@@ -213,6 +213,7 @@ const SmartwatchManager: React.FC<SmartwatchManagerProps> = ({ visible, onClose 
           <DeviceScanner 
             onConnectionStatusChange={setConnectionStatus}
             onConnectionSuccess={handleConnectionSuccess}
+            onNavigateToControl={() => setCurrentView('control')}
           />
         )}
       </View>

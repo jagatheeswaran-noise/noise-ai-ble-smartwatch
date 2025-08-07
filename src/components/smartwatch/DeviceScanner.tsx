@@ -18,18 +18,21 @@ interface DeviceScannerProps {
   onConnectionStatusChange: (status: ConnectionStatus) => void;
   onDeviceSelect?: (device: DeviceInfo) => void;
   onConnectionSuccess?: (device: DeviceInfo) => void;
+  onNavigateToControl?: () => void;
 }
 
 const DeviceScanner: React.FC<DeviceScannerProps> = ({ 
   onConnectionStatusChange, 
   onDeviceSelect,
-  onConnectionSuccess
+  onConnectionSuccess,
+  onNavigateToControl
 }) => {
   const [scanStatus, setScanStatus] = useState<ScanStatus>(ScanStatus.IDLE);
   const [scannedDevices, setScannedDevices] = useState<DeviceInfo[]>([]);
   const [filteredDevices, setFilteredDevices] = useState<DeviceInfo[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [scanTimer, setScanTimer] = useState<NodeJS.Timeout | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(ConnectionStatus.DISCONNECTED);
   
   const SCAN_TIMEOUT = 15000; // 15 seconds auto-stop
   const [selectedDevice, setSelectedDevice] = useState<DeviceInfo | null>(null);
@@ -37,6 +40,9 @@ const DeviceScanner: React.FC<DeviceScannerProps> = ({
 
   useEffect(() => {
     let deviceUpdateTimer: NodeJS.Timeout | null = null;
+    
+    // Initialize connection status
+    setConnectionStatus(zhSDKService.currentConnectionStatus);
     
     // Throttled device list update - only update every 1000ms to prevent performance issues
     const throttledUpdate = () => {
@@ -54,7 +60,9 @@ const DeviceScanner: React.FC<DeviceScannerProps> = ({
 
     const connectionStateSubscription = zhSDKService.addEventListener('onConnectionStateChanged', (state: any) => {
       console.log('🔗 Connection state changed:', state);
-      onConnectionStatusChange(zhSDKService.currentConnectionStatus);
+      const currentStatus = zhSDKService.currentConnectionStatus;
+      setConnectionStatus(currentStatus);
+      onConnectionStatusChange(currentStatus);
     });
 
     return () => {
@@ -208,6 +216,20 @@ const DeviceScanner: React.FC<DeviceScannerProps> = ({
     }
   };
 
+  const renderDeviceControlButton = () => {
+    if (connectionStatus === ConnectionStatus.BOUND && onNavigateToControl) {
+      return (
+        <TouchableOpacity 
+          style={[styles.scanButton, styles.deviceControlButton]} 
+          onPress={onNavigateToControl}
+        >
+          <Text style={styles.scanButtonText}>Go to Device Control</Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
+
   if (showConnectionFlow && selectedDevice) {
     return (
       <ConnectionFlow
@@ -234,6 +256,7 @@ const DeviceScanner: React.FC<DeviceScannerProps> = ({
 
       <View style={styles.buttonContainer}>
         {renderScanButton()}
+        {renderDeviceControlButton()}
       </View>
 
       <View style={styles.deviceListContainer}>
@@ -313,6 +336,9 @@ const styles = StyleSheet.create({
   },
   stopButton: {
     backgroundColor: '#ef4444',
+  },
+  deviceControlButton: {
+    backgroundColor: '#3b82f6',
   },
   scanButtonText: {
     color: '#ffffff',
