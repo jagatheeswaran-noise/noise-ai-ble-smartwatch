@@ -116,4 +116,15 @@ dependencies {
     } else {
         implementation jscFlavor
     }
+    
+    // ZH SDK for smartwatch BLE connectivity
+    implementation files('libs/ZH_SDK_20250801_V2.1.7.aar')
+    
+    // Additional dependencies for BLE functionality
+    implementation 'androidx.lifecycle:lifecycle-livedata:2.6.2'
+    implementation 'com.blankj:utilcodex:1.31.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    
+    // Google Protobuf for ZH SDK (required for BLE operations)
+    implementation 'com.google.protobuf:protobuf-java:3.21.12'
 }
