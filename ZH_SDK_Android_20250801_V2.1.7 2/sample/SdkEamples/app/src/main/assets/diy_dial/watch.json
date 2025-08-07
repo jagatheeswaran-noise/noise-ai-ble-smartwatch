@@ -1,0 +1,206 @@
+{
+  "id": "00201301000070000200",
+  "watchVersion": 1,
+  "shape": "Rectangle",
+  "dpi": "410x502",
+  "thumbnailDpi": "274x336",
+  "thumbnailOffset": "68x83",
+  "type": "DIY",
+  "author": "JW",
+  "code": "007",
+  "watchName": "worksName_0:Inspiration",
+  "watchDesc": "worksDescribe_0:It is an inspired guess",
+  "background": {
+    "md5Background": "C7ECE09A7CEA2DD51F17E1B785AE8BBC",
+    "backgroundImgPath": "/background/background.png",
+    "md5thumbnail": "6F015F0A734A2DA47AC423A74421758C",
+    "thumbnailImgPath": "/background/thumbnail.png",
+    "overlayImgPath": "/background/overlay.png",
+    "designsketchImgPath": "/background/designsketch.png"
+  },
+  "complex": {
+    "isCompress": false,
+    "md5": "2A36E47D41E2138D758B79076B558053",
+    "path": "/complex/complex.bin",
+    "infos": [
+      {
+        "location": "MidUp",
+        "detail": [
+          {
+            "isDefault": true,
+            "typeName": "Kwh",
+            "pointX": 152,
+            "pointY": 92,
+            "picPath": "/complex/Kwh.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "GeneralDate",
+            "pointX": 152,
+            "pointY": 92,
+            "picPath": "/complex/GeneralDate.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Step",
+            "pointX": 152,
+            "pointY": 92,
+            "picPath": "/complex/Step.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Calorie",
+            "pointX": 152,
+            "pointY": 92,
+            "picPath": "/complex/Calorie.png"
+          }
+        ]
+      },
+      {
+        "location": "LeftMid",
+        "detail": [
+          {
+            "isDefault": true,
+            "typeName": "Kwh",
+            "pointX": 72,
+            "pointY": 198,
+            "picPath": "/complex/Kwh.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "GeneralDate",
+            "pointX": 72,
+            "pointY": 198,
+            "picPath": "/complex/GeneralDate.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Step",
+            "pointX": 72,
+            "pointY": 198,
+            "picPath": "/complex/Step.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Calorie",
+            "pointX": 72,
+            "pointY": 198,
+            "picPath": "/complex/Calorie.png"
+          }
+        ]
+      },
+      {
+        "location": "RightMid",
+        "detail": [
+          {
+            "isDefault": true,
+            "typeName": "Kwh",
+            "pointX": 232,
+            "pointY": 198,
+            "picPath": "/complex/Kwh.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "GeneralDate",
+            "pointX": 232,
+            "pointY": 198,
+            "picPath": "/complex/GeneralDate.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Step",
+            "pointX": 232,
+            "pointY": 198,
+            "picPath": "/complex/Step.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Calorie",
+            "pointX": 232,
+            "pointY": 198,
+            "picPath": "/complex/Calorie.png"
+          }
+        ]
+      },
+      {
+        "location": "MidBottom",
+        "detail": [
+          {
+            "isDefault": true,
+            "typeName": "Kwh",
+            "pointX": 152,
+            "pointY": 304,
+            "picPath": "/complex/Kwh.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "GeneralDate",
+            "pointX": 152,
+            "pointY": 304,
+            "picPath": "/complex/GeneralDate.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Step",
+            "pointX": 152,
+            "pointY": 304,
+            "picPath": "/complex/Step.png"
+          },
+          {
+            "isDefault": false,
+            "typeName": "Calorie",
+            "pointX": 152,
+            "pointY": 304,
+            "picPath": "/complex/Calorie.png"
+          }
+        ]
+      }
+    ]
+  },
+  "pointers": [
+    {
+      "isCompress": false,
+      "md5": "358ABBB89CFE3937B6573C85DF4B8CE7",
+      "pointerImgPath": "/pointer/3101_IMG.png",
+      "pointerDataPath": "/pointer/3101_Data.bin",
+      "pointerOverlayPath": "/pointer/3101_Overlay.png"
+    },
+    {
+      "isCompress": false,
+      "md5": "E7E43336A5A383F97A632C1918AFA982",
+      "pointerImgPath": "/pointer/3102_IMG.png",
+      "pointerDataPath": "/pointer/3102_Data.bin",
+      "pointerOverlayPath": "/pointer/3102_Overlay.png"
+    },
+    {
+      "isCompress": false,
+      "md5": "8514C8DD24D15930113114DC7F1AC758",
+      "pointerImgPath": "/pointer/3103_IMG.png",
+      "pointerDataPath": "/pointer/3103_Data.bin",
+      "pointerOverlayPath": "/pointer/3103_Overlay.png"
+    }
+  ],
+  "time": [
+    {
+      "isCompress": false,
+      "md5": "51B69D1E146E4964CD71A2CE84EFD8C7",
+      "timeImgPath": "/time/3001_IMG.png",
+      "timeDataPath": "/time/3001_Data.bin",
+      "timeOverlayPath": "/time/3001_Overlay.png"
+    },
+    {
+      "isCompress": false,
+      "md5": "12146A1D163DAC7345707588773A7401",
+      "timeImgPath": "/time/3002_IMG.png",
+      "timeDataPath": "/time/3002_Data.bin",
+      "timeOverlayPath": "/time/3002_Overlay.png"
+    },
+    {
+      "isCompress": false,
+      "md5": "D2F9ABA1A01D58273D6E80DB22935A69",
+      "timeImgPath": "/time/3003_IMG.png",
+      "timeDataPath": "/time/3003_Data.bin",
+      "timeOverlayPath": "/time/3003_Overlay.png"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnFindWear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s27" />
+
+            <include layout="@layout/line"/>
+
+            <Button
+                android:id="@+id/btnEnterPhotogragh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s29"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnExitPhotogragh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s30"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line"/>
+
+            <Button
+                android:id="@+id/btnGetWidget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s35"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetWidget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s36"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etWidget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="1,2,3" />
+
+            <include layout="@layout/line"/>
+
+            <Button
+                android:id="@+id/btnGetApplication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s32"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetApplication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s33"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line"/>
+
+
+
+            <Button
+                android:id="@+id/btnGetSportWidget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s298"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetSportWidget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s299"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line"/>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

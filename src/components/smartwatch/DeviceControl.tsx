@@ -202,6 +202,48 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
     }
   };
 
+  const handleReconnect = async () => {
+    setIsLoading(true);
+    try {
+      console.log('🔄 Manual reconnection triggered by user');
+      const success = await zhSDKService.reconnectToLastDevice();
+      
+      if (success) {
+        Alert.alert('Success', 'Reconnected to device successfully');
+      } else {
+        Alert.alert('Error', 'Failed to reconnect to device. Try scanning for devices again.');
+      }
+    } catch (error) {
+      console.error('❌ Reconnection error:', error);
+      Alert.alert('Error', 'Failed to reconnect to device');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClearPersistence = async () => {
+    Alert.alert(
+      'Forget Device',
+      'This will clear the saved connection and the app will not automatically reconnect to this device. Continue?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Clear', 
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await zhSDKService.clearConnectionPersistence();
+              Alert.alert('Success', 'Device connection cleared. The app will no longer auto-reconnect to this device.');
+            } catch (error) {
+              console.error('❌ Clear persistence error:', error);
+              Alert.alert('Error', 'Failed to clear device connection');
+            }
+          }
+        }
+      ]
+    );
+  };
+
   const getConnectionStatusColor = () => {
     // Use real-time status from service instead of local state
     const currentStatus = zhSDKService.currentConnectionStatus;
@@ -310,6 +352,16 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
           </TouchableOpacity>
 
           <TouchableOpacity 
+            style={[styles.primaryButton, styles.reconnectButton, isLoading && styles.disabledButton]} 
+            onPress={handleReconnect}
+            disabled={isLoading}
+          >
+            <Text style={styles.buttonText}>
+              {isLoading ? 'Reconnecting...' : 'Reconnect'}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
             style={[styles.primaryButton, isLoading && styles.disabledButton]} 
             onPress={handleGetDeviceInfo}
             disabled={isLoading}
@@ -346,6 +398,13 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
               </TouchableOpacity>
             </View>
           </View>
+
+          <TouchableOpacity 
+            style={[styles.primaryButton, styles.forgetButton]} 
+            onPress={handleClearPersistence}
+          >
+            <Text style={styles.buttonText}>Forget Device</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -443,6 +502,12 @@ const styles = StyleSheet.create({
   },
   timeButton: {
     backgroundColor: '#10b981',
+  },
+  reconnectButton: {
+    backgroundColor: '#f59e0b',
+  },
+  forgetButton: {
+    backgroundColor: '#ef4444',
   },
   disabledButton: {
     backgroundColor: '#6b7280',

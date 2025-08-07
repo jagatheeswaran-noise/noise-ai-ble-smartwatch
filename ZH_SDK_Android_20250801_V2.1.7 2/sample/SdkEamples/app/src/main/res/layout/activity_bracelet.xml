@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/s1"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="补充功能...."-->
+            <!--                android:textColor="#ff0000"-->
+            <!--                android:textSize="16sp" />-->
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="connectDevice"
+                android:text="@string/s2"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="disconnectDevice"
+                android:text="@string/s327"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/etUserId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="userId"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="bindDevice"
+                android:text="@string/s3"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/etUserId2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="userId"
+                android:maxLines="1"
+                android:singleLine="true"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="verifyUserId"
+                android:text="@string/s734"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="unBindDevice"
+                android:text="@string/s4"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="unbindDeviceWaitConfirmation"
+                android:text="@string/s468"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s5"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/s6"
+                android:textColor="#ff0000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvDeviceInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/s7"
+                android:textColor="#ff0000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvBattery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="getDeviceInfo"
+                android:text="@string/s8"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="getDeviceBatteryInfo"
+                android:text="@string/s9"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/s10"
+                android:textColor="#ff0000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvRealTimeData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="50dp"
+                android:textSize="13sp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="realTimeDataSwitch"
+                android:text="@string/s86"
+                android:textAllCaps="false"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s11"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/tvDailyProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="#ff0000"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/tvDailyResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp"
+            android:textColor="#ff0000"
+            android:textSize="13sp" />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="getDailyHistoryData"
+            android:text="@string/s12"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="ringGetDailyHistoryData"
+            android:text="@string/s550"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="ringExecutesDeleteDailyData"
+            android:text="@string/s678"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s13"
+            android:textSize="20sp" />
+
+        <!-- <Button
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:gravity="center"
+             android:onClick="getTestDailyHistoryData"
+             android:text="@string/s525"
+             android:textAllCaps="false"
+             android:textSize="20sp" />-->
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toSportInfo"
+            android:text="@string/s14"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toRemindInfo"
+            android:text="@string/s15"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toMicro"
+            android:text="@string/s16"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toSetInfo"
+            android:text="@string/s17"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="getDeviceFirmwareLog"
+            android:text="@string/s365"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="getFirmwareTrackingLog"
+            android:text="@string/s458"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toClockDialInfo"
+            android:text="@string/s18"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toDiyDial"
+            android:text="@string/s361"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toDiyDial2"
+            android:text="@string/s516"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toOldDiyDial"
+            android:text="@string/s527"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toCustomAlbumDial"
+            android:text="@string/s502"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toOTAInfo"
+            android:text="OTA"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toClassicPair"
+            android:text="@string/s274"
+            android:textAllCaps="false"
+            android:textSize="20sp"
+            android:visibility="gone" />
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toRing"
+            android:text="@string/s462"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="btScanTest"
+            android:text="@string/s486"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="btTest"
+            android:text="@string/s487"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="sifli"
+            android:text="@string/s488"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toRealTimeHeartRate"
+            android:text="@string/s518"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toLoopBind"
+            android:text="戒指循环绑定测试"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toLoopFitness"
+            android:text="戒指循环同步测试"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toEmoji"
+            android:text="@string/s548"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toActiveMeasure"
+            android:text="@string/s549"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="getDisconnectReason"
+            android:text="@string/s328"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toActiveEsim"
+            android:text="Esim"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="toSpp"
+            android:text="SppTest"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>
+

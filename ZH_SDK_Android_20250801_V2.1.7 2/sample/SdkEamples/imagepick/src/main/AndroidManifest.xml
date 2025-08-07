@@ -1,0 +1,42 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dh.imagepick">
+
+    <application>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" /> <!-- 全面屏适配设置 -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.4" /> <!-- 刘海屏适配设置 -->
+        <!-- 适配华为（huawei）刘海屏 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" /> <!-- 适配小米（xiaomi）刘海屏 -->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+        <activity
+            android:name="com.dh.imagepick.crop.ImageBaseActivity"
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation|uiMode"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name="com.dh.imagepick.crop.ImageCropActivity"
+            android:exported="false"
+            android:configChanges="keyboardHidden|orientation|uiMode"
+            android:hardwareAccelerated="false"
+            android:theme="@style/ImagePickerTheme" />
+
+        <provider
+            android:name="com.dh.imagepick.CustomerFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_path" />
+        </provider>
+    </application>
+</manifest>

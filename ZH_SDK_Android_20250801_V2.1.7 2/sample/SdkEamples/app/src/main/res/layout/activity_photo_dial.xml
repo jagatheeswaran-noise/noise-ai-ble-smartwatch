@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333333"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivEffect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dip"
+        android:background="@color/colorMyIndex" />
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/ivColor1"
+            android:onClick="onClick"
+            style="@style/public_textview_style"
+            android:text="Color1" />
+
+
+        <TextView
+            android:id="@+id/ivColor2"
+            android:onClick="onClick"
+            style="@style/public_textview_style"
+            android:text="Color2" />
+
+
+        <TextView
+            android:id="@+id/ivColor3"
+            android:onClick="onClick"
+            style="@style/public_textview_style"
+            android:text="Color3" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvBg1"-->
+<!--            style="@style/public_textview_style"-->
+<!--            android:text="select for photo" />-->
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/switchData1"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="切换1号表盘" />
+
+    <Button
+        android:id="@+id/switchData2"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="切换2号表盘" />
+
+    <Button
+        android:id="@+id/btnSpp"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="Spp通道发送" />
+   <Button
+        android:id="@+id/btnBle"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="Ble通道发送" />
+
+
+</LinearLayout>

@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnAPP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s54"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etAppName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s573"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etPackName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s574"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNTitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s55"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s56"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNTicker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s57"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendAppN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s58"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s47"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etContacts"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s48"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etMsg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s49"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <CheckBox
+                android:id="@+id/cbCallSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s645"
+                />
+
+            <CheckBox
+                android:id="@+id/cbMissCallSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s646"
+                />
+
+            <Button
+                android:id="@+id/btnSys0"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s50"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSys1"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s51"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSys2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s52"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSysPhoneHangup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s264"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSysPhoneAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s265"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etReply"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s44"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s82"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s45"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etReplyW"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s44"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetRW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s706"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetRW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s707"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <Button
+                android:id="@+id/btnSetContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s272"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s273"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etCyContactName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s48"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="contactName" />
+
+            <EditText
+                android:id="@+id/etCyContactPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s47"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="181000000" />
+
+
+            <Button
+                android:id="@+id/setCyContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s360"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/getCyContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s493"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etSosContactName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s48"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="contactName" />
+
+            <EditText
+                android:id="@+id/etSosContactPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s47"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="181000000" />
+
+            <Button
+                android:id="@+id/btnSetSosContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s338"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetSosContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s339"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <Button
+                android:id="@+id/btnAPP2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s54"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etAppName2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s573"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etPackName2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s574"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSNType"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s743"
+                android:inputType="textMultiLine"
+                />
+
+            <EditText
+                android:id="@+id/etSNContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s742"
+                android:imeOptions="actionNext"
+                android:inputType="textMultiLine"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendSuperN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s741"
+                android:textAllCaps="false" />
+
+
+            <include layout="@layout/line" />
+
+            <Button
+                android:id="@+id/btnGetFavoriteContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s745"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnDelFavoriteContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s746"
+                android:textAllCaps="false" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tvHeadName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp" />
+
+            <EditText
+                android:id="@+id/etFName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s650"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+
+            <EditText
+                android:id="@+id/etFPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="Phone (A number 0-Max will be added after the number you filled in.)"
+                android:imeOptions="actionNext"
+                android:inputType="textMultiLine"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <TextView
+                android:id="@+id/tvTip1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:autoLink="web" />
+
+            <Button
+                android:id="@+id/btnGetHeadFile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/s594" />
+
+            <Button
+                android:id="@+id/btnSetFavoriteContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s747"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

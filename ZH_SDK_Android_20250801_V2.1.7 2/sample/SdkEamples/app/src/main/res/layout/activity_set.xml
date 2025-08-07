@@ -1,0 +1,1588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/s105"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s106"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <!--region 生理周期 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbPhSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s107" />
+
+            <CheckBox
+                android:id="@+id/cbPhSwitch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s354" />
+
+            <EditText
+                android:id="@+id/etY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s108"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s109"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s110"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s111"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAllDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s112"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s113"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onPhysiologicalCycleClick"
+                android:text="@string/s114"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onPhysiologicalCycleClick"
+                android:text="@string/s115"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s116"
+            android:textSize="20sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s117"
+            android:textColor="#ff0000" />
+        <!--region 时间 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/chbTimeFormat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/s118" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="setTime"
+                android:text="@string/s117"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s119"
+            android:textColor="#ff0000" />
+        <!--region 语言 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="setLanguage"
+                android:text="@string/s119"
+                android:textAllCaps="false" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="getLanguageList"
+                android:text="@string/s120"
+                android:textAllCaps="false"
+                android:visibility="gone" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s121"
+            android:textColor="#ff0000" />
+        <!--region 设置用户配置 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/chbDistanceUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/s122" />
+
+            <CheckBox
+                android:id="@+id/chbTemperatureUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/s123" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="@string/s454" />
+
+            <CheckBox
+                android:id="@+id/chbSleep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/s454" />
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="setUserProfile"
+                android:text="@string/s124"
+                android:textAllCaps="false" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="getUserProfile"
+                android:text="@string/s461"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s125"
+            android:textColor="#ff0000" />
+        <!--region 抬腕亮屏 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <EditText
+                android:id="@+id/etWMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s126"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWSensitivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s127"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onWristScreenClick"
+                android:text="@string/s128"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onWristScreenClick"
+                android:text="@string/s129"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s130"
+            android:textColor="#ff0000" />
+        <!--region 省电设置 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbPSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSetP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onPowerSavingCLick"
+                android:text="@string/s131"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onPowerSavingCLick"
+                android:text="@string/s132"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s133"
+            android:textColor="#ff0000" />
+        <!--region 覆盖息屏 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbOSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSetO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onOverlayScreenCLick"
+                android:text="@string/s134"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onOverlayScreenCLick"
+                android:text="@string/s135"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s136"
+            android:textColor="#ff0000" />
+        <!--region 快速眼动 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbRSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSetR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onRapidEyeMovementCLick"
+                android:text="@string/s137"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onRapidEyeMovementCLick"
+                android:text="@string/s138"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s139"
+            android:textColor="#ff0000" />
+        <!--region 震动设置 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <EditText
+                android:id="@+id/etVibration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s140"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onVibrationCLick"
+                android:text="@string/s141"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onVibrationCLick"
+                android:text="@string/s142"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s143"
+            android:textColor="#ff0000" />
+        <!--region 息屏显示 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <EditText
+                android:id="@+id/etDMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s144"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s145"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onScreenDisplayCLick"
+                android:text="@string/s146"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onScreenDisplayCLick"
+                android:text="@string/s147"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s148"
+            android:textColor="#ff0000" />
+        <!--region 亮屏设置 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbSSwitch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s149" />
+
+            <CheckBox
+                android:id="@+id/cbSSwitch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s150" />
+
+            <EditText
+                android:id="@+id/etLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s150"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s151"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onScreenSettingClick"
+                android:text="@string/s152"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onScreenSettingClick"
+                android:text="@string/s153"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s154"
+            android:textColor="#ff0000" />
+        <!--region 勿扰模式 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbNSwitch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s155" />
+
+            <CheckBox
+                android:id="@+id/cbNSwitch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s156" />
+
+            <EditText
+                android:id="@+id/etNSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onDoNotDisturbModeClick"
+                android:text="@string/s157"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onDoNotDisturbModeClick"
+                android:text="@string/s158"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s159"
+            android:textColor="#ff0000" />
+        <!--region 天气 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbWeatherSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnDayWeather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="setDayWeather"
+                android:text="@string/s160"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s266"
+            android:textColor="#ff0000" />
+        <!--region 股票 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <Button
+                android:id="@+id/btnSyncStock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onStockClick"
+                android:text="@string/s267"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetStockOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onStockClick"
+                android:text="@string/s268"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetStockOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onStockClick"
+                android:text="@string/s269"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnDelStock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onStockClick"
+                android:text="@string/s270"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s271"
+            android:textColor="#ff0000" />
+        <!--region 联系人 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <Button
+                android:id="@+id/btnSetContacts"
+                android:onClick="onContactsClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s272"
+                android:textAllCaps="false" />
+
+            <Button
+                android:onClick="onContactsClick"
+                android:id="@+id/btnGetContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s273"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etSosContactName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s48"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="contactName" />
+
+            <EditText
+                android:id="@+id/etSosContactPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s47"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="181000000" />
+
+            <Button
+                android:onClick="onContactsClick"
+                android:id="@+id/btnSetSosContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s338"
+                android:textAllCaps="false" />
+
+            <Button
+                android:onClick="onContactsClick"
+                android:id="@+id/btnGetSosContacts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s339"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s300"
+            android:textColor="#ff0000" />
+        <!--region 经典通话蓝牙开关 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbBtSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s357" />
+
+            <CheckBox
+                android:id="@+id/cbBtRemind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s358" />
+
+            <Button
+                android:id="@+id/btnGetBtSwitch"
+                android:onClick="onBtSwitchClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s301"
+                android:textAllCaps="false" />
+
+            <Button
+                android:onClick="onBtSwitchClick"
+                android:id="@+id/btnSetBtSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s302"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/s303"
+            android:textColor="#ff0000" />
+        <!--region 世界时钟 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <Button
+                android:id="@+id/btnGetWorldClock"
+                android:onClick="onWorldClockClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s304"
+                android:textAllCaps="false" />
+
+            <Button
+                android:onClick="onWorldClockClick"
+                android:id="@+id/btnSetWorldClock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s305"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s306"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+        <!--region 心率预警 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbHrModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s307" />
+
+            <CheckBox
+                android:id="@+id/cbHrIsWarningSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s308" />
+
+            <CheckBox
+                android:id="@+id/cbHeartRateMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/s353" />
+
+            <EditText
+                android:id="@+id/etHeartRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s309"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <CheckBox
+                android:id="@+id/cbHrIsSport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/s355" />
+
+            <EditText
+                android:id="@+id/etHeartSport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s356"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetHr"
+                android:onClick="onHeartRateClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s310"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetHr"
+                android:onClick="onHeartRateClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s311"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s320"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+        <!--region 学校模式 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <Button
+                android:id="@+id/btnGetSchoolMode"
+                android:onClick="onSchooleMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s321"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetSchoolMode"
+                android:onClick="onSchooleMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s322"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s323"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+        <!--region 调度器 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+            <!--tools:visibility="gone"-->
+
+            <Button
+                android:id="@+id/btnGetScheduler"
+                android:onClick="onScheduler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s324"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetScheduler"
+                android:onClick="onScheduler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s325"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <!--region 压力模式 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s329"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbPrModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s330" />
+
+            <CheckBox
+                android:id="@+id/cbPrReminderSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s331" />
+
+            <Button
+                android:id="@+id/btnGetPressure"
+                android:onClick="onPressureClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s332"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetPressure"
+                android:onClick="onPressureClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s333"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <!--endregion-->
+
+        <!--region 通知设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s334"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbNoticeNotLightUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s335" />
+
+            <CheckBox
+                android:id="@+id/cbNoticeDelay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s340" />
+
+            <EditText
+                android:id="@+id/etPhoneRemindVibrationMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s341"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etPhoneRemindRingMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s342"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetNoticeSettings"
+                android:onClick="onNoticeSettingsClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s336"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetNoticeSettings"
+                android:onClick="onNoticeSettingsClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s337"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <!--region 连续血氧设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s343"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <CheckBox
+                android:id="@+id/cbBoModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s344" />
+
+            <EditText
+                android:id="@+id/etBoReminderSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s345"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetBoMode"
+                android:onClick="onBloodOxygenSettingsClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s346"
+                android:textAllCaps="false" />
+
+            <Button
+                android:onClick="onBloodOxygenSettingsClick"
+                android:id="@+id/btnSetBoMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s347"
+                android:textAllCaps="false" />
+        </LinearLayout>
+        <!--endregion-->
+
+        <!--region 找手环设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s348"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <EditText
+                android:id="@+id/etFwRMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/s349"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etFwVMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s350"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetFw"
+                android:onClick="onFindWearSettingsClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s351"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetFw"
+                android:onClick="onFindWearSettingsClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s352"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+
+        <!--endregion-->
+
+        <!--region 找手环设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s359"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:visibility="gone">
+
+            <EditText
+                android:id="@+id/etCyContactName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s48"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="contactName" />
+
+            <EditText
+                android:id="@+id/etCyContactPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s47"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="181000000" />
+
+
+            <Button
+                android:id="@+id/setCyContact"
+                android:onClick="onCYClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s360"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/getCyContact"
+                android:onClick="onSetCYClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s493"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <!--endregion-->
+
+        <!--region 呼吸灯 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s528"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <Button
+            android:onClick="onLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s528"
+            android:textAllCaps="false"
+            tools:visibility="gone"
+            />
+        <!--endregion-->
+
+        <!--region 产测重启 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s485"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnRestart"
+            android:onClick="onRestart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s485"
+            android:textAllCaps="false"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/btReset"
+            android:onClick="onReset"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s503"
+            android:textAllCaps="false"
+            tools:visibility="gone" />
+
+        <Button
+            android:id="@+id/btHeartLightLeakTest"
+            android:onClick="onHeartLightLeakTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s507"
+            android:textAllCaps="false"
+            tools:visibility="gone" />
+
+
+        <!--endregion-->
+
+
+        <!--region EV电动车 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s552"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnEv"
+            android:onClick="onEv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s552"
+            android:textAllCaps="false"
+            tools:visibility="gone" />
+        <!--endregion-->
+
+        <!--region 戒指飞行模式 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/s575"
+            android:textColor="#ff0000"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnRingAir"
+            android:onClick="onRingAir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s575"
+            android:textAllCaps="false"
+            tools:visibility="gone" />
+        <!--endregion-->
+
+
+    </LinearLayout>
+
+</ScrollView>
+

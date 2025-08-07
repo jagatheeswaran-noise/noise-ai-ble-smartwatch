@@ -1,0 +1,1623 @@
+package com.zjw.sdkdemo.function.sync
+
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.lifecycle.Observer
+import com.blankj.utilcode.util.ClipboardUtils
+import com.blankj.utilcode.util.GsonUtils
+import com.blankj.utilcode.util.ToastUtils
+import com.zhapp.ble.BleCommonAttributes
+import com.zhapp.ble.ControlBleTools
+import com.zhapp.ble.bean.ActivityDurationBean
+import com.zhapp.ble.bean.AutoActiveSportBean
+import com.zhapp.ble.bean.ContinuousBloodOxygenBean
+import com.zhapp.ble.bean.ContinuousHeartRateBean
+import com.zhapp.ble.bean.ContinuousPressureBean
+import com.zhapp.ble.bean.ContinuousTemperatureBean
+import com.zhapp.ble.bean.DailyBean
+import com.zhapp.ble.bean.EffectiveStandingBean
+import com.zhapp.ble.bean.ExaminationBean
+import com.zhapp.ble.bean.FitnessRTCOffsetBean
+import com.zhapp.ble.bean.OffEcgDataBean
+import com.zhapp.ble.bean.OfflineBloodOxygenBean
+import com.zhapp.ble.bean.OfflineHeartRateBean
+import com.zhapp.ble.bean.OfflinePressureDataBean
+import com.zhapp.ble.bean.OfflineTemperatureDataBean
+import com.zhapp.ble.bean.OverallDayMovementData
+import com.zhapp.ble.bean.RingBodyBatteryBean
+import com.zhapp.ble.bean.RingHealthScoreBean
+import com.zhapp.ble.bean.RingSleepNapBean
+import com.zhapp.ble.bean.RingSleepResultBean
+import com.zhapp.ble.bean.RingStressDetectionBean
+import com.zhapp.ble.bean.SleepBean
+import com.zhapp.ble.bean.TodayActiveTypeData
+import com.zhapp.ble.bean.TodayRespiratoryRateData
+import com.zhapp.ble.callback.CallBackUtils
+import com.zhapp.ble.callback.FitnessDataCallBack
+import com.zhapp.ble.callback.FitnessRTCDataCallBack
+import com.zhapp.ble.callback.FitnessRTCOffsetCallBack
+import com.zhapp.ble.manager.FitnessRTCManager
+import com.zjw.sdkdemo.R
+import com.zjw.sdkdemo.function.language.BaseActivity
+import com.zjw.sdkdemo.livedata.BleConnectState
+import kotlinx.android.synthetic.main.activity_sync_fitness.tvDailyProgress
+import kotlinx.android.synthetic.main.activity_sync_fitness.tvDailyResult
+import kotlinx.android.synthetic.main.activity_sync_fitness.tvStatus
+import java.util.ArrayList
+
+/**
+ * Created by Android on 2024/4/13.
+ */
+class SyncRingRTCFitnessActivity : BaseActivity() {
+
+    private val TAG = "SyncFitnessActivity"
+
+    //结果 Result
+    private var dailyResult = StringBuffer()
+
+    //RTC时间偏移数据  RTC time offset data
+    private var rtcOffsets: ArrayList<FitnessRTCOffsetBean> = arrayListOf()
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        title = getString(R.string.s550)
+        setContentView(R.layout.activity_sync_fitness)
+
+        inits()
+
+        //COPY
+        if (tvDailyResult != null) {
+            tvDailyResult.setOnLongClickListener(View.OnLongClickListener {
+                ClipboardUtils.copyText(tvDailyResult.getText().toString().trim { it <= ' ' })
+                ToastUtils.showShort("copy complete")
+                false
+            })
+        }
+    }
+
+    fun getDailyHistoryData(view: View?) {
+        if (ControlBleTools.getInstance().isConnect()) {
+            ControlBleTools.getInstance().getDailyHistoryData(null)
+        }
+    }
+
+    private fun inits() {
+        /**
+         * 连接状态  connect state
+         */
+        BleConnectState.getInstance().observe(this, Observer<Int?> { integer ->
+            when (integer) {
+                BleCommonAttributes.STATE_CONNECTED -> {
+                    tvStatus.text = getString(R.string.s255) + getString(R.string.ble_connected_tips)
+                }
+
+                BleCommonAttributes.STATE_CONNECTING -> {
+                    tvStatus.text = getString(R.string.s255) + getString(R.string.ble_connecting_tips)
+                }
+
+                BleCommonAttributes.STATE_DISCONNECTED -> {
+                    tvStatus.text = getString(R.string.s255) + getString(R.string.ble_disconnect_tips)
+                }
+
+                BleCommonAttributes.STATE_TIME_OUT -> {
+                    tvStatus.text = getString(R.string.s255) + getString(R.string.ble_connect_time_out_tips)
+                }
+            }
+        })
+
+        /**
+         * RTC时间偏移数据回调  RTC time offset data callback
+         */
+        CallBackUtils.fitnessRTCOffsetCallBack = object : FitnessRTCOffsetCallBack {
+            override fun onOffsetList(offsets: ArrayList<FitnessRTCOffsetBean>?) {
+                if (offsets != null) {
+                    rtcOffsets.clear()
+                    rtcOffsets.addAll(offsets)
+
+                    dailyResult.append("\n\nFitnessRTCOffset : ${GsonUtils.toJson(offsets)}")
+
+                    FitnessRTCManager.initFitnessRTCDataCallBack(rtcOffsets, MyFitnessRTCDataCallBack())
+                }
+            }
+        }
+
+
+        /**
+         * 日常数据回调   daily data callback
+         */
+        CallBackUtils.fitnessDataCallBack = object : FitnessDataCallBack {
+            override fun onProgress(progress: Int, total: Int) {
+                Log.e(TAG, "onProgress : progress $progress  total $total")
+
+                /****** fill Progress ******/
+                FitnessRTCManager.fillProgress(progress, total)
+
+                if (progress == 0) {
+                    dailyResult = StringBuffer()
+                    tvDailyResult.text = ""
+                    rtcOffsets.clear()
+                    //region TODO 测试
+                    rtcOffsets.add(FitnessRTCOffsetBean().apply {
+                        isOffFlag = false
+                        powerOffRtcTime = 1711844127   //2024-03-31 08:15:27
+                        phoneSyncRtcTime = 0
+                        offSecondTime = 0
+                    })
+                    rtcOffsets.add(FitnessRTCOffsetBean().apply {
+                        isOffFlag = true
+                        /* powerOffRtcTime = 1711930527
+                         phoneSyncRtcTime = 1712153727
+                         offSecondTime = 72000*/
+                        /* powerOffRtcTime = 1711930527
+                         phoneSyncRtcTime = 1712175327
+                         offSecondTime = 93600*/
+                        powerOffRtcTime = 1711930527   //2024-04-01 08:15:27
+                        phoneSyncRtcTime = 1712340927  //2024-04-06 02:15:27
+                        offSecondTime = 172800
+                    })
+
+                    FitnessRTCManager.initFitnessRTCDataCallBack(rtcOffsets, MyFitnessRTCDataCallBack())
+                    //endregion
+                }
+                tvDailyProgress.text = "onProgress :progress  $progress  total $total"
+                if (progress == total) {
+                    tvDailyProgress.text = ""
+                    tvDailyResult.text = dailyResult.toString()
+                }
+            }
+
+            override fun onDailyData(data: DailyBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onDailyData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nonDailyData : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+
+                //region TODO 假数据
+                FitnessRTCManager.fillPendingData(DailyBean().apply {
+                    calorieData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            if (i <= 2) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    calorieFrequency = 60
+                    distanceData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            if (i <= 2) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    distanceFrequency = 60
+                    stepsData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            if (i <= 2) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    stepsFrequency = 60
+                    todayOuraCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            if (i <= 2) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    todayCalorieData = 2
+                    todayOuraCalorieData = 2
+                    todaySportCalorieData = 2
+                    todaySportCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            if (i <= 2) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(DailyBean().apply {
+                    calorieData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    calorieFrequency = 60
+                    distanceData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    distanceFrequency = 60
+                    stepsData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    stepsFrequency = 60
+                    todayOuraCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    todayCalorieData = 24
+                    todayOuraCalorieData = 24
+                    todaySportCalorieData = 24
+                    todaySportCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(DailyBean().apply {
+                    calorieData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    calorieFrequency = 60
+                    distanceData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    distanceFrequency = 60
+                    stepsData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    stepsFrequency = 60
+                    todayOuraCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    todayCalorieData = 24
+                    todayOuraCalorieData = 24
+                    todaySportCalorieData = 24
+                    todaySportCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(DailyBean().apply {
+                    calorieData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    calorieFrequency = 60
+                    distanceData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    distanceFrequency = 60
+                    stepsData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    stepsFrequency = 60
+                    todayOuraCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    todayCalorieData = 24
+                    todayOuraCalorieData = 24
+                    todaySportCalorieData = 24
+                    todaySportCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(DailyBean().apply {
+                    calorieData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    calorieFrequency = 60
+                    distanceData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    distanceFrequency = 60
+                    stepsData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    stepsFrequency = 60
+                    todayOuraCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    todayCalorieData = 24
+                    todayOuraCalorieData = 24
+                    todaySportCalorieData = 24
+                    todaySportCalorieHourlyData = mutableListOf<Int>().apply {
+                        for (i in 1..24) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //ContinuousHeartRateBean{continuousHeartRateFrequency=5, heartRateData=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], max=0, min=0, restingRate=0, heartRateHourMaxValue=[],
+                // heartRateHourMinValue=[], date='2024-03-29 00:00:00'}
+
+                FitnessRTCManager.fillPendingData(ContinuousHeartRateBean().apply {
+                    continuousHeartRateFrequency = 5
+                    max = 27
+                    min = 1
+                    heartRateData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            if (i <= 27) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    heartRateHourMaxValue = listOf()
+                    heartRateHourMinValue = listOf()
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousHeartRateBean().apply {
+                    continuousHeartRateFrequency = 5
+                    max = 288
+                    min = 1
+                    heartRateData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    heartRateHourMaxValue = listOf()
+                    heartRateHourMinValue = listOf()
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousHeartRateBean().apply {
+                    continuousHeartRateFrequency = 5
+                    max = 288
+                    min = 1
+                    heartRateData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    heartRateHourMaxValue = listOf()
+                    heartRateHourMinValue = listOf()
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousHeartRateBean().apply {
+                    continuousHeartRateFrequency = 5
+                    max = 288
+                    min = 1
+                    heartRateData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    heartRateHourMaxValue = listOf()
+                    heartRateHourMinValue = listOf()
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousHeartRateBean().apply {
+                    continuousHeartRateFrequency = 5
+                    max = 288
+                    min = 1
+                    heartRateData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    heartRateHourMaxValue = listOf()
+                    heartRateHourMinValue = listOf()
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //ContinuousBloodOxygenBean{bloodOxygenFrequency=15, bloodOxygenData=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], max=0, min=0,
+                // bloodOxygenMaxValue=[], bloodOxygenMinValue=[], date='2024-03-29 00:00:00'}
+                FitnessRTCManager.fillPendingData(ContinuousBloodOxygenBean().apply {
+                    bloodOxygenFrequency = 15
+                    max = 9
+                    min = 1
+                    bloodOxygenData = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            if (i <= 9) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    bloodOxygenMaxValue = listOf()
+                    bloodOxygenMinValue = listOf()
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousBloodOxygenBean().apply {
+                    bloodOxygenFrequency = 15
+                    max = 96
+                    min = 1
+                    bloodOxygenData = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    bloodOxygenMaxValue = listOf()
+                    bloodOxygenMinValue = listOf()
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousBloodOxygenBean().apply {
+                    bloodOxygenFrequency = 15
+                    max = 96
+                    min = 1
+                    bloodOxygenData = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    bloodOxygenMaxValue = listOf()
+                    bloodOxygenMinValue = listOf()
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousBloodOxygenBean().apply {
+                    bloodOxygenFrequency = 15
+                    max = 96
+                    min = 1
+                    bloodOxygenData = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    bloodOxygenMaxValue = listOf()
+                    bloodOxygenMinValue = listOf()
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousBloodOxygenBean().apply {
+                    bloodOxygenFrequency = 15
+                    max = 96
+                    min = 1
+                    bloodOxygenData = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    bloodOxygenMaxValue = listOf()
+                    bloodOxygenMinValue = listOf()
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //ContinuousPressureBean{pressureFrequency=5, pressureData=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], pressureDataMaxValue=0, pressureDataMinValue=0, date='2024-03-29 00:00:00'}
+                FitnessRTCManager.fillPendingData(ContinuousPressureBean().apply {
+                    pressureFrequency = 5
+                    pressureDataMaxValue = 27
+                    pressureDataMinValue = 1
+                    pressureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            if (i <= 27) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousPressureBean().apply {
+                    pressureFrequency = 5
+                    pressureDataMaxValue = 288
+                    pressureDataMinValue = 1
+                    pressureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousPressureBean().apply {
+                    pressureFrequency = 5
+                    pressureDataMaxValue = 288
+                    pressureDataMinValue = 1
+                    pressureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousPressureBean().apply {
+                    pressureFrequency = 5
+                    pressureDataMaxValue = 288
+                    pressureDataMinValue = 1
+                    pressureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousPressureBean().apply {
+                    pressureFrequency = 5
+                    pressureDataMaxValue = 288
+                    pressureDataMinValue = 1
+                    pressureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //ContinuousTemperatureBean{temperatureFrequency=5, temperatureData=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                // 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], date='2024-03-29 00:00:00'}
+                FitnessRTCManager.fillPendingData(ContinuousTemperatureBean().apply {
+                    temperatureFrequency = 5
+                    temperatureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            if (i <= 27) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousTemperatureBean().apply {
+                    temperatureFrequency = 5
+                    temperatureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousTemperatureBean().apply {
+                    temperatureFrequency = 5
+                    temperatureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousTemperatureBean().apply {
+                    temperatureFrequency = 5
+                    temperatureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(ContinuousTemperatureBean().apply {
+                    temperatureFrequency = 5
+                    temperatureData = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+                //OverallDayMovementData {"data":[255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255],"date":"2024-03-29 00:00:00"}
+                FitnessRTCManager.fillPendingData(OverallDayMovementData().apply {
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            if (i <= 27) {
+                                add(i)
+                            } else {
+                                add(255)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(OverallDayMovementData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(OverallDayMovementData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(OverallDayMovementData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(OverallDayMovementData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //TodayActiveTypeData {"data":[255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255],"date":"2024-03-29 00:00:00"}
+                FitnessRTCManager.fillPendingData(TodayActiveTypeData().apply {
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            if (i <= 27) {
+                                add(i)
+                            } else {
+                                add(255)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayActiveTypeData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayActiveTypeData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayActiveTypeData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayActiveTypeData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //TodayRespiratoryRateData {"data":[255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+                // 255,255,255,255,255,255,255,255,255,255,255],"date":"2024-03-29 00:00:00"}
+                FitnessRTCManager.fillPendingData(TodayRespiratoryRateData().apply {
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            if (i <= 27) {
+                                add(i)
+                            } else {
+                                add(255)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayRespiratoryRateData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayRespiratoryRateData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayRespiratoryRateData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(TodayRespiratoryRateData().apply {
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..288) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //RingBodyBatteryBean {"bodyBatteryFrequency":15,"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                // 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                // 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"date":"2024-03-29
+                // 00:00:00"}
+                FitnessRTCManager.fillPendingData(RingBodyBatteryBean().apply {
+                    bodyBatteryFrequency = 15
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            if (i <= 9) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingBodyBatteryBean().apply {
+                    bodyBatteryFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingBodyBatteryBean().apply {
+                    bodyBatteryFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingBodyBatteryBean().apply {
+                    bodyBatteryFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingBodyBatteryBean().apply {
+                    bodyBatteryFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //RingStressDetectionBean {"data":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+                // ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+                // 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"stressFrequency":15,"date":"2024-03-29 00:00:00"}
+                FitnessRTCManager.fillPendingData(RingStressDetectionBean().apply {
+                    stressFrequency = 15
+                    this.data  = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            if (i <= 9) {
+                                add(i)
+                            } else {
+                                add(0)
+                            }
+                        }
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingStressDetectionBean().apply {
+                    stressFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingStressDetectionBean().apply {
+                    stressFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingStressDetectionBean().apply {
+                    stressFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingStressDetectionBean().apply {
+                    stressFrequency = 5
+                    this.data = mutableListOf<Int>().apply {
+                        for (i in 1..96) {
+                            add(i)
+                        }
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //RingHealthScoreBean : {"healthScore":0,"sedentaryDuration":0,"date":"2024-03-30 00:00:00"}
+                FitnessRTCManager.fillPendingData(RingHealthScoreBean().apply {
+                    healthScore = 1
+                    sedentaryDuration = 2
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingHealthScoreBean().apply {
+                    healthScore = 2
+                    sedentaryDuration = 3
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingHealthScoreBean().apply {
+                    healthScore = 2
+                    sedentaryDuration = 3
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingHealthScoreBean().apply {
+                    healthScore = 2
+                    sedentaryDuration = 3
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingHealthScoreBean().apply {
+                    healthScore = 4
+                    sedentaryDuration = 5
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //RingSleepResultBean : {"awakeTime":0,"deepSleepTime":0,"entryTime":0,"exitTime":0,"isExistSleep":false,"lightSleepTime":0,
+                // "rapidEyeMovementTime":0,"sleepDistributionData":[],"sleepDuration":0,"sleepEfficiency":0,"sleepLatency":0,
+                // "sleepMovementsData":[],"sleepScore":0,"timeInBedTime":0,"date":"2024-03-30 00:00:00"}
+                FitnessRTCManager.fillPendingData(RingSleepResultBean().apply {
+                    awakeTime = 0
+                    deepSleepTime = 1
+                    entryTime = 2
+                    exitTime=3
+                    isExistSleep = true
+                    lightSleepTime = 4
+                    rapidEyeMovementTime = 5
+                    sleepDistributionData = listOf()
+                    sleepDuration = 6
+                    sleepEfficiency = 7
+                    sleepLatency = 8
+                    sleepMovementsData = listOf()
+                    sleepScore = 9
+                    timeInBedTime = 10
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepResultBean().apply {
+                    awakeTime = 0
+                    deepSleepTime = 1
+                    entryTime = 2
+                    exitTime=3
+                    isExistSleep = true
+                    lightSleepTime = 4
+                    rapidEyeMovementTime = 5
+                    sleepDistributionData = listOf()
+                    sleepDuration = 6
+                    sleepEfficiency = 7
+                    sleepLatency = 8
+                    sleepMovementsData = listOf()
+                    sleepScore = 9
+                    timeInBedTime = 10
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepResultBean().apply {
+                    awakeTime = 0
+                    deepSleepTime = 1
+                    entryTime = 2
+                    exitTime=3
+                    isExistSleep = true
+                    lightSleepTime = 4
+                    rapidEyeMovementTime = 5
+                    sleepDistributionData = listOf()
+                    sleepDuration = 6
+                    sleepEfficiency = 7
+                    sleepLatency = 8
+                    sleepMovementsData = listOf()
+                    sleepScore = 9
+                    timeInBedTime = 10
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepResultBean().apply {
+                    awakeTime = 0
+                    deepSleepTime = 1
+                    entryTime = 2
+                    exitTime=3
+                    isExistSleep = true
+                    lightSleepTime = 4
+                    rapidEyeMovementTime = 5
+                    sleepDistributionData = listOf()
+                    sleepDuration = 6
+                    sleepEfficiency = 7
+                    sleepLatency = 8
+                    sleepMovementsData = listOf()
+                    sleepScore = 9
+                    timeInBedTime = 10
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepResultBean().apply {
+                    awakeTime = 10
+                    deepSleepTime = 11
+                    entryTime = 12
+                    exitTime=13
+                    isExistSleep = true
+                    lightSleepTime = 14
+                    rapidEyeMovementTime = 15
+                    sleepDistributionData = listOf()
+                    sleepDuration = 16
+                    sleepEfficiency = 17
+                    sleepLatency = 18
+                    sleepMovementsData = listOf()
+                    sleepScore = 19
+                    timeInBedTime = 20
+                    date = "2024-04-02 00:00:00"
+                })
+
+
+                //RingSleepNapBean : [{"existSleepNap":true,"asleepNapTime":0,"wakeupNapTime":0,"sleepNapDuration":0,"date":"2024-03-30 00:00:00"}]
+                FitnessRTCManager.fillPendingData(RingSleepNapBean().apply {
+                    existSleepNap = true
+                    asleepNapTime = 1
+                    wakeupNapTime = 2
+                    sleepNapDuration = 3
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepNapBean().apply {
+                    existSleepNap = true
+                    asleepNapTime = 3
+                    wakeupNapTime = 4
+                    sleepNapDuration = 5
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepNapBean().apply {
+                    existSleepNap = true
+                    asleepNapTime = 3
+                    wakeupNapTime = 4
+                    sleepNapDuration = 5
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepNapBean().apply {
+                    existSleepNap = true
+                    asleepNapTime = 3
+                    wakeupNapTime = 4
+                    sleepNapDuration = 5
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(RingSleepNapBean().apply {
+                    existSleepNap = true
+                    asleepNapTime = 6
+                    wakeupNapTime = 7
+                    sleepNapDuration = 8
+                    date = "2024-04-02 00:00:00"
+                })
+
+                //AutoActiveSportBean{[{"autoActiveSportType":0,"autoActiveSportLevel":0,"autoActiveStartTime":0,"autoActiveDuration":0,"autoActiveSteps":0,"autoSctiveKcal":0}]
+                // ,"date":"2024-03-30 00:00:00"}
+                FitnessRTCManager.fillPendingData(AutoActiveSportBean().apply {
+                    sportData = arrayListOf<AutoActiveSportBean.SportData>().apply {
+                        this.add(AutoActiveSportBean.SportData().apply {
+                            autoActiveSportType = 1
+                            autoActiveSportLevel = 2
+                            autoActiveStartTime = 3
+                            autoActiveDuration = 4
+                            autoActiveSteps = 5
+                            autoSctiveKcal = 6
+                        })
+                    }
+                    date = "2024-04-03 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(AutoActiveSportBean().apply {
+                    sportData = arrayListOf<AutoActiveSportBean.SportData>().apply {
+                        this.add(AutoActiveSportBean.SportData().apply {
+                            autoActiveSportType = 11
+                            autoActiveSportLevel = 12
+                            autoActiveStartTime = 13
+                            autoActiveDuration = 14
+                            autoActiveSteps = 15
+                            autoSctiveKcal = 16
+                        })
+                    }
+                    date = "2024-03-30 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(AutoActiveSportBean().apply {
+                    sportData = arrayListOf<AutoActiveSportBean.SportData>().apply {
+                        this.add(AutoActiveSportBean.SportData().apply {
+                            autoActiveSportType = 11
+                            autoActiveSportLevel = 12
+                            autoActiveStartTime = 13
+                            autoActiveDuration = 14
+                            autoActiveSteps = 15
+                            autoSctiveKcal = 16
+                        })
+                    }
+                    date = "2024-03-31 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(AutoActiveSportBean().apply {
+                    sportData = arrayListOf<AutoActiveSportBean.SportData>().apply {
+                        this.add(AutoActiveSportBean.SportData().apply {
+                            autoActiveSportType = 11
+                            autoActiveSportLevel = 12
+                            autoActiveStartTime = 13
+                            autoActiveDuration = 14
+                            autoActiveSteps = 15
+                            autoSctiveKcal = 16
+                        })
+                    }
+                    date = "2024-04-01 00:00:00"
+                })
+                FitnessRTCManager.fillPendingData(AutoActiveSportBean().apply {
+                    sportData = arrayListOf<AutoActiveSportBean.SportData>().apply {
+                        this.add(AutoActiveSportBean.SportData().apply {
+                            autoActiveSportType = 21
+                            autoActiveSportLevel = 22
+                            autoActiveStartTime = 23
+                            autoActiveDuration = 24
+                            autoActiveSteps = 25
+                            autoSctiveKcal = 26
+                        })
+                    }
+                    date = "2024-04-02 00:00:00"
+                })
+                //endregion
+
+            }
+
+            override fun onSleepData(data: SleepBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onSleepData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nSleepBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+
+            }
+
+            override fun onContinuousHeartRateData(data: ContinuousHeartRateBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onContinuousHeartRateData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nContinuousHeartRateBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onOfflineHeartRateData(data: OfflineHeartRateBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onOfflineHeartRateData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nOfflineHeartRateBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onContinuousBloodOxygenData(data: ContinuousBloodOxygenBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onContinuousBloodOxygenData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nContinuousBloodOxygenBean : $data")
+                    return
+                }
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onOfflineBloodOxygenData(data: OfflineBloodOxygenBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onOfflineBloodOxygenData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nOfflineBloodOxygenBean : $data")
+                    return
+                }
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onContinuousPressureData(data: ContinuousPressureBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onContinuousPressureData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nContinuousPressureBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onOfflinePressureData(data: OfflinePressureDataBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onOfflinePressureData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nOfflinePressureDataBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onContinuousTemperatureData(data: ContinuousTemperatureBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onContinuousTemperatureData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nContinuousTemperatureBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onOfflineTemperatureData(data: OfflineTemperatureDataBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onOfflineTemperatureData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nOfflineTemperatureDataBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onEffectiveStandingData(data: EffectiveStandingBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onEffectiveStandingData : $data")
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nEffectiveStandingBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onActivityDurationData(data: ActivityDurationBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onActivityDurationData : " + GsonUtils.toJson(data))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nActivityDurationBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onOffEcgData(data: OffEcgDataBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onOffEcgData : " + GsonUtils.toJson(data))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nOffEcgDataBean : $data")
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onExaminationData(data: ExaminationBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "ExaminationBean : " + GsonUtils.toJson(data))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nExaminationBean : ${GsonUtils.toJson(data)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onRingTodayActiveTypeData(bean: TodayActiveTypeData) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "TodayActivityIndicatorsBean : " + GsonUtils.toJson(bean))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nTodayActivityIndicatorsBean : ${GsonUtils.toJson(bean)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(bean)
+            }
+
+            override fun onRingOverallDayMovementData(bean: OverallDayMovementData) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onRingOverallDayMovementData : " + GsonUtils.toJson(bean))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nOverallDayMovementData : ${GsonUtils.toJson(bean)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(bean)
+            }
+
+            override fun onRingTodayRespiratoryRateData(bean: TodayRespiratoryRateData) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onRingTodayRespiratoryRateData : " + GsonUtils.toJson(bean))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nTodayRespiratoryRateData : ${GsonUtils.toJson(bean)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(bean)
+            }
+
+            override fun onRingHealthScore(bean: RingHealthScoreBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "RingHealthScoreBean : " + GsonUtils.toJson(bean))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nRingHealthScoreBean : ${GsonUtils.toJson(bean)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(bean)
+            }
+
+            override fun onRingSleepResult(bean: RingSleepResultBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "RingSleepResultBean : " + GsonUtils.toJson(bean))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nRingSleepResultBean : ${GsonUtils.toJson(bean)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(bean)
+            }
+
+            override fun onRingSleepNAP(list: List<RingSleepNapBean>) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "RingSleepNapBean : " + GsonUtils.toJson(list))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nRingSleepNapBean : ${GsonUtils.toJson(list)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(list)
+            }
+
+            override fun onRingAutoActiveSportData(data: AutoActiveSportBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "AutoActiveSportData : " + GsonUtils.toJson(data))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nAutoActiveSportData : ${GsonUtils.toJson(data)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onRingBodyBatteryData(data: RingBodyBatteryBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onRingBodyBatteryData : " + GsonUtils.toJson(data))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nRingBodyBatteryBean : ${GsonUtils.toJson(data)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+
+            override fun onRingStressDetectionData(data: RingStressDetectionBean) {
+                if (rtcOffsets.isEmpty()) {
+                    Log.e(TAG, "onRingStressDetectionData : " + GsonUtils.toJson(data))
+                    //之前的逻辑  previous logic
+                    dailyResult.append("\n\nRingStressDetectionBean : ${GsonUtils.toJson(data)}".trimIndent())
+                    return
+                }
+
+                /****** fill Pending Data ******/
+                //FitnessRTCManager.fillPendingData(data)
+            }
+        }
+    }
+
+
+
+    public inner class MyFitnessRTCDataCallBack : FitnessRTCDataCallBack {
+        /**
+         * @param offsetState
+         * 偏移状态 ： 1 无需偏移  ,2 偏移  ,3 偏移值超出合理时间范围（1H - 1Y）
+         * Offset status: 1 No offset required, 2 Offset, 3 Offset value exceeds reasonable time range (1H - 1Y)
+         * @param data
+         * 数据 data
+         */
+        override fun onDailyData(offsetState:Int,data: MutableList<DailyBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onDailyData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState, onDailyData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onSleepData(offsetState:Int,data: MutableList<SleepBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onSleepData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onSleepData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onContinuousHeartRateData(offsetState:Int,data: MutableList<ContinuousHeartRateBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onContinuousHeartRateData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onContinuousHeartRateData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onOfflineHeartRateData(offsetState:Int,data: MutableList<OfflineHeartRateBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onOfflineHeartRateData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onOfflineHeartRateData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onContinuousBloodOxygenData(offsetState:Int,data: MutableList<ContinuousBloodOxygenBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onContinuousBloodOxygenData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onContinuousBloodOxygenData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onOfflineBloodOxygenData(offsetState:Int,data: MutableList<OfflineBloodOxygenBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onOfflineBloodOxygenData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onOfflineBloodOxygenData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onContinuousPressureData(offsetState:Int,data: MutableList<ContinuousPressureBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onContinuousPressureData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onContinuousPressureData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onOfflinePressureData(offsetState:Int,data: MutableList<OfflinePressureDataBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onOfflinePressureData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onOfflinePressureData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onContinuousTemperatureData(offsetState:Int,data: MutableList<ContinuousTemperatureBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onContinuousTemperatureData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onContinuousTemperatureData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onOfflineTemperatureData(offsetState:Int,data: MutableList<OfflineTemperatureDataBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onOfflineTemperatureData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onOfflineTemperatureData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onEffectiveStandingData(offsetState:Int,data: MutableList<EffectiveStandingBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onEffectiveStandingData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onEffectiveStandingData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onActivityDurationData(offsetState:Int,data: MutableList<ActivityDurationBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onActivityDurationData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onActivityDurationData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onOffEcgData(offsetState:Int,data: MutableList<OffEcgDataBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onOffEcgData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onOffEcgData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onExaminationData(offsetState:Int,data: MutableList<ExaminationBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onExaminationData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onExaminationData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingTodayActiveTypeData(offsetState:Int,data: MutableList<TodayActiveTypeData>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingTodayActiveTypeData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingTodayActiveTypeData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingOverallDayMovementData(offsetState:Int,data: MutableList<OverallDayMovementData>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingOverallDayMovementData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingOverallDayMovementData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingTodayRespiratoryRateData(offsetState:Int,data: MutableList<TodayRespiratoryRateData>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingTodayRespiratoryRateData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingTodayRespiratoryRateData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingHealthScore(offsetState:Int,data: MutableList<RingHealthScoreBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingHealthScore : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingHealthScore : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingSleepResult(offsetState:Int,data: MutableList<RingSleepResultBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingSleepResult : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingSleepResult : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingSleepNAP(offsetState:Int,data: MutableList<RingSleepNapBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingSleepNAP : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingSleepNAP : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingAutoActiveSportData(offsetState:Int,data: MutableList<AutoActiveSportBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingAutoActiveSportData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingAutoActiveSportData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingBodyBatteryData(offsetState:Int,data: MutableList<RingBodyBatteryBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingBodyBatteryData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingBodyBatteryData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+        override fun onRingStressDetectionData(offsetState:Int,data: MutableList<RingStressDetectionBean>?) {
+            if (data == null) return
+            for (item in data) {
+                Log.e(TAG, "offsetState :$offsetState ,onRingStressDetectionData : ${GsonUtils.toJson(item)}")
+                dailyResult.append("\n\noffsetState：$offsetState,onRingStressDetectionData : ${GsonUtils.toJson(item)}")
+            }
+        }
+
+    }
+
+
+
+}

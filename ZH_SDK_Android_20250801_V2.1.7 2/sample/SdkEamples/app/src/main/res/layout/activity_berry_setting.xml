@@ -1,0 +1,1648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="50dp">
+
+            <CheckBox
+                android:id="@+id/cbHrModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s307" />
+
+            <CheckBox
+                android:id="@+id/cbHrIsWarningSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s308" />
+
+            <CheckBox
+                android:id="@+id/cbHeartRateMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/s353" />
+
+            <EditText
+                android:id="@+id/etHeartRate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s309"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <CheckBox
+                android:id="@+id/cbHrIsSport"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/s355" />
+
+            <EditText
+                android:id="@+id/etHeartSport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s356"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetHr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s310"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetHr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s311"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbSleepSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <CheckBox
+                android:id="@+id/cbSleepREM"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s610" />
+
+            <CheckBox
+                android:id="@+id/cbSleepSmartSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s611" />
+
+            <CheckBox
+                android:id="@+id/cbSleepMinimizeScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s612" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/s454" />
+
+            <EditText
+                android:id="@+id/etSleepSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSleepSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSleepEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSleepEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetSleepMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s614"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetSleepMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s613"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbPrModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s330" />
+
+            <CheckBox
+                android:id="@+id/cbPrReminderSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s331" />
+
+            <Button
+                android:id="@+id/btnGetPressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s332"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetPressure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s333"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etVibration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s140"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s141"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s142"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etVibrationD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s620"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetVD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s619"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetVD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s618"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbPSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSetP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s131"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetP"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s132"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbOSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSetO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s134"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s135"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbRSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSetR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s137"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s138"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etWMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s126"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etWSensitivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s127"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s128"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s129"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbNSwitch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s155" />
+
+            <CheckBox
+                android:id="@+id/cbNSwitch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s156" />
+
+            <EditText
+                android:id="@+id/etNSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etNEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s157"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetN"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s158"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etDMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s144"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s145"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s146"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s147"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbSSwitch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s149" />
+
+            <CheckBox
+                android:id="@+id/cbSSwitch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s150" />
+
+            <EditText
+                android:id="@+id/etLevel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s150"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s151"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s152"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s153"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbSRSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s62" />
+
+                <CheckBox
+                    android:id="@+id/cbSRSRwitch2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:checked="false"
+                    android:text="@string/s63" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/etSSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSInterval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s76"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetSR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s66"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetSR"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s67"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetRD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s68"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetRD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s69"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetRM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s70"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetRM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s75"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetRH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s258"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetRH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s259"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetRW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s260"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetRW"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s261"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbSleepRSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <EditText
+                android:id="@+id/etSleepH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etSleepM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetSleep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s466"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetSleep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s467"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etEventDescr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s72"
+                android:imeOptions="actionNext"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEventFinish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s464"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s74"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s73"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s87"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s88"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s89"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etEs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s90"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s91"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetEvent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s92"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbCSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s62" />
+
+            <EditText
+                android:id="@+id/etCName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:hint="@string/s94"
+                android:imeOptions="actionNext"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etCSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etCSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbC1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s95" />
+
+                <CheckBox
+                    android:id="@+id/cbC2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s96" />
+
+                <CheckBox
+                    android:id="@+id/cbC3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s97" />
+
+                <CheckBox
+                    android:id="@+id/cbC4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s98" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/cbC5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s95" />
+
+                <CheckBox
+                    android:id="@+id/cbC6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s100" />
+
+                <CheckBox
+                    android:id="@+id/cbC7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:text="@string/s101" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSetC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s102"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s80"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbBtSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s357" />
+
+            <CheckBox
+                android:id="@+id/cbBtRemind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s358" />
+
+            <Button
+                android:id="@+id/btnGetBtSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s301"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetBtSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s302"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <Button
+                android:id="@+id/btnGetSchoolMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s321"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetSchoolMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s322"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <Button
+                android:id="@+id/btnGetScheduler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s324"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetScheduler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s325"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbPhSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s107" />
+
+            <CheckBox
+                android:id="@+id/cbPhSwitch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s354" />
+
+            <EditText
+                android:id="@+id/etY"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s108"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s109"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s110"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etTip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s111"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAllDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s112"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s113"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s114"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetPh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s115"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <Button
+                android:id="@+id/btnSyncStock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s267"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetStockOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s268"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetStockOrder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s269"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnDelStock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s270"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbBoModeSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s344" />
+
+            <EditText
+                android:id="@+id/etBoReminderSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s345"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoSH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s78"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoSM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s64"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoEH"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s77"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etBoEM"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s65"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetBoMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s346"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetBoMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s347"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etFwRMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/s349"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etFwVMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:hint="@string/s350"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetFw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s351"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetFw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s352"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbNoticeNotLightUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s335" />
+
+            <CheckBox
+                android:id="@+id/cbNotice2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s635" />
+
+            <CheckBox
+                android:id="@+id/cbNotice3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s636" />
+
+            <CheckBox
+                android:id="@+id/cbNoticeDelay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s340" />
+
+            <EditText
+                android:id="@+id/etPhoneRemindVibrationMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s341"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etPhoneRemindRingMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s342"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetNoticeSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s336"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetNoticeSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s337"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etCustomizeSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s637"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetCustomizeSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s638"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetCustomizeSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s639"
+                android:textAllCaps="false" />
+
+
+            <include layout="@layout/line" />
+
+            <CheckBox
+                android:id="@+id/cbAutoSportSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s641" />
+
+            <CheckBox
+                android:id="@+id/cbAutoSportStopSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/s642" />
+
+            <Button
+                android:id="@+id/btnSetAutoSport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s643"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetAutoSport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s644"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etMpTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s704"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etMpContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s705"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSetMorningPost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s703"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etVaultCardId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s710"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etVaultSort"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s711"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etVaultAppNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s712"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etVaultAlwaysOn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s713"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etVaultDeleteDays"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s714"
+                android:imeOptions="actionNext"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etVaultPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s715"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etVaultStrings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s716"
+                android:imeOptions="actionNext" />
+
+            <Button
+                android:id="@+id/btnSetVault"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s717"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetSimpleVault"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s718"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etGetVaultCardId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s710"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnGetVaultInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s719"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etDelVaultCardId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s722"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnDelVaultInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s720"
+                android:textAllCaps="false" />
+
+            <EditText
+                android:id="@+id/etAiCmd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/s723"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnAiCmd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s724"
+                android:textAllCaps="false" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

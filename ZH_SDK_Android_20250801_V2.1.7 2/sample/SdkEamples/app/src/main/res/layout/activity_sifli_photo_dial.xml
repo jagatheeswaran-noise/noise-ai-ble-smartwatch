@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivEffect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dip"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/colorMyIndex" />
+
+    <LinearLayout
+        android:id="@+id/llTop"
+        app:layout_constraintTop_toBottomOf="@id/ivEffect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/ivColor1"
+            style="@style/public_textview_style"
+            android:text="Color1" />
+
+
+        <TextView
+            android:id="@+id/ivColor2"
+            style="@style/public_textview_style"
+            android:text="Color2" />
+
+
+        <TextView
+            android:id="@+id/ivColor3"
+            style="@style/public_textview_style"
+            android:text="Color3" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnWatchface"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/s21"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/llTop"
+        android:layout_marginTop="20dp"/>
+
+    <Button
+        android:id="@+id/btnClearLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/s489"
+        android:textAllCaps="false"
+        app:layout_constraintTop_toBottomOf="@id/btnWatchface" />
+
+    <LinearLayout
+        android:id="@+id/llLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/btnClearLog" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

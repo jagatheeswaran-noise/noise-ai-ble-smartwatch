@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etAiCmd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="1,2,3"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendAiCmd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s730" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etAiError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0,1,2,3,4,5"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendAiError"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s729" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etAiTranslatedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendAiTranslatedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s731" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etAiAnswerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendAiAnswerText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s732" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etAiVTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="title"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiVValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="value"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiVUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="unit"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiVFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="footer"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiVTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2000-01-01 00:00:00"
+                android:text="2000-01-01 00:00:00"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+
+            <Button
+                android:id="@+id/btnSendViewUi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s733" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etAiHTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="title"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHPeriod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="period"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHValueTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="valueTitle"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHYMax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="yMax"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHMaxValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="maxValue"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHMinValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="minValue"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHAvgValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="avgValue"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="unit"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHYMD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2000-01-01"
+                android:text="2000-01-01"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+
+            <EditText
+                android:id="@+id/etAiHChartValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="chartValue"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiHCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="category"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendHistoryUi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s737" />
+
+            <include layout="@layout/line" />
+
+            <EditText
+                android:id="@+id/etAiAScenario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="scenario"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiAThresholdValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="thresholdValue"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiAYMD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2000-01-01"
+                android:text="2000-01-01"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+
+            <EditText
+                android:id="@+id/etAiAUnit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="unit"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiATime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2000-01-01 00:00:00"
+                android:text="2000-01-01 00:00:00"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s738" />
+
+            <include layout="@layout/line" />
+
+            <!--AiToggleBean-->
+
+            <EditText
+                android:id="@+id/etAiTScenario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="scenario"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/etAiTTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2000-01-01 00:00:00"
+                android:text="2000-01-01 00:00:00"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <CheckBox
+                android:id="@+id/cbAiTToggleStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s62" />
+
+            <Button
+                android:id="@+id/btnSendToggle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s739" />
+
+            <include layout="@layout/line" />
+
+            <!--AiOpenFunctionBean-->
+
+            <EditText
+                android:id="@+id/etAiOFScenario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="scenario"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/etAiOFTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="2000-01-01 00:00:00"
+                android:text="2000-01-01 00:00:00"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/etAiOFContactsNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="contactsNumber"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/etAiOFWorkoutType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="workoutType"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/etAiOFDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="duration"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+            <EditText
+                android:id="@+id/etAiOFMusicCommand"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="musicCommand"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/btnSendOpenFun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s740" />
+
+            <include layout="@layout/line" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

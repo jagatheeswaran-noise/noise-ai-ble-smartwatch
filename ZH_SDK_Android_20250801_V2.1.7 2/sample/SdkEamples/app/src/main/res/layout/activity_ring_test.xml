@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="50dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="toActiveMeasure"
+            android:text="@string/s445"
+            android:textAllCaps="false"
+            android:textSize="20sp" />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="getAutoSportData"
+            android:text="@string/s456"
+            android:textAllCaps="false" />
+
+        <include layout="@layout/line"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="getRingAllDaySleepConfig"
+            android:text="@string/s519"
+            android:textAllCaps="false" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="setRingAllDaySleepConfig"
+            android:text="@string/s520"
+            android:textAllCaps="false" />
+
+        <CheckBox
+            android:id="@+id/cbAllDaySleepSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s521" />
+
+        <include layout="@layout/line"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="getAutoActiveSportConfig"
+            android:text="@string/s522"
+            android:textAllCaps="false" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="setAutoActiveSportConfig"
+            android:text="@string/s523"
+            android:textAllCaps="false" />
+
+        <CheckBox
+            android:id="@+id/cbAutoActiveSportSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s524" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            />
+
+        <include layout="@layout/line"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="startRawUpload"
+            android:text="@string/s545"
+            android:textAllCaps="false" />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="endRawUpload"
+            android:text="@string/s546"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/rawFileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s513"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="shareRaw"
+            android:text="@string/s547"
+            android:textAllCaps="false" />
+
+        <include layout="@layout/line"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="getRingChargingCaseInfo"
+            android:text="@string/s744"
+            android:textAllCaps="false" />
+
+        <include layout="@layout/line"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

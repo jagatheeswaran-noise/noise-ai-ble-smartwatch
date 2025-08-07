@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnSyncData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s11" />
+
+            <Button
+                android:id="@+id/btnSys"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s38" />
+
+            <Button
+                android:id="@+id/btnUserSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s606" />
+
+
+            <Button
+                android:id="@+id/btnTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s117" />
+
+            <Button
+                android:id="@+id/btnNotify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s385" />
+
+            <Button
+                android:id="@+id/btnMusic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s416" />
+
+            <Button
+                android:id="@+id/btnMicro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s16" />
+
+            <Button
+                android:id="@+id/btnWeather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s420" />
+
+            <Button
+                android:id="@+id/btnSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s17" />
+
+            <Button
+                android:id="@+id/btnRealTimeLog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s627" />
+
+            <Button
+                android:id="@+id/btnChildren"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s649" />
+
+            <Button
+                android:id="@+id/btnSetMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s691"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnSetSocket"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s708"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnAi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s727"
+                android:textAllCaps="false" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

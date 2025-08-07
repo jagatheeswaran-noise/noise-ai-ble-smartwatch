@@ -33,6 +33,10 @@ const SmartwatchManager: React.FC<SmartwatchManagerProps> = ({ visible, onClose 
 
   const checkInitialState = async () => {
     try {
+      // Initialize persistence and attempt auto-reconnection first
+      console.log('🔄 Initializing with persistence...');
+      await zhSDKService.initializeWithPersistence();
+      
       // Check Bluetooth status
       const bluetoothEnabled = await zhSDKService.isBluetoothEnabled();
       setIsBluetoothEnabled(bluetoothEnabled);

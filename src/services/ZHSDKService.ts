@@ -7,6 +7,7 @@ import {
   ScanStatus,
   ConnectionStatus
 } from '../types/smartwatch';
+import ConnectionPersistenceService from './ConnectionPersistenceService';
 
 const { ZHSDKModule } = NativeModules;
 
@@ -21,6 +22,9 @@ class ZHSDKService {
   private scanStatus: ScanStatus = ScanStatus.IDLE;
   private connectionStatus: ConnectionStatus = ConnectionStatus.DISCONNECTED;
   private connectedDevice: DeviceInfo | null = null;
+  private autoReconnectEnabled: boolean = true;
+  private reconnectAttempts: number = 0;
+  private maxReconnectAttempts: number = 3;
 
   constructor() {
     this.eventEmitter = new NativeEventEmitter(ZHSDKModule);
@@ -89,6 +93,15 @@ class ZHSDKService {
           console.log('✅ Updating connection status to BOUND (Berry)');
           this.connectionStatus = ConnectionStatus.BOUND;
           console.log('📊 Connection status is now:', this.connectionStatus);
+          
+          // Save the connection state for persistence
+          if (this.connectedDevice) {
+            ConnectionPersistenceService.saveConnectionState(
+              this.connectedDevice,
+              ConnectionStatus.BOUND,
+              this.autoReconnectEnabled
+            );
+          }
         }
       })
     );
@@ -100,6 +113,15 @@ class ZHSDKService {
           console.log('✅ Updating connection status to BOUND');
           this.connectionStatus = ConnectionStatus.BOUND;
           console.log('📊 Connection status is now:', this.connectionStatus);
+          
+          // Save the connection state for persistence
+          if (this.connectedDevice) {
+            ConnectionPersistenceService.saveConnectionState(
+              this.connectedDevice,
+              ConnectionStatus.BOUND,
+              this.autoReconnectEnabled
+            );
+          }
         }
       })
     );
@@ -500,6 +522,129 @@ class ZHSDKService {
 
   get currentScannedDevices(): DeviceInfo[] {
     return [...this.scannedDevices];
+  }
+
+  // Connection persistence and auto-reconnection methods
+  
+  /**
+   * Initialize the service and attempt auto-reconnection if enabled
+   */
+  async initializeWithPersistence(): Promise<boolean> {
+    try {
+      console.log('🔄 Initializing service with persistence...');
+      
+      // Check if we should attempt to reconnect
+      const shouldReconnect = await ConnectionPersistenceService.shouldAttemptReconnect();
+      if (!shouldReconnect) {
+        console.log('📱 No reconnection needed');
+        return false;
+      }
+
+      const deviceToReconnect = await ConnectionPersistenceService.getDeviceForReconnect();
+      if (!deviceToReconnect) {
+        console.log('📱 No device found for reconnection');
+        return false;
+      }
+
+      console.log('🔄 Attempting to reconnect to:', deviceToReconnect.name);
+      
+      // Check SDK status and permissions first
+      const sdkReady = await this.checkSDKStatus();
+      const permissionsGranted = await this.checkBluetoothPermissions();
+      if (!sdkReady || !permissionsGranted) {
+        console.log('❌ SDK not ready or permissions missing, cannot reconnect');
+        return false;
+      }
+
+      // Attempt reconnection
+      return await this.attemptAutoReconnect(deviceToReconnect);
+      
+    } catch (error) {
+      console.error('❌ Error during initialization with persistence:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Attempt to automatically reconnect to a device
+   */
+  private async attemptAutoReconnect(device: DeviceInfo): Promise<boolean> {
+    try {
+      this.reconnectAttempts++;
+      console.log(`🔄 Auto-reconnect attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts} to ${device.name}`);
+
+      // First check if device is already connected at native level
+      const isAlreadyConnected = await ZHSDKModule.isDeviceConnected();
+      if (isAlreadyConnected) {
+        console.log('✅ Device already connected at native level');
+        this.connectedDevice = device;
+        this.connectionStatus = ConnectionStatus.BOUND; // Assume bound if already connected
+        return true;
+      }
+
+      // Attempt to connect
+      const connected = await this.connectDevice(device);
+      if (connected) {
+        console.log('✅ Auto-reconnection successful');
+        this.reconnectAttempts = 0; // Reset counter on success
+        return true;
+      } else {
+        console.log('❌ Auto-reconnection failed');
+        
+        // If we've exceeded max attempts, clear the persisted state
+        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+          console.log('❌ Max reconnection attempts reached, clearing persisted state');
+          await ConnectionPersistenceService.clearConnectionState();
+          this.reconnectAttempts = 0;
+        }
+        
+        return false;
+      }
+      
+    } catch (error) {
+      console.error('❌ Error during auto-reconnection:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Manually trigger reconnection to last connected device
+   */
+  async reconnectToLastDevice(): Promise<boolean> {
+    const device = await ConnectionPersistenceService.getDeviceForReconnect();
+    if (!device) {
+      console.log('📱 No device available for reconnection');
+      return false;
+    }
+
+    console.log('🔄 Manual reconnection triggered for:', device.name);
+    return await this.attemptAutoReconnect(device);
+  }
+
+  /**
+   * Enable or disable auto-reconnection
+   */
+  async setAutoReconnectEnabled(enabled: boolean): Promise<void> {
+    this.autoReconnectEnabled = enabled;
+    await ConnectionPersistenceService.setReconnectEnabled(enabled);
+    console.log('⚙️ Auto-reconnect set to:', enabled);
+  }
+
+  /**
+   * Get the last connected device from persistence
+   */
+  async getLastConnectedDevice(): Promise<DeviceInfo | null> {
+    return await ConnectionPersistenceService.getDeviceForReconnect();
+  }
+
+  /**
+   * Clear connection persistence (disconnect permanently)
+   */
+  async clearConnectionPersistence(): Promise<void> {
+    await ConnectionPersistenceService.clearConnectionState();
+    this.connectedDevice = null;
+    this.connectionStatus = ConnectionStatus.DISCONNECTED;
+    console.log('🗑️ Connection persistence cleared');
   }
 
   // Cleanup method
