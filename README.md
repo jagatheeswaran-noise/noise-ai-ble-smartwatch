@@ -1,4 +1,67 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Noise AI - Intelligent Voice Health Assistant
+
+A React Native app that combines voice recognition with local AI (Llama) to provide personalized health insights and recommendations based on your health data.
+
+## 🚀 Features
+
+### 🎤 Voice Recognition
+- Real-time speech-to-text conversion
+- Multi-language support
+- Voice command processing
+
+### 🤖 Local AI Integration
+- Llama 3.2-1B-Instruct model running locally
+- Streaming AI responses with typing effects
+- No internet required for AI processing
+
+### 📊 Intelligent Health Data Analysis
+- **Heart Rate Analysis**: "What is my average heart rate last week?"
+- **Sleep Comparison**: "Compare my sleep last week and this week"
+- **Personalized Diet Plans**: "Give me a diet plan based on my health data"
+- **Comprehensive Health Tracking**: HR, HRV, Sleep Stages, Recovery Scores
+
+### 🎯 Smart Health Queries
+The AI intelligently detects and responds to specific health questions:
+- Fetches real data from local database
+- Provides detailed analysis and trends
+- Offers personalized recommendations
+- Supports natural language queries
+
+## 🏥 Health Data Features
+
+### Tracked Metrics
+- **Heart Rate (HR)**: Continuous monitoring with context (rest/activity/exercise)
+- **Respiratory Rate (RR)**: Breathing pattern analysis
+- **Heart Rate Variability (HRV)**: RMSSD, PNN50, SDNN for stress/recovery
+- **Sleep Data**: Complete sleep stage tracking (Light, Deep, REM, Awake)
+- **Recovery & Stress Scores**: AI-derived wellness indicators
+
+### Sample Data
+Automatically generates 30 days of realistic health data including:
+- Daily heart rate patterns with activity contexts
+- Complete sleep cycles with efficiency scores
+- HRV trends for stress and recovery analysis
+- Personalized health insights and recommendations
+
+## 🎯 Example Queries
+
+Try these natural language health queries:
+
+```
+"What is my average heart rate last week?"
+"Compare my sleep last week and this week"
+"Give me a diet plan based on my health data"
+"How has my heart rate been trending?"
+"What nutrition do I need based on my data?"
+```
+
+## 🔧 Technical Stack
+
+- **React Native 0.80+**
+- **@react-native-voice/voice**: Speech recognition
+- **llama.rn**: Local AI inference
+- **AsyncStorage**: Health data persistence
+- **TypeScript**: Type-safe development
 
 # Getting Started
 

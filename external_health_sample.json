@@ -1,0 +1,50 @@
+[
+  {
+    "timestamp": "2024-01-15T08:00:00Z",
+    "category": "heart_rate",
+    "type": "resting_hr",
+    "value": 65,
+    "unit": "bpm",
+    "source": "smartwatch"
+  },
+  {
+    "timestamp": "2024-01-15T09:30:00Z",
+    "category": "activity",
+    "type": "steps",
+    "value": 8540,
+    "unit": "steps",
+    "source": "fitness_tracker"
+  },
+  {
+    "timestamp": "2024-01-15T23:00:00Z",
+    "category": "sleep",
+    "type": "sleep_duration",
+    "value": 7.5,
+    "unit": "hours",
+    "source": "sleep_tracker"
+  },
+  {
+    "timestamp": "2024-01-15T12:00:00Z",
+    "category": "nutrition",
+    "type": "calories_consumed",
+    "value": 1850,
+    "unit": "kcal",
+    "source": "food_diary"
+  },
+  {
+    "timestamp": "2024-01-15T16:30:00Z",
+    "category": "stress",
+    "type": "stress_level",
+    "value": 3,
+    "unit": "scale_1_10",
+    "source": "self_report"
+  },
+  {
+    "timestamp": "2024-01-15T20:45:00Z",
+    "category": "general",
+    "type": "water_intake",
+    "value": 2.1,
+    "unit": "liters",
+    "source": "manual_entry"
+  }
+]

@@ -1,0 +1,1187 @@
+{
+  "user_profile": {
+    "age": 28,
+    "gender": "male",
+    "height": 175,
+    "weight": 70,
+    "activity_level": "moderate",
+    "goals": {
+      "target_heart_rate": 75,
+      "target_sleep": 8,
+      "target_steps": 10000,
+      "target_calories": 2200
+    }
+  },
+  "daily_metrics": [
+    {
+      "date": "2025-06-20",
+      "timestamp": 1750417190399,
+      "heart_rate": {
+        "average": 79,
+        "resting": 67,
+        "max": 141,
+        "zones": {
+          "fat_burn": 67,
+          "cardio": 31,
+          "peak": 6
+        }
+      },
+      "hrv": {
+        "average": 43,
+        "trend": "stable",
+        "stress_level": 54,
+        "recovery_score": 68
+      },
+      "sleep": {
+        "total_hours": 7.3,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.1,
+        "sleep_score": 73,
+        "efficiency": 84
+      },
+      "activity": {
+        "steps": 9000,
+        "calories_burned": 2050,
+        "active_minutes": 61,
+        "distance_km": 7.2
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 51,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-06-21",
+      "timestamp": 1750503590399,
+      "heart_rate": {
+        "average": 74,
+        "resting": 63,
+        "max": 133,
+        "zones": {
+          "fat_burn": 28,
+          "cardio": 19,
+          "peak": 10
+        }
+      },
+      "hrv": {
+        "average": 46,
+        "trend": "improving",
+        "stress_level": 48,
+        "recovery_score": 71
+      },
+      "sleep": {
+        "total_hours": 7.3,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.1,
+        "sleep_score": 73,
+        "efficiency": 84
+      },
+      "activity": {
+        "steps": 8107,
+        "calories_burned": 1961,
+        "active_minutes": 62,
+        "distance_km": 6.5
+      },
+      "mood": {
+        "energy_level": 10,
+        "stress_level": 37,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-06-22",
+      "timestamp": 1750589990399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 62,
+        "max": 130,
+        "zones": {
+          "fat_burn": 61,
+          "cardio": 26,
+          "peak": 6
+        }
+      },
+      "hrv": {
+        "average": 51,
+        "trend": "improving",
+        "stress_level": 38,
+        "recovery_score": 76
+      },
+      "sleep": {
+        "total_hours": 8.4,
+        "deep_sleep": 1.8,
+        "rem_sleep": 2,
+        "light_sleep": 4.6,
+        "sleep_score": 84,
+        "efficiency": 89
+      },
+      "activity": {
+        "steps": 7614,
+        "calories_burned": 1911,
+        "active_minutes": 70,
+        "distance_km": 6.1
+      },
+      "mood": {
+        "energy_level": 6,
+        "stress_level": 34,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-06-23",
+      "timestamp": 1750676390399,
+      "heart_rate": {
+        "average": 75,
+        "resting": 64,
+        "max": 135,
+        "zones": {
+          "fat_burn": 67,
+          "cardio": 33,
+          "peak": 20
+        }
+      },
+      "hrv": {
+        "average": 41,
+        "trend": "stable",
+        "stress_level": 58,
+        "recovery_score": 66
+      },
+      "sleep": {
+        "total_hours": 6.9,
+        "deep_sleep": 1.3,
+        "rem_sleep": 1.7,
+        "light_sleep": 3.9,
+        "sleep_score": 69,
+        "efficiency": 82
+      },
+      "activity": {
+        "steps": 8826,
+        "calories_burned": 2033,
+        "active_minutes": 66,
+        "distance_km": 7.1
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 52,
+        "motivation": 6
+      }
+    },
+    {
+      "date": "2025-06-24",
+      "timestamp": 1750762790399,
+      "heart_rate": {
+        "average": 73,
+        "resting": 62,
+        "max": 131,
+        "zones": {
+          "fat_burn": 52,
+          "cardio": 40,
+          "peak": 25
+        }
+      },
+      "hrv": {
+        "average": 52,
+        "trend": "improving",
+        "stress_level": 36,
+        "recovery_score": 77
+      },
+      "sleep": {
+        "total_hours": 6.6,
+        "deep_sleep": 1.2,
+        "rem_sleep": 1.6,
+        "light_sleep": 3.7,
+        "sleep_score": 66,
+        "efficiency": 80
+      },
+      "activity": {
+        "steps": 8704,
+        "calories_burned": 2020,
+        "active_minutes": 60,
+        "distance_km": 7
+      },
+      "mood": {
+        "energy_level": 10,
+        "stress_level": 31,
+        "motivation": 6
+      }
+    },
+    {
+      "date": "2025-06-25",
+      "timestamp": 1750849190399,
+      "heart_rate": {
+        "average": 80,
+        "resting": 68,
+        "max": 144,
+        "zones": {
+          "fat_burn": 36,
+          "cardio": 41,
+          "peak": 11
+        }
+      },
+      "hrv": {
+        "average": 38,
+        "trend": "stable",
+        "stress_level": 63,
+        "recovery_score": 63
+      },
+      "sleep": {
+        "total_hours": 7.9,
+        "deep_sleep": 1.6,
+        "rem_sleep": 1.9,
+        "light_sleep": 4.4,
+        "sleep_score": 79,
+        "efficiency": 87
+      },
+      "activity": {
+        "steps": 9889,
+        "calories_burned": 2139,
+        "active_minutes": 71,
+        "distance_km": 7.9
+      },
+      "mood": {
+        "energy_level": 9,
+        "stress_level": 54,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-06-26",
+      "timestamp": 1750935590399,
+      "heart_rate": {
+        "average": 77,
+        "resting": 65,
+        "max": 138,
+        "zones": {
+          "fat_burn": 51,
+          "cardio": 27,
+          "peak": 12
+        }
+      },
+      "hrv": {
+        "average": 40,
+        "trend": "stable",
+        "stress_level": 61,
+        "recovery_score": 65
+      },
+      "sleep": {
+        "total_hours": 7.7,
+        "deep_sleep": 1.6,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.3,
+        "sleep_score": 77,
+        "efficiency": 86
+      },
+      "activity": {
+        "steps": 9237,
+        "calories_burned": 2074,
+        "active_minutes": 50,
+        "distance_km": 7.4
+      },
+      "mood": {
+        "energy_level": 6,
+        "stress_level": 55,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-06-27",
+      "timestamp": 1751021990399,
+      "heart_rate": {
+        "average": 71,
+        "resting": 60,
+        "max": 128,
+        "zones": {
+          "fat_burn": 26,
+          "cardio": 35,
+          "peak": 6
+        }
+      },
+      "hrv": {
+        "average": 47,
+        "trend": "improving",
+        "stress_level": 46,
+        "recovery_score": 72
+      },
+      "sleep": {
+        "total_hours": 7.1,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.7,
+        "light_sleep": 4,
+        "sleep_score": 71,
+        "efficiency": 83
+      },
+      "activity": {
+        "steps": 8196,
+        "calories_burned": 1970,
+        "active_minutes": 62,
+        "distance_km": 6.6
+      },
+      "mood": {
+        "energy_level": 9,
+        "stress_level": 54,
+        "motivation": 7
+      }
+    },
+    {
+      "date": "2025-06-28",
+      "timestamp": 1751108390399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 61,
+        "max": 130,
+        "zones": {
+          "fat_burn": 53,
+          "cardio": 40,
+          "peak": 11
+        }
+      },
+      "hrv": {
+        "average": 49,
+        "trend": "improving",
+        "stress_level": 42,
+        "recovery_score": 74
+      },
+      "sleep": {
+        "total_hours": 7.5,
+        "deep_sleep": 1.5,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.2,
+        "sleep_score": 75,
+        "efficiency": 85
+      },
+      "activity": {
+        "steps": 9514,
+        "calories_burned": 2101,
+        "active_minutes": 71,
+        "distance_km": 7.6
+      },
+      "mood": {
+        "energy_level": 10,
+        "stress_level": 42,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-06-29",
+      "timestamp": 1751194790399,
+      "heart_rate": {
+        "average": 74,
+        "resting": 63,
+        "max": 133,
+        "zones": {
+          "fat_burn": 78,
+          "cardio": 25,
+          "peak": 6
+        }
+      },
+      "hrv": {
+        "average": 49,
+        "trend": "improving",
+        "stress_level": 42,
+        "recovery_score": 74
+      },
+      "sleep": {
+        "total_hours": 6.8,
+        "deep_sleep": 1.3,
+        "rem_sleep": 1.7,
+        "light_sleep": 3.8,
+        "sleep_score": 68,
+        "efficiency": 81
+      },
+      "activity": {
+        "steps": 9658,
+        "calories_burned": 2116,
+        "active_minutes": 73,
+        "distance_km": 7.7
+      },
+      "mood": {
+        "energy_level": 7,
+        "stress_level": 33,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-06-30",
+      "timestamp": 1751281190399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 61,
+        "max": 129,
+        "zones": {
+          "fat_burn": 42,
+          "cardio": 27,
+          "peak": 21
+        }
+      },
+      "hrv": {
+        "average": 44,
+        "trend": "stable",
+        "stress_level": 53,
+        "recovery_score": 69
+      },
+      "sleep": {
+        "total_hours": 7.9,
+        "deep_sleep": 1.6,
+        "rem_sleep": 1.9,
+        "light_sleep": 4.4,
+        "sleep_score": 79,
+        "efficiency": 87
+      },
+      "activity": {
+        "steps": 7276,
+        "calories_burned": 1878,
+        "active_minutes": 74,
+        "distance_km": 5.8
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 60,
+        "motivation": 10
+      }
+    },
+    {
+      "date": "2025-07-01",
+      "timestamp": 1751367590399,
+      "heart_rate": {
+        "average": 79,
+        "resting": 67,
+        "max": 142,
+        "zones": {
+          "fat_burn": 28,
+          "cardio": 50,
+          "peak": 6
+        }
+      },
+      "hrv": {
+        "average": 42,
+        "trend": "stable",
+        "stress_level": 55,
+        "recovery_score": 67
+      },
+      "sleep": {
+        "total_hours": 6.9,
+        "deep_sleep": 1.3,
+        "rem_sleep": 1.7,
+        "light_sleep": 3.9,
+        "sleep_score": 69,
+        "efficiency": 82
+      },
+      "activity": {
+        "steps": 7292,
+        "calories_burned": 1879,
+        "active_minutes": 64,
+        "distance_km": 5.8
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 40,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-02",
+      "timestamp": 1751453990399,
+      "heart_rate": {
+        "average": 75,
+        "resting": 63,
+        "max": 134,
+        "zones": {
+          "fat_burn": 64,
+          "cardio": 50,
+          "peak": 7
+        }
+      },
+      "hrv": {
+        "average": 48,
+        "trend": "improving",
+        "stress_level": 43,
+        "recovery_score": 73
+      },
+      "sleep": {
+        "total_hours": 8.2,
+        "deep_sleep": 1.7,
+        "rem_sleep": 1.9,
+        "light_sleep": 4.6,
+        "sleep_score": 82,
+        "efficiency": 89
+      },
+      "activity": {
+        "steps": 7962,
+        "calories_burned": 1946,
+        "active_minutes": 61,
+        "distance_km": 6.4
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 66,
+        "motivation": 7
+      }
+    },
+    {
+      "date": "2025-07-03",
+      "timestamp": 1751540390399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 61,
+        "max": 130,
+        "zones": {
+          "fat_burn": 52,
+          "cardio": 47,
+          "peak": 9
+        }
+      },
+      "hrv": {
+        "average": 52,
+        "trend": "improving",
+        "stress_level": 37,
+        "recovery_score": 77
+      },
+      "sleep": {
+        "total_hours": 7.1,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.7,
+        "light_sleep": 4,
+        "sleep_score": 71,
+        "efficiency": 83
+      },
+      "activity": {
+        "steps": 7657,
+        "calories_burned": 1916,
+        "active_minutes": 71,
+        "distance_km": 6.1
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 49,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-07-04",
+      "timestamp": 1751626790399,
+      "heart_rate": {
+        "average": 75,
+        "resting": 63,
+        "max": 134,
+        "zones": {
+          "fat_burn": 28,
+          "cardio": 42,
+          "peak": 18
+        }
+      },
+      "hrv": {
+        "average": 45,
+        "trend": "stable",
+        "stress_level": 51,
+        "recovery_score": 70
+      },
+      "sleep": {
+        "total_hours": 7.7,
+        "deep_sleep": 1.6,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.3,
+        "sleep_score": 77,
+        "efficiency": 86
+      },
+      "activity": {
+        "steps": 9678,
+        "calories_burned": 2118,
+        "active_minutes": 57,
+        "distance_km": 7.7
+      },
+      "mood": {
+        "energy_level": 10,
+        "stress_level": 62,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-07-05",
+      "timestamp": 1751713190399,
+      "heart_rate": {
+        "average": 79,
+        "resting": 67,
+        "max": 142,
+        "zones": {
+          "fat_burn": 32,
+          "cardio": 15,
+          "peak": 21
+        }
+      },
+      "hrv": {
+        "average": 39,
+        "trend": "stable",
+        "stress_level": 61,
+        "recovery_score": 64
+      },
+      "sleep": {
+        "total_hours": 6.5,
+        "deep_sleep": 1.2,
+        "rem_sleep": 1.6,
+        "light_sleep": 3.7,
+        "sleep_score": 65,
+        "efficiency": 80
+      },
+      "activity": {
+        "steps": 9838,
+        "calories_burned": 2134,
+        "active_minutes": 56,
+        "distance_km": 7.9
+      },
+      "mood": {
+        "energy_level": 7,
+        "stress_level": 34,
+        "motivation": 7
+      }
+    },
+    {
+      "date": "2025-07-06",
+      "timestamp": 1751799590399,
+      "heart_rate": {
+        "average": 78,
+        "resting": 66,
+        "max": 140,
+        "zones": {
+          "fat_burn": 77,
+          "cardio": 31,
+          "peak": 15
+        }
+      },
+      "hrv": {
+        "average": 46,
+        "trend": "improving",
+        "stress_level": 48,
+        "recovery_score": 71
+      },
+      "sleep": {
+        "total_hours": 7.1,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.7,
+        "light_sleep": 4,
+        "sleep_score": 71,
+        "efficiency": 83
+      },
+      "activity": {
+        "steps": 7837,
+        "calories_burned": 1934,
+        "active_minutes": 65,
+        "distance_km": 6.3
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 63,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-07",
+      "timestamp": 1751885990399,
+      "heart_rate": {
+        "average": 74,
+        "resting": 63,
+        "max": 133,
+        "zones": {
+          "fat_burn": 78,
+          "cardio": 31,
+          "peak": 15
+        }
+      },
+      "hrv": {
+        "average": 45,
+        "trend": "stable",
+        "stress_level": 51,
+        "recovery_score": 70
+      },
+      "sleep": {
+        "total_hours": 6.8,
+        "deep_sleep": 1.3,
+        "rem_sleep": 1.7,
+        "light_sleep": 3.8,
+        "sleep_score": 68,
+        "efficiency": 81
+      },
+      "activity": {
+        "steps": 9995,
+        "calories_burned": 2150,
+        "active_minutes": 67,
+        "distance_km": 8
+      },
+      "mood": {
+        "energy_level": 9,
+        "stress_level": 47,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-08",
+      "timestamp": 1751972390399,
+      "heart_rate": {
+        "average": 70,
+        "resting": 60,
+        "max": 127,
+        "zones": {
+          "fat_burn": 56,
+          "cardio": 18,
+          "peak": 23
+        }
+      },
+      "hrv": {
+        "average": 45,
+        "trend": "improving",
+        "stress_level": 50,
+        "recovery_score": 70
+      },
+      "sleep": {
+        "total_hours": 8.4,
+        "deep_sleep": 1.8,
+        "rem_sleep": 2,
+        "light_sleep": 4.6,
+        "sleep_score": 84,
+        "efficiency": 89
+      },
+      "activity": {
+        "steps": 9363,
+        "calories_burned": 2086,
+        "active_minutes": 66,
+        "distance_km": 7.5
+      },
+      "mood": {
+        "energy_level": 9,
+        "stress_level": 34,
+        "motivation": 10
+      }
+    },
+    {
+      "date": "2025-07-09",
+      "timestamp": 1752058790399,
+      "heart_rate": {
+        "average": 79,
+        "resting": 67,
+        "max": 143,
+        "zones": {
+          "fat_burn": 60,
+          "cardio": 30,
+          "peak": 20
+        }
+      },
+      "hrv": {
+        "average": 38,
+        "trend": "stable",
+        "stress_level": 65,
+        "recovery_score": 63
+      },
+      "sleep": {
+        "total_hours": 7.5,
+        "deep_sleep": 1.5,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.2,
+        "sleep_score": 75,
+        "efficiency": 85
+      },
+      "activity": {
+        "steps": 9277,
+        "calories_burned": 2078,
+        "active_minutes": 48,
+        "distance_km": 7.4
+      },
+      "mood": {
+        "energy_level": 6,
+        "stress_level": 62,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-07-10",
+      "timestamp": 1752145190399,
+      "heart_rate": {
+        "average": 80,
+        "resting": 68,
+        "max": 143,
+        "zones": {
+          "fat_burn": 32,
+          "cardio": 26,
+          "peak": 17
+        }
+      },
+      "hrv": {
+        "average": 39,
+        "trend": "stable",
+        "stress_level": 62,
+        "recovery_score": 64
+      },
+      "sleep": {
+        "total_hours": 7,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.7,
+        "light_sleep": 4,
+        "sleep_score": 70,
+        "efficiency": 83
+      },
+      "activity": {
+        "steps": 7603,
+        "calories_burned": 1910,
+        "active_minutes": 69,
+        "distance_km": 6.1
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 64,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-11",
+      "timestamp": 1752231590399,
+      "heart_rate": {
+        "average": 73,
+        "resting": 62,
+        "max": 131,
+        "zones": {
+          "fat_burn": 38,
+          "cardio": 26,
+          "peak": 10
+        }
+      },
+      "hrv": {
+        "average": 51,
+        "trend": "improving",
+        "stress_level": 39,
+        "recovery_score": 76
+      },
+      "sleep": {
+        "total_hours": 7.4,
+        "deep_sleep": 1.5,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.1,
+        "sleep_score": 74,
+        "efficiency": 84
+      },
+      "activity": {
+        "steps": 7331,
+        "calories_burned": 1883,
+        "active_minutes": 62,
+        "distance_km": 5.9
+      },
+      "mood": {
+        "energy_level": 9,
+        "stress_level": 38,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-12",
+      "timestamp": 1752317990399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 61,
+        "max": 129,
+        "zones": {
+          "fat_burn": 76,
+          "cardio": 36,
+          "peak": 8
+        }
+      },
+      "hrv": {
+        "average": 39,
+        "trend": "stable",
+        "stress_level": 61,
+        "recovery_score": 64
+      },
+      "sleep": {
+        "total_hours": 8,
+        "deep_sleep": 1.7,
+        "rem_sleep": 1.9,
+        "light_sleep": 4.5,
+        "sleep_score": 80,
+        "efficiency": 88
+      },
+      "activity": {
+        "steps": 7702,
+        "calories_burned": 1920,
+        "active_minutes": 56,
+        "distance_km": 6.2
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 37,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-07-13",
+      "timestamp": 1752404390399,
+      "heart_rate": {
+        "average": 74,
+        "resting": 63,
+        "max": 134,
+        "zones": {
+          "fat_burn": 61,
+          "cardio": 23,
+          "peak": 11
+        }
+      },
+      "hrv": {
+        "average": 51,
+        "trend": "improving",
+        "stress_level": 38,
+        "recovery_score": 76
+      },
+      "sleep": {
+        "total_hours": 8.5,
+        "deep_sleep": 1.8,
+        "rem_sleep": 2,
+        "light_sleep": 4.7,
+        "sleep_score": 85,
+        "efficiency": 90
+      },
+      "activity": {
+        "steps": 9839,
+        "calories_burned": 2134,
+        "active_minutes": 50,
+        "distance_km": 7.9
+      },
+      "mood": {
+        "energy_level": 10,
+        "stress_level": 43,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-14",
+      "timestamp": 1752490790399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 61,
+        "max": 130,
+        "zones": {
+          "fat_burn": 78,
+          "cardio": 42,
+          "peak": 19
+        }
+      },
+      "hrv": {
+        "average": 41,
+        "trend": "stable",
+        "stress_level": 58,
+        "recovery_score": 66
+      },
+      "sleep": {
+        "total_hours": 7.3,
+        "deep_sleep": 1.4,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.1,
+        "sleep_score": 73,
+        "efficiency": 84
+      },
+      "activity": {
+        "steps": 8014,
+        "calories_burned": 1951,
+        "active_minutes": 49,
+        "distance_km": 6.4
+      },
+      "mood": {
+        "energy_level": 6,
+        "stress_level": 70,
+        "motivation": 8
+      }
+    },
+    {
+      "date": "2025-07-15",
+      "timestamp": 1752577190399,
+      "heart_rate": {
+        "average": 77,
+        "resting": 66,
+        "max": 139,
+        "zones": {
+          "fat_burn": 24,
+          "cardio": 36,
+          "peak": 10
+        }
+      },
+      "hrv": {
+        "average": 52,
+        "trend": "improving",
+        "stress_level": 35,
+        "recovery_score": 77
+      },
+      "sleep": {
+        "total_hours": 6.6,
+        "deep_sleep": 1.2,
+        "rem_sleep": 1.6,
+        "light_sleep": 3.7,
+        "sleep_score": 66,
+        "efficiency": 80
+      },
+      "activity": {
+        "steps": 7955,
+        "calories_burned": 1946,
+        "active_minutes": 55,
+        "distance_km": 6.4
+      },
+      "mood": {
+        "energy_level": 7,
+        "stress_level": 39,
+        "motivation": 7
+      }
+    },
+    {
+      "date": "2025-07-16",
+      "timestamp": 1752663590399,
+      "heart_rate": {
+        "average": 80,
+        "resting": 68,
+        "max": 143,
+        "zones": {
+          "fat_burn": 27,
+          "cardio": 37,
+          "peak": 6
+        }
+      },
+      "hrv": {
+        "average": 51,
+        "trend": "improving",
+        "stress_level": 38,
+        "recovery_score": 76
+      },
+      "sleep": {
+        "total_hours": 6.7,
+        "deep_sleep": 1.2,
+        "rem_sleep": 1.6,
+        "light_sleep": 3.8,
+        "sleep_score": 67,
+        "efficiency": 81
+      },
+      "activity": {
+        "steps": 8592,
+        "calories_burned": 2009,
+        "active_minutes": 47,
+        "distance_km": 6.9
+      },
+      "mood": {
+        "energy_level": 8,
+        "stress_level": 35,
+        "motivation": 10
+      }
+    },
+    {
+      "date": "2025-07-17",
+      "timestamp": 1752749990399,
+      "heart_rate": {
+        "average": 75,
+        "resting": 64,
+        "max": 135,
+        "zones": {
+          "fat_burn": 62,
+          "cardio": 15,
+          "peak": 16
+        }
+      },
+      "hrv": {
+        "average": 40,
+        "trend": "stable",
+        "stress_level": 61,
+        "recovery_score": 65
+      },
+      "sleep": {
+        "total_hours": 7.7,
+        "deep_sleep": 1.6,
+        "rem_sleep": 1.8,
+        "light_sleep": 4.3,
+        "sleep_score": 77,
+        "efficiency": 86
+      },
+      "activity": {
+        "steps": 8023,
+        "calories_burned": 1952,
+        "active_minutes": 65,
+        "distance_km": 6.4
+      },
+      "mood": {
+        "energy_level": 9,
+        "stress_level": 43,
+        "motivation": 9
+      }
+    },
+    {
+      "date": "2025-07-18",
+      "timestamp": 1752836390399,
+      "heart_rate": {
+        "average": 72,
+        "resting": 61,
+        "max": 129,
+        "zones": {
+          "fat_burn": 67,
+          "cardio": 17,
+          "peak": 8
+        }
+      },
+      "hrv": {
+        "average": 41,
+        "trend": "stable",
+        "stress_level": 59,
+        "recovery_score": 66
+      },
+      "sleep": {
+        "total_hours": 8.1,
+        "deep_sleep": 1.7,
+        "rem_sleep": 1.9,
+        "light_sleep": 4.5,
+        "sleep_score": 81,
+        "efficiency": 88
+      },
+      "activity": {
+        "steps": 7219,
+        "calories_burned": 1872,
+        "active_minutes": 66,
+        "distance_km": 5.8
+      },
+      "mood": {
+        "energy_level": 7,
+        "stress_level": 55,
+        "motivation": 10
+      }
+    },
+    {
+      "date": "2025-07-19",
+      "timestamp": 1752922790399,
+      "heart_rate": {
+        "average": 76,
+        "resting": 65,
+        "max": 137,
+        "zones": {
+          "fat_burn": 33,
+          "cardio": 17,
+          "peak": 22
+        }
+      },
+      "hrv": {
+        "average": 40,
+        "trend": "stable",
+        "stress_level": 60,
+        "recovery_score": 65
+      },
+      "sleep": {
+        "total_hours": 8.1,
+        "deep_sleep": 1.7,
+        "rem_sleep": 1.9,
+        "light_sleep": 4.5,
+        "sleep_score": 81,
+        "efficiency": 88
+      },
+      "activity": {
+        "steps": 8696,
+        "calories_burned": 2020,
+        "active_minutes": 55,
+        "distance_km": 7
+      },
+      "mood": {
+        "energy_level": 7,
+        "stress_level": 32,
+        "motivation": 8
+      }
+    }
+  ]
+}
