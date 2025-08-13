@@ -10,6 +10,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
@@ -19,3 +20,10 @@ buildscript {
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// Ensure JitPack is available to all subprojects (RN plugin overrides project repos)
+subprojects { project ->
+    project.repositories { repos ->
+        repos.maven { url 'https://jitpack.io' }
+    }
+}

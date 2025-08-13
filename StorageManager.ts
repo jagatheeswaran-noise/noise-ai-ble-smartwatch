@@ -46,7 +46,7 @@ export class StorageManager {
 
   static async getDirectorySize(dirPath: string): Promise<number> {
     try {
-      const items = await RNFS.readdir(dirPath);
+      const items = await RNFS.readDir(dirPath);
       let totalSize = 0;
 
       for (const item of items) {
@@ -70,7 +70,7 @@ export class StorageManager {
   static async getModelStorageUsage(): Promise<{ totalSize: number; fileCount: number }> {
     try {
       const modelDir = RNFS.DocumentDirectoryPath;
-      const files = await RNFS.readdir(modelDir);
+      const files = await RNFS.readDir(modelDir);
       
       let totalSize = 0;
       let fileCount = 0;
@@ -94,7 +94,7 @@ export class StorageManager {
   static async cleanupTempFiles(): Promise<number> {
     try {
       const tempDir = RNFS.TemporaryDirectoryPath;
-      const files = await RNFS.readdir(tempDir);
+      const files = await RNFS.readDir(tempDir);
       
       let cleanedSize = 0;
 

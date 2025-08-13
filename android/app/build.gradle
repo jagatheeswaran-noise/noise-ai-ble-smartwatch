@@ -73,10 +73,23 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
-    ndkVersion rootProject.ext.ndkVersion
+    ndkVersion "26.1.10909125"
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
-
+    
+    // Native build removed - using pure Java implementation
+    
+    packagingOptions {
+        pickFirst 'lib/**/libopus.so'
+        pickFirst 'lib/**/libopusbridge.so'
+        pickFirst 'lib/**/libeasyopus.so'
+        pickFirst 'lib/**/libopusenc.so'
+        pickFirst 'lib/**/libsimplenative.so'
+        // Prevent stripping of our native libraries
+        doNotStrip '**/libopusbridge.so'
+        doNotStrip '**/libsimplenative.so'
+    }
+    
     namespace "com.noise_ai"
     defaultConfig {
         applicationId "com.noise_ai"
@@ -84,6 +97,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        
+        ndk {
+            abiFilters "arm64-v8a"
+        }
     }
     signingConfigs {
         debug {
@@ -96,6 +113,9 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -103,6 +123,9 @@ android {
             signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            ndk {
+                debugSymbolLevel 'FULL'
+            }
         }
     }
 }
@@ -118,12 +141,17 @@ dependencies {
     }
     
     // ZH SDK for smartwatch BLE connectivity
-    implementation files('libs/ZH_SDK_20250801_V2.1.7.aar')
+    implementation files('libs/ZH_SDK_20250808_V2.2.0.aar')
     
     // Additional dependencies for BLE functionality
     implementation 'androidx.lifecycle:lifecycle-livedata:2.6.2'
     implementation 'com.blankj:utilcodex:1.31.1'
     implementation 'com.google.code.gson:gson:2.10.1'
+    // Opus decoder (Concentus via JitPack)
+    implementation 'com.github.lostromb:concentus:master-SNAPSHOT'
+    
+    // Opus native library via AAR (temporarily disabled)
+    // implementation fileTree(dir: "libs", include: ["opus.aar"])
     
     // Google Protobuf for ZH SDK (required for BLE operations)
     implementation 'com.google.protobuf:protobuf-java:3.21.12'

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btnGetMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s695"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnDelMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s696"
+                android:textAllCaps="false" />
+
+
+            <Button
+                android:id="@+id/btnSetMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s691"
+                android:textAllCaps="false" />
+
+            <include layout="@layout/line" />
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

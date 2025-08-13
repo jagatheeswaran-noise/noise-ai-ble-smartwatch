@@ -58,6 +58,18 @@ export interface TimeFormatResult {
   is24Hour?: boolean;
 }
 
+export interface WatchVoiceCommandResult {
+  rawData: string;
+  timestamp: string;
+}
+
+export interface AiCommandResult {
+  success: boolean;
+  command?: number;
+  text?: string;
+  errorCode?: number;
+}
+
 export type SmartwatchEventType = 
   | 'onDeviceFound'
   | 'onConnectionStateChanged'
@@ -73,7 +85,12 @@ export type SmartwatchEventType =
   | 'onBatteryInfoReceived'
   | 'onDeviceInfoRequestCompleted'
   | 'onTimeSetCompleted'
-  | 'onTimeFormatSetCompleted';
+  | 'onTimeFormatSetCompleted'
+  | 'onWatchAiVoiceCommand'
+  | 'onAiVoiceCommandSent'
+  | 'onAiTranslatedTextSent'
+  | 'onAiAnswerTextSent'
+  | 'onAiErrorCodeSent';
 
 export interface SmartwatchEventData {
   onDeviceFound: DeviceInfo;
@@ -91,6 +108,11 @@ export interface SmartwatchEventData {
   onDeviceInfoRequestCompleted: BindingResult;
   onTimeSetCompleted: TimeSetResult;
   onTimeFormatSetCompleted: TimeFormatResult;
+  onWatchAiVoiceCommand: WatchVoiceCommandResult;
+  onAiVoiceCommandSent: AiCommandResult;
+  onAiTranslatedTextSent: AiCommandResult;
+  onAiAnswerTextSent: AiCommandResult;
+  onAiErrorCodeSent: AiCommandResult;
 }
 
 export enum ScanStatus {

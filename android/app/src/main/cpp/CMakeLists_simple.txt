@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.22.1)
+
+project("simplenative")
+
+# Add simplenative shared library
+add_library(simplenative SHARED
+  simple_native.c
+)
+
+# Include directories
+target_include_directories(simplenative PRIVATE
+  ${CMAKE_SOURCE_DIR}
+)
+
+# Find and link libraries
+find_library(log-lib log)
+
+# Link libraries
+target_link_libraries(simplenative 
+  ${log-lib}
+)

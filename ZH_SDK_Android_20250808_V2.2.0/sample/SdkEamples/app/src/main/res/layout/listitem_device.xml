@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dip">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:minHeight="50dip"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/device_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="name"
+                android:textColor="#f0f0"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/device_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="address"
+                android:textColor="#3f3f3f"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="version"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_bind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="isBind"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_user_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="isUserMode"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_has_bind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="hasBindingFunction"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_support_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="isSupportHeadset"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_bt_bond"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="isHeadsetBond"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:id="@+id/tv_bt_broadcast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="isHeadsetBroadcast"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_bt_mac"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="headsetMac"
+            android:textColor="#80000000"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_protocol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="protocol"
+            android:textColor="#80000000"
+            android:textSize="10sp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

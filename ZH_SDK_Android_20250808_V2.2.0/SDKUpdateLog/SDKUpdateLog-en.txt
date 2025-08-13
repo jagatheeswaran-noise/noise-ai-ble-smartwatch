@@ -1,0 +1,896 @@
+========================================================
+zhbracelet-sdk-1.0.4 Update
+slightly
+========================================================
+zhbracelet-sdk-1.0.5 Update
+slightly
+========================================================
+zhbracelet-sdk-1.0.6 Update
+New - Method of monitoring connection status separately
+ControlBleTools.getInstance().init(this);
+  
+ControlBleTools.getInstance().setBleStateCallBack(new BleStateCallBack() {
+            @Override
+            public void onConnectState(int state) {
+                BleConnectState.getInstance().postValue(state);
+            }        
+});
+========================================================
+zhbracelet-sdk-1.0.7 Update
+Fix - connection listener method null pointer handling
+========================================================
+zhbracelet-sdk-1.0.8 Update
+Fix - invalid connection listening method
+========================================================
+zhbracelet-sdk-1.0.9 Update
+Optimization - Bluetooth connection related
+========================================================
+zhbracelet-sdk-1.0.10 Update
+Optimization - device language related
+========================================================
+zhbracelet-sdk-1.0.11 Update
+Optimization - turn off / on Bluetooth auto reconnect logic
+========================================================
+zhbracelet-sdk-1.0.12 Update
+New - hand washing reminder function
+New - meal reminder function
+New - pressure related functions
+========================================================
+zhbracelet-sdk-1.0.13 Update
+New - sdklog output function
+- ControlBleTools.getInstance().setDeviceLogCallBack(new DeviceLogCallBack()
+========================================================
+zhbracelet-sdk-1.0.14 Update
+Optimize - synchronize daily data logic
+New - stock related functions
+New - contact related functions
+========================================================
+zhbracelet-sdk-1.0.15 Update
+Optimization - connection related logic
+========================================================
+Zhbracelet-sdk-1.0.16 update
+Optimization - connection related logic
+New - Sport list sorting function
+New - BT Bluetooth related functions
+New - world clock related functions
+========================================================
+Zhbracelet-sdk-1.0.17 update
+New BT Bluetooth pairing operation steps demonstration
+Optimization - some SDK interfaces
+========================================================
+Zhbracelet-sdk-1.0.18 update
+New - weather switch
+========================================================
+Zhbracelet-sdk-1.0.19 update
+1.Set whether the weather switch is on
+ControlBleTools.getInstance().setAppWeatherSwitch(checked,listener)
+2.Optimize sdk initialization callback
+ControlBleTools.getInstance().setInitStatusCallBack(ZHInitStatusCallBack)
+========================================================
+Zhbracelet-sdk-1.0.20 update
+1.Add the parameter isnewpermissiontype document display logic to the musicinfobean object of synchronous music information (false indicates old document and true indicates new document)
+========================================================
+Zhbracelet-sdk-1.0.21 update
+1. Repair the binding device callback binddevicestatecallback Binddevicebean missing device version information
+2. Modify the connection delay mechanism from 6 seconds to 1 second
+========================================================
+Zhbracelet-sdk-1.0.22 update
+1. Compatible with android12
+2. Increase search service timeout reconnection
+3. Connection delay 1S -> 3S
+
+========================================================
+Zhbracelet-sdk-1.0.23 update
+1. Add and obtain the reason for device disconnection
+
+   public void getDisconnectReason(View view) {
+        CallBackUtils.disconnectReasonCallBack = new DisconnectReasonCallBack() {
+            @Override
+            public void onReason(DeviceInfoBean deviceInfoBean) {
+                Log.i(TAG, "getDisconnectReason = deviceInfoBean = " + deviceInfoBean.toString());
+            }
+        };
+
+        if (ControlBleTools.getInstance().isConnect()) {
+            ControlBleTools.getInstance().getDisconnectReason(null);
+        }
+    }
+
+========================================================
+Zhbracelet-sdk-1.0.24 update
+1. Add the controlbletools() construction method to initialize the SDK
+2. Optimize connection
+3. Demo, for the photo album dial of circular equipment, the background image is processed as circular
+========================================================
+Zhbracelet-sdk-1.0.25 update
+1. Add direct card ID (small function card list)
+2. Add nickname in user information setting
+3. Modify the new BT pairing scheme
+4. Optimize daily data timeout of internal synchronization
+========================================================
+Zhbracelet-sdk-1.0.26 update
+1. Add notification settings
+ControlBleTools.getInstance().setNotificationSettings(NotificationSettingsBean)
+2. Add the setting of Get Through
+ControlBleTools.getInstance().getNotificationSettings()
+3. Add notification setting data callback interface
+SettingMenuCallBack.onNotificationSetting
+4. Increase pressure mode setting
+ControlBleTools.getInstance().setPressureMode(PressureModeBean)
+5. Increase the setting of acquisition pressure mode
+ControlBleTools.getInstance().getPressureMode()
+========================================================
+Zhbracelet-sdk-1.0.27 update
+1.Call Bluetooth one-key dual connection solution optimization
+
+2.PhysiologicalCycleCallBack removed onResponse(),If you have logic in this method before, please migrate to ControlBleTools.getInstance().getPhysiologicalCycle(object :
+     ParsingStateManager.SendCmdStateListener() {
+         override fun onState(state: SendCmdState) {
+             //TODO..
+         }
+     })
+
+3.CallBackUtils.settingMenuCallBack Add multiple unimplemented callback methods
+========================================================
+Zhbracelet-sdk-1.0.28 update
+1.slightly
+========================================================
+Zhbracelet-sdk-1.0.29 update
+1. When optimizing one button dual connection pairing, filter the scanned BLE type Bluetooth devices
+2. Add the app application device firmware log upload function
+//Get
+ControlBleTools.getInstance().getFirmwareLog()
+//Listening callback
+CallBackUtils.firmwareLogStateCallBack.onFirmwareLogState(int state)
+state = 0: Start uploading 1: Uploading 2: End data uploading
+========================================================
+Zhbracelet-sdk-1.0.30 update
+1. Fix the problem of invalid call unpairing
+========================================================
+Zhbracelet-sdk-1.0.31 update
+A、Sdk adds ndk configuration：android { defaultConfig {ndk{abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'}}}
+The ABI required by the app module according to its application declaration
+
+B、 Modify app application device firmware log upload callback
+//Get device firmware log
+ControlBleTools.getInstance().getFirmwareLog()
+//Listening callback
+CallBackUtils.firmwareLogStateCallBack = FirmwareLogStateCallBack{
+	/**
+     * Device log file transfer progress status callback
+     */
+    void onFirmwareLogState(int state);
+    /**
+     * File path after device log transfer
+     */
+    void onFirmwareLogFilePath(String filePath);
+}
+
+C、 Add the interface for power analysis
+1. Get power consumption data
+ControlBleTools.getInstance().getMptPowerLog(SendCmdStateListener)
+
+2. Monitoring device power consumption data return
+CallBackUtils.deviceMptPowerLogCallBack = DeviceMptPowerLogCallBack {
+	/**
+	* Equipment power consumption data
+	*/
+	onMptPowerLog(MptPowerLogBean bean);
+}
+
+
+D、 Add the active measurement interface initiated by app
+1. App actively initiates measurement
+ControlBleTools.getInstance().activeMeasurementStart(ActiveMeasureParamsBean,SendCmdStateListener)
+
+2. App actively ends the measurement
+ControlBleTools.getInstance().activeMeasurementStop(ActiveMeasureParamsBean,SendCmdStateListener)
+
+3. Monitor the active measurement status, measurement data, results and other callbacks
+CallBackUtils.activeMeasureCallBack =  ActiveMeasureCallBack {
+	/**
+     * The device sends an active measurement success or failure callback
+     */
+    onMeasureStatus(ActiveMeasureStatusBean statusBean);
+    /**
+     * Equipment sends data callback in active measurement
+     */
+    onMeasuring(ActiveMeasuringBean measuringBean);
+    /**
+     * Equipment sends data callback in active measurement
+     */
+    onMeasureResult(ActiveMeasureResultBean resultBean);
+}
+
+
+E、 Add relevant interface of DIY dial
+1. Get the default diy dial configuration through the configuration file json
+val diyWatchFaceConfig = ControlBleTools.getInstance().getDefDiyWatchFaceConfig(dataJson)
+
+2. Get the device diy dial configuration
+ControlBleTools.getInstance().getDiyWatchFaceConfig(String diyWatchId,SendCmdStateListener)
+
+3. Monitor the DIY dial configuration callback
+CallBackUtils.diyWatchFaceCallBack = DiyWatchFaceCallBack {
+	/**
+     * Diy dial configuration
+     */
+    onDiyWatchFaceStatus(DiyWatchFaceConfigBean config);
+}
+
+4. Get the effect picture of diy dial setting
+ControlBleTools.getInstance().getPreviewBitmap(DiyParamsBean diyParamsBean, DiyDialPreviewCallBack callBack)
+DiyDialPreviewCallBack{
+    /**
+     * Preview
+     */
+    void onDialPreview(Bitmap preview);
+    /**
+     * error message
+     */
+    void onError(String errMsg);
+}
+
+5. The settings to be sent to the device to obtain the diy dial settings
+ControlBleTools.getInstance().getDiyDialData(DiyParamsBean diyParamsBean, DiyDialDataCallBack callBack)
+DiyDialDataCallBack{
+	/**
+     * The callback needs to update the file and configuration class
+     */
+    void onDialData(String diyDialId, byte[] data, DiyWatchFaceConfigBean configBean);
+    /**
+     * Only the configuration class needs to be updated
+     */
+    void onChangeConfig(DiyWatchFaceConfigBean configBean);
+    /**
+     * error message
+     */
+    void onError(String errMsg);
+}
+5. Call back onChangeConfig and onDialData according to DiyDialDataCallBack
+(1) onChangeConfig(.)
+Only need to update the configuration class and call to update the device diy dial configuration
+ControlBleTools.getInstance().setDiyWatchFaceConfig(DiyWatchFaceConfigBean,SendCmdStateListener)
+(2) onDialData(...)
+The file and configuration class need to be updated
+Ask the status of the diy dial to be sent
+①.ControlBleTools.getInstance().getDeviceDiyWatchFace(String watch_face_id, int fileSize, DiyWatchFaceConfigBean configBean, DeviceWatchFaceFileStatusListener listener);
+②.According to the callback "DeviceWatchFaceFileStatusListener. onSuccess $statusValue==0 (READY)", the file will continue to be distributed, otherwise an exception will be prompted
+③.Publish large files under "ControlBleTools. getInstance(). startUploadBigData (BleCommonAttributes. UPLOAD_BIG_DATA_WATCH, DATA, UploadBigDataListener)"
+④.After the transmission is completed, monitor the dial installation result callback
+CallBackUtils.watchFaceInstallCallBack = WatchFaceInstallCallBack {
+	/**
+     * Dial installation result callback
+     */
+    void onresult(WatchFaceInstallResultBean result);
+}
+========================================================
+Zhbracelet-sdk-1.0.32 update
+1. Add an interface for obtaining activity indicator data of the current day
+obtain:
+ControlBleTools.getInstance().getTodayActivityIndicators（ActivityIndicatorsCallBack.IndicatorType，Listener）
+Listening data callback:
+CallBackUtils.setActivityIndicatorsCallBack(ActivityIndicatorsCallBack)
+2. Add and obtain automatic motion data list
+obtain:
+ControlBleTools.getInstance().getAutoSportData（Listener）
+Listening data callback:
+CallBackUtils.setAutoSportDataCallBack(AutoSportDataCallBack)
+========================================================
+Zhbracelet-sdk-1.0.33 update
+1. Add Alexa status and device synchronization interface
+ControlBleTools.getInstance().syncAlexaStatusToDevice(AlexaBean.XXX, listener)
+2. Add Alexa text title synchronization to device interface
+ControlBleTools.getInstance().syncAlexaTextToDevice(body, mainTitle, subTitle, listener)
+ PS：The 'mainTitle' and 'subTitle' parameters are not currently used, and an empty string of '' needs to be passed
+3. Add Alexa skills to synchronize with device interfaces
+ControlBleTools.getInstance().syncAlexaSkillToDevice(AlexaBean.XXX_BOOT, eventBean, listener)
+ PS：When sending skills to the device without carrying additional data, 'eventBean' can be passed as' null '
+4.Monitor the status of audio data replied by the device and the Opus original audio data stream
+CallBackUtils.setVoiceCallBack(object : VoiceCallBack{
+            /**
+		 * The status of the device's response to audio data
+             * 0: The device is ready
+             * 1: Device starts sending raw audio data stream
+             * 3: Device ends sending audio data stream
+             * 5: Need to reply to the device whether the current Alexa authentication and mobile network status can proceed to the next step
+             */
+      override fun onStatus(status: Int) {}
+	//Original audio data stream replied by the device
+      override fun onRawBodyResult(data: ByteArray?) {}
+})
+========================================================
+Zhbracelet-sdk-1.0.34 update
+1. Sleep results
+Monitor sleep result callback
+RingSleepCallBack.setRingSleepCallBack(RingSleepCallBack)//RingSleepCallBack$onRingSleepResult(RingSleepResultBean)
+Obtain sleep result data
+ControlBleTools.getInstance().getRingSleepResult(SendCmdStateListener)
+2. Nap data
+Monitoring ring nap data callback
+RingSleepCallBack.setRingSleepCallBack(RingSleepCallBack)//RingSleepCallBack$onRingSleepNAPList(List<RingSleepNapBean>)
+Obtain nap data
+========================================================
+Zhbracelet-sdk-1.0.35 update
+1. Remove and obtain daily activity indicator data
+remove-ControlBleTools.getInstance().getTodayActivityIndicators
+remove-ActivityIndicatorsCallBack
+2. Remove the obtained ring sleep result data and ring nap data
+remove-ControlBleTools.getInstance().getRingSleepResult
+remove-ControlBleTools.getInstance().getRingSleepNAPList
+remove-RingSleepCallBack
+3. Remove and obtain ring health score data
+remove-ControlBleTools.getInstance().getRingHealthyScore
+remove-RingHealthyCallBack
+4. Add ring related data callback to daily data callback, and synchronize data by obtaining daily data interface:ControlBleTools.getInstance().getDailyHistoryData
+Add daily activity indicator data callback
+FitnessDataCallBack.onRingTodayActivityIndicators(TodayActivityIndicatorsBean bean)
+Add Ring Sleep Result Data Callback
+FitnessDataCallBack.onRingSleepResult(RingSleepResultBean bean)
+Add ring nap data callback
+FitnessDataCallBack.onRingSleepNAP(List<RingSleepNapBean> list)
+Add Ring Health Score Data Callback
+FitnessDataCallBack.onRingHealthScore(RingHealthScoreBean bean
+========================================================
+Zhbracelet-sdk-1.0.36 update
+1.Daily data callback increases current walking calories for the day（todayWakeCalorieData）、Current exercise calories for the day（todaySportCalorieData）
+FitnessDataCallBack.onDailyData(DailyBean)
+========================================================
+Zhbracelet-sdk-1.0.37 update
+Ring Agreement Update
+1. Automatic motion data list data "AutoSportDataBean" update:
+Increase the "hrData" rate of sports Dim sum beating
+
+2. Sleep result data "RingSleepResultBean" update:
+Change the sleep time from "asleepTime" to "entryTime" and the wake up time from "wakeupTime" to "exitTime";
+Increase the total waking time by "wakeTime", the total light sleep time by "lightSleepTime", the total deep sleep time by "deepSleepTime", the total rapid eye movement time by "rapidEyeMovementTime", and the sleep segments by "sleepDistributionData";
+Remove sleep segment 'sleepStagesData'
+
+3. Nap data "RingSleepNapBean" update:
+Increase the sleep indicator "sleepNapStatus" (1: long sleep 2: short sleep)
+
+4. Health score data "RingHealthScoreBean" update:
+Increase the current sedentary duration and the most recent exercise heart rate by 'workHr'
+========================================================
+Zhbracelet-sdk-1.0.38 update
+1. "FitnessDataCallBack" daily data callback modification
+2. Remove activity indicator data callback 'onRingTodayActivityIndicators'
+3. Add "GoMore" algorithm activity type indicator data "onRingTodayActiveTypeData (TodayActiveTypeData)"
+4. Add "GoMore" algorithm all day activity indicator data "onRingOverallDayMovementData (OverallDayMovementData)"
+5. Add "GoMore" algorithm respiratory rate data "onRingTodayRespiratoryRateData (TodayRespiratorRateData)"
+========================================================
+Zhbracelet-sdk-1.0.39 update
+1. Add online and DIY dial installation result callback (album dial installation does not have this callback)
+CallBackUtils. watchFaceInstallCallBack = new WatchFaceInstallCallBack() {
+     @Override
+     public void onresult(WatchFaceInstallResultBean result) {
+         //“WatchFaceInstallResultBean.code” Installation result status code // 0: Verification failed 1: Installation failed 2: Installation succeeded
+     }
+};
+
+2. Initiate factory reset pending device confirmation
+ControlBleTools.getInstance().unbindDeviceWaitConfirmation(new ParsingStateManager.SendCmdStateListener() {
+     @Override
+     public void onState(SendCmdState state) {
+        if(state == SendCmdState. SUCCEED) {
+            //The command is sent successfully, and the app logic is processed. . .
+        }else{
+			//command failed to send
+		}
+     }
+});
+
+3. Real-time data callback to increase the 24-hour data of steps, calories, and distance
+CallBackUtils. realTimeDataCallback = new RealTimeDataCallBack() {
+     @Override
+     public void onResult(RealTimeBean bean) {
+        //"RealTimeBean.stepsData"  step 24-hour data
+		//"RealTimeBean.calorieData" calorie 24-hour data
+		//"RealTimeBean.distanceData" distance 24-hour data
+     }
+};
+
+4. Increase the device setting item sleep reminder callback
+CallBackUtils.settingMenuCallBack = new SettingMenuCallBack() {
+	@Override
+	public void onSleepReminder(SleepReminder reminder){
+		//"reminder" sleep reminder data
+	}
+}
+========================================================
+Zhbracelet-sdk-1.0.40 update
+1. Increase the initiation of secondary screen movement status changes
+ControlBleTools.getInstance().secondaryScreenSportRequest(SportRequestBean，Listener）
+2. Add a response to the device's secondary screen movement status change
+ControlBleTools.getInstance().replyDevSecondaryScreenSportRequest(SportResponseBean，Listener）
+3. Add secondary screen motion related callbacks
+CallBackUtils.secondaryScreenSportCallBack = object : SecondaryScreenSportCallBack {
+    Device reply app secondary screen motion status report
+   （1）onSecondaryScreenSportResponseBean(SportResponseBean)
+    Device reports secondary screen motion status
+   （2）onSecondaryScreenSportRequestBean(SportRequestBean)
+    Data during secondary screen movement
+   （3）onSecondaryScreenWearData(SecondaryScreenWearDataBean)
+    Reply to querying device movement status
+   （4）onSportStatus(SportStatusBean)
+}
+
+========================================================
+Zhbracelet-sdk-1.0.41 update
+1. Add Ring Sleep Result Callback Object Activity Sleep Paragraph
+Callback:“FitnessDataCallBack.onRingSleepResult(RingSleepResultBean)”
+Sleep paragraph:“RingSleepResultBean.sleepMovementsData”
+2. Add daily data callback objects to 24-hour walking and exercise calorie data
+Callback:“FitnessDataCallBack.onDailyData(DailyBean)”
+Walk Calories Data 24 Hour Data:“DailyBean.todayWalkCalorieHourlyData”
+Exercise calorie data 24-hour data:“DailyBean.todaySportCalorieHourlyData”
+3. Add real-time data callback objects to 24-hour walking and exercise calorie data
+Callback:“RealTimeDataCallBack.onResult(RealTimeBean)”
+Walk Calories Data 24 Hour Data:“RealTimeBean.todayWalkCalorieHourlyData”
+Exercise calorie data 24-hour data:“RealTimeBean.todaySportCalorieHourlyData”
+4. Modify the attribute name and recall the current walking calories of the object "DailyBean" for daily data on that day
+Change from 'todayWakeCalorieData' to 'todayWalkCalorieData'
+5. Modify the attribute name and recall the current walking calories of the object "RealTimeBean" for real-time data on that day
+Change from 'todayWakeCalorie' to 'todayWalkCalorie'
+========================================================
+Zhbracelet-sdk-1.0.42 update
+ignore
+========================================================
+Zhbracelet-sdk-1.0.43 update
+1. Add a date "Date" field to the ring related data object (OverallDayMovementData, RingHealthScoreBean, RingSleepNapBean, RingSleepResultBean, TodayActiveTypeData, TodayRespiratoryRateData)
+2. Remove the 'workHr' field from the 'RingHealthScoreBean' health score object
+3. Modify the current walking calorie field of "RealTimeBean" from "todayWaleCalorie" to "todayWalkCalorie"
+========================================================
+Zhbracelet-sdk-1.0.44 update
+1. Add ring restart method (production testing protocol)
+ControlBleTools.getInstance().restartByProduction()
+2.Remove Enumeration Class：VerifyUserIdCallBack.VerifyUserIdState
+========================================================
+Zhbracelet-sdk-1.0.45 update
+. The log callback 'DeviceLogCallBack' method adds the 'mode' parameter.
+Changed from 'DeviceLogCallBack.Log...(String tag, String msg);' to 'DeviceLogCallBack.Log...(String mode, String tag, String msg);'.
+Existing types of mode: BIND, CONNECT, DAILY, SPORT, BASIC, WEATHER, NOTIFICATION, DIAL, OTA, AGPS, SET, AUXILIARY
+2. minsdkVersion changed from 19 to 21
+（v1.0.26Provided）
+3.Add notification settings
+ControlBleTools.getInstance().setNotificationSettings(NotificationSettingsBean)
+4. Add the setting of Get Through
+ControlBleTools.getInstance().getNotificationSettings()
+5. Add notification setting data callback interface
+SettingMenuCallBack.onNotificationSetting
+========================================================
+Zhbracelet-sdk-1.0.46 update
+1. Add a new style album dial
+2. Modify the new version of DIY, refer to DEMO (DiyDialActivity) for the collective process, and the relevant interfaces are as follows
+(1) Obtain the default DIY dial configuration based on the configuration JSON file
+ControlBleTools.getInstance().getDefDiyWatchFaceConfig(String jsonStr）
+(2) Obtain device default DIY dial configuration
+ControlBleTools.getInstance().getDiyWatchFaceConfig(diyWatchId,listener）
+(3) Set device DIY dial configuration callback
+CallBackUtils.setDiyWatchFaceCallBack(DiyWatchFaceCallBack)
+(4) Obtain the DIY dial rendering based on the DIY parameter object
+ControlBleTools.getInstance().getPreviewBitmap(DiyParamsBean, DiyDialPreviewCallBack）
+(5) Obtain DIY dial data based on DIY parameter object
+ControlBleTools.getInstance().getPreviewBitmap(DiyParamsBean, DiyDialDataCallBack）
+(6) Obtain the sending status of the dial
+ControlBleTools.getInstance().getDeviceDiyWatchFace(diyWatchId, fileSize, isReplace, DiyWatchFaceConfigBean, DeviceWatchFaceFileStatusListener)
+(7) Send dial file
+ControlBleTools.getInstance().startUploadBigData(BleCommonAttributes.UPLOAD_BIG_DATA_WATCH, data, resumable,UploadBigDataListener）
+(8) Set the installation results of the monitoring dial
+CallBackUtils.setWatchFaceInstallCallBack(WatchFaceInstallCallBack)
+========================================================
+Zhbracelet-sdk-1.0.47 update
+1. Update style album dial
+2. Fix log classification index out of bounds exception
+3. Increase production testing services for heart rate and light leakage testing
+ControlBleTools.getInstance().heartLightLeakTestByProduction()
+========================================================
+Zhbracelet-sdk-1.0.48 update
+1. Optimize motion positioning data analysis
+2. Add the following parameters to the motion data object "DevSportInfoBean"
+GPS version: "recordGpsVersion", report version: "recordReportVersion", data validity 5: "reportDataValid5", average pace: "reportAvgPace", average speed: "reportAvgSpeed", average step frequency: "reportAvgStepSpeed", maximum oxygen intake: "reportVO2max", exercise load: "reportTrainingLoad"
+3. DIY digital dial font object "TextInfo" adds the following parameters (App does not need to handle)
+Whether to hide address: "isDisableAddr", whether to hide data: "isDisableValue"
+4. Add Spp channel transmission method
+//Transfer using Spp channel
+ControlBleTools.getInstance().startUploadBigDataUseSpp(
+	BleCommonAttributes.UPLOAD_BIG_DATA_WATCH,
+	data, true, new UploadBigDataListener() {
+		@Override
+		public void onSuccess() {
+		}
+
+		@Override
+		public void onProgress(int curPiece, int dataPackTotalPieceLength) {
+		}
+
+		@Override
+		public void onTimeout() {
+			//If the Spp connection fails, you can switch the transmission method here
+		}
+	});
+========================================================
+Zhbracelet-sdk-1.0.49 update
+1.Compatible with 255 version rule album dial transmission
+========================================================
+Zhbracelet-sdk-1.0.50 update
+1. Add an interface for obtaining JSON model objects based on JSON
+ControlBleTools.getInstance().getZhDiyDialBeanByJson(json)
+2. Increase the acquisition of pointer diy data
+ControlBleTools.getInstance().getSimplePointerDiyDialData(backgroundBm, thumbnailBm, pointerBin,complexBin, diyWatchFaceConfigBean, json,callBack)
+3. Increase the acquisition of digital DIY data
+ControlBleTools.getInstance().getSimpleNumberDiyDialData(backgroundBm, thumbnailBm, numberId,numberBin,complexBin,colorRed,colorGreen,colorBlue,diyWatchFaceConfigBean, json, callBack)
+4. Does the addition of device information support SPP
+DeviceInfoBean.sppSupportFlat
+========================================================
+Zhbracelet-sdk-1.0.51 update
+1. Remove 'CustomClockDialNewUtils. getMyNewCustomClockDialData'
+2. Compatible with V3 album dial rules
+3.The "app module build. gradle" file needs to add "implementation 'com. blankj: utilcode: 1.31.1'"
+========================================================
+Zhbracelet-sdk-1.0.52 update
+1. Increase ring battery and proactively report and callback
+   Set up active reporting of monitoring battery level'CallBackUtils.setDeviceBatteryReportingCallBack(DeviceBatteryReportingCallBack)'
+   //onBatteryReporting(DeviceBatteryValueBean)  DeviceBatteryValueBean.deviceBatteryValue Device power
+2. Daily data adds automatic motion recall for rings over multiple days
+   'FitnessParsing.onRingAutoActiveSportData(AutoActiveSportBean)'
+3. Add relevant interfaces for the Gomore all day sleep switch of the ring
+   Obtain sleep switch settings：'ControlBleTools.getInstance().getRingAllDaySleepConfig(listener)'
+   Set sleep switch settings：'ControlBleTools.getInstance().setRingAllDaySleepConfig(listener)'
+   Set up listening：'CallBackUtils.setRingAllDaySleepConfigCallBack(RingAllDaySleepConfigCallBack)'
+4. Add relevant interfaces for the Gomore automatic activity detection switch of the ring
+   Obtain sleep switch settings：'ControlBleTools.getInstance().getRingAutoActiveSportConfig(listener)'
+   Set sleep switch settings：'ControlBleTools.getInstance().setRingAutoActiveSportConfig(listener)'
+   Set up listening：'CallBackUtils.setRingAutoActiveSportConfigCallBack(RingAutoActiveSportConfigCallBack)'
+5. Update v3 album dial compatibility
+========================================================
+Zhbracelet-sdk-1.0.53 update
+1. Update the Siche SIFLI SDK
+(1) Update serialTransport release.aar
+(2) Update watchfacelibrary release.aar
+(3) Change the package from com.sifli.watchfacelibrary to com.sifli.watchfacelibraryzh
+========================================================
+Zhbracelet-sdk-1.0.54 update
+1. Modify the naming of DIY related models and interfaces
+    (1)."DiyParamsBean" is changed to "NewDiyParamsBean"
+    (2)."ZhDiyDialBean" is changed to "NewZhDiyDialBean"
+    (3)."ControlBleTools.getInstance().getPreviewBitmap(...)" is changed to "ControlBleTools.getInstance().getNewPreviewBitmap(...)"
+    (4)."ControlBleTools.getInstance().getDiyDialData(...)" is modified to "ControlBleTools.getInstance().getNewDiyDialData(...)"
+2. Sleep data increases sleep readiness score "SleepBean.readinessScore"
+3. Sports data increases fitness age "DevSportInfoBean.fitnessAge"
+4. Added breathing light related interfaces
+(1) Get the breathing light settings "ControlBleTools.getInstance().getBreathingLightSettings(...)"
+    (2) Set the breathing light settings "ControlBleTools.getInstance().setBreathingLightSettings(BreathingLightSettingsBean,...)"
+    (3) Monitor the breathing light setting result callback "CallBackUtils.settingMenuCallBack.onBreathingLightSettings(BreathingLightSettingsBean)"
+
+========================================================
+Zhbracelet-sdk-1.0.55 update
+1. Add instructions related to the movement of the ring secondary screen
+  (1) Set the motion status of the ring secondary screen
+   ControlBleTools.getInstance().sendRingSportStatus(SendRingSportStatusBean,listener)
+   (2) Obtain the motion status of the ring secondary screen
+   ControlBleTools.getInstance().sendRingSportStatus(SendRingSportStatusBean,listener)
+  (3) Monitor ring audio motion status callback
+   CallBackUtils.RingSportCallBack.onRingSportStatus(RingSportStatusBean)
+2. Increase the device's proactive request to update automatic motion data
+   CallBackUtils.AutoSportDataCallBack.onAutoSportData(AutoSportDataBeans)
+========================================================
+Zhbracelet-sdk-1.0.57 update
+1. The daily data "DailyBean.todayWalkCalorieData" is modified to "DailyBean.todayOuraCalorieData" (the ring item targets the calories of "Oura")
+2. The daily data "DailyBean.todayWalkCalorieHourlyData" is modified to "DailyBean.todayOuraCalorieHourlyData" (the ring project benchmarks the 24-hour calories of "Oura")
+3. Daily data "DailyBean" adds the current calories of the day to "todayCalorieData" (the ring project targets "Apple")
+4. The real-time data "RealTimeBean.todayWalkCalorie" is modified to "RealTimeBean.todayOuraCalorie" (the total calories are compared to the calories of "Oura")
+5. The real-time data "RealTimeBean.todayWalkCalorieHourlyData" is modified to "RealTimeBean.todayOuraCalorieHourlyData" (the ring item benchmarks "Oura"'s current exercise calories of the day)
+6. Automatic motion detection parameter setting "RingAutoActiveSportConfigBean" adds "autoActiveSportActivetime" (time validity of automatic motion detection)
+7. Add "GoMore" algorithm body score to daily data "FitnessDataCallBack.onRingBodyBatteryData"("RingBodyBatteryBean")
+8. Daily data adds "GoMore" algorithm body score "FitnessDataCallBack.onRingStressDetectionData" ("RingStressDetectionBean")
+9. Added types of ring secondary screen sports: "211" badminton, "212" tennis, "213" football, "214" cricket, and "215" yoga
+10. Fixed the problem of blurred screen on Jerry’s photo album dial
+========================================================
+Zhbracelet-sdk-1.0.58 update
+1. Optimize "SPP" transmission null pointer exception
+========================================================
+Zhbracelet-sdk-1.0.59 update
+1. Add the timestamp 'DevSportInfoBean.' corresponding to the dot data RingPointData. pointTime '
+========================================================
+Zhbracelet-sdk-1.0.60 update
+1. Set up glowing contacts
+ControlBleTool.getInstance().setGlodFriendContactsList(List<GlodFriendContactsBean>,listener)
+2. Obtain glowing contacts
+ControlBleTool.getInstance().getGlodFriendContactsList(listener)
+3. Illuminated contact callback interface
+CallBackUtils.glodFriendContactsCallBack
+4. Set contact emoji information
+ControlBleTool.getInstance().setGlodFriendEmoji(GlodFriendEmojiBean,listener)
+5. Obtain contact emoji information
+ControlBleTool.getInstance().getGlodFriendEmoji(listener)
+6. Contact emoji callback interface
+CallBackUtils.glodFriendEmojiCallBack
+7. Enable or disable the upload of leaked raw data
+ControlBleTools.getInstance().setHeartRateRawSwitch(true/false,listener)
+8. Monitor the raw data of light leakage
+CallBackUtils.heartRateLeakageRawCallBack.onRawData(HeartRateLeakageRawBean)
+9. Increase the enumeration of reasons for the end of the ring movement during charging and during ring movement
+RingSportEndReason.SPORT_END_REASON_CHARGE
+========================================================
+Zhbracelet-sdk-1.0.61 update
+1. Modify the breathing light enumeration type (see "BreathingLightType" for details) and set the breathing light
+"ControlBleTools.getInstance().setBreathingLightSettings(BreathingLightSettingsBean, listener)"
+2. Add a new contact person "emoji" message status reply
+"ControlBleTools.getInstance().setGlodFriendEmojiRequest(GlodFriendEmojiBean, listener)"
+3. Delete and obtain contact "emoji" information
+"ControlBleTool.getInstance().getGlodFriendEmoji(listener)"
+========================================================
+Zhbracelet-sdk-1.0.62 update
+1. Add the "callContactsId" field to the glowing friend contact "GlodFriendContactsBean"
+2. Add "callContactsId" field to "GlodFriendEmojiBean" of glowing friend "emoji" information
+========================================================
+Zhbracelet-sdk-1.0.63 update
+1. Modify the package name of the "BleBCManager" class from "com. zhapp. ble" to "com. zhapp. ble. manager"
+2. Increase power consumption behavior logging callback
+“CallBackUtils.setBehaviorLogCallBack(BehaviorLogCallBack)”
+3. Modify DIY to be compatible with multiple backgrounds and numerical colors
+(1)  "The field name of NewDiyParamsBean. backgroundResBean. background has been changed from 'background' to 'backgrounds', and the type has been changed from' Bitmap 'to' List<Bitmap>'."
+(2)  "NewDiyParamsBean. backgroundResBean" added "List<int []>backgroundColors;"
+(3)  "ControlBleTools. getInstance(). getSimpleNumberDiyDialData (Bitmap backgroundBm,...)", int colorRed, int colorGreen, int colorBlue,...)”
+Change to "ControlBleTools. getInstance(). getSimpleNumberDiyDialData (List<Bitmap>backgroundBm,...)", "List<int []>colors,...)"
+(4) "ControlBleTools. getInstance(). getSimplePointerDiyDialData (Bitmap backgroundBm,...)"
+Change to "ControlBleTools. getInstance(). getSimplePointerDiyDialData (List<Bitmap>backgroundBm,...)"
+========================================================
+zhbracelet-sdk-1.0.64 update content
+1. Added setting of EV electric vehicle related data interface
+"ControlBleTool.getInstance().setEvDataInfo(EvDataInfoBean, listener)"
+"EvDataInfoBean.dataConnectType" Electric vehicle connection status reference "SettingMenuCallBack.EvConnectType"
+"EvDataInfoBean.ApplicationData.carStatus" Electric vehicle status reference "SettingMenuCallBack.EvCarStatus"
+"EvDataInfoBean.ApplicationData.ChargeStatus.status" Vehicle charging status reference "SettingMenuCallBack.EvChargeStatus"
+2. Added setting of EV electric vehicle reminder event
+"ControlBleTool.getInstance().setEvRemindStatus(remindStatus,listener)"
+"remindStatus" Reminder type reference "SettingMenuCallBack.EvRemindType"
+===========================================================
+zhbracelet-sdk-1.0.65 update content
+1. Ring project - daily data synchronization adds ring charging data callback
+"FitnessDataCallBack.onRingBatteryData(RingBatteryBean)"
+2. Ring project - add the function of turning on the flight mode
+"ControlBleTool.getInstance().setRingAirplaneMode(listener)"
+3. Ring project - daily data adds ring power information
+"FitnessDataCallBack.onRingBatteryData(RingBatteryBean)"
+4. Ring sports start sports result enumeration "RingSportStartResult" adds "SPORT_START_RESULT_SPORTING" (in motion).
+===========================================================
+ZH_SDK_20241127_Bate_V2.0.0 Update content
+1. Modify the sdk file name from ZhAppBle-sdk-n010-XXX.aar to ZH_SDK_yyyyMMdd_Bate_VXXX.aar/ ZH_SDK_yyyyMMdd_VXXX.aar
+2. Compatible with the second-generation protocol, modify the reference document ZH_SDK_BerryUpdateNotes.adoc
+========================================================
+ZH_SDK_20241226_V2.0.0 Update content
+1. Added cricket sports (sportType = 217) data analysis
+2. Modified the notification interface of the second-generation protocol and added key parameters for aggregated message notifications
+3. Optimized large file data transmission
+========================================================
+ZH_SDK_20241231_V2.0.1 Update content
+1. Update TVS iQube parameter modification
+(1) "EvDataInfoBean" adds the acquisition failure reason "dataFailType" (refer to SettingMenuCallBack.DataFailType)
+(2) "EvDataInfoBean" adds the refresh frequency "refreshInterval" (currently forced by the device to 10 minutes)
+(3) "EvDataInfoBean.ApplicationData.TireGauge" in frontWheel rearWheel when there is no data, fill in 65535
+(4) "EvCarStatus" adds the electric vehicle status, abnormal data type "EV_CAR_ERROR" cannot be obtained
+(5) "EvChargeStatus" adds the vehicle charging status, abnormal data type "EV_CHARGE_END" cannot be obtained
+(6) "EvRemindType" adds the vehicle reminder event, abnormal data type "EV_APP_CONNECT_ERROR" cannot be obtained
+=============================================================
+ZH_SDK_20250102_V2.0.2 Update content
+1. Added the interface for setting the incoming call notification reminder switch
+"ControlBleTools.getInstance().setBerryIncomingCallSwitch(isOpen, SendCmdStateListener)"
+=============================================================
+ZH_SDK_20250104_V2.0.3 Update content
+1. Modify the incoming call notification reminder switch setting interface
+"ControlBleTools.getInstance().setBerryIncomingCallNotificationSwitch(isOpen, SendCmdStateListener)"
+2. Add a new missed call notification reminder switch setting interface
+"ControlBleTools.getInstance().setBerryMissCallNotificationSwitch(isOpen, SendCmdStateListener)"
+3. Add a new call-related notification switch setting interface
+"ControlBleTools.getInstance().setBerryCallNotificationSwitch(isCallOpen, isMissCallOpen, SendCmdStateListener)"
+========================================================
+ZH_SDK_20250122_V2.0.4 Update content
+1. Added Berry protocol unpairing disconnection event processing
+========================================================
+ZH_SDK_20250219_V2.0.5 Update Content
+1. APP confirms receipt of data synchronized with the ring (ring usage)
+//ReceptionStatus ->0: indicates not received, 1: indicates received
+“ControlBleTools.getInstance().ringExecutesDeleteDailyData(receptionStatus,SendCmdStateListener)”
+2. Second generation protocol Berry weather data modification
+Remove old wind speeds "BerryLatestWeatherBean.windinfo, BerryForecastWeatherBean.WeatherData.windinfo"
+Added wind speed levels  "BerryLatestWeatherBean.windSpeed" and "BerryForecastWeatherBean.WeatherData.windSpeed"
+Added wind direction "BerryLatestWeatherBean.windDeg, BerryForecastWeatherBean.WeatherData.windDeg"
+========================================================
+ZH_SDK_20250227_V2.0.6 Update Content
+1. Add an interface for obtaining ESIM general information data
+“ControlBleTools.getInstance().getEsimCommonDataSettings(SendCmdStateListener)”
+2. EsimEidSettingsCallBack adds a universal data callback
+EsimEidSettingsCallBack.onEsimCommonDataSetting(EsimCommonDataBean)
+EsimEidSettingsCallBack.onEsimCommonDataSetting(EsimCommonDataBean)
+========================================================
+ZH_SDK_20250320_V2.0.7 Updated content
+1. Added watch data reporting during ring sports
+RingSportCallBack.onRingSportData(RingSportDataBean)
+2. Modify DevSportInfoBean data
+①. Modify DevSportInfoBean.RecordPointSportData.baseballRole to DevSportInfoBean.RecordPointSportData.cricketRole
+②. Add the maximum swing speed of cricket batsman DevSportInfoBean.reportBatsmanSwingMaxSpeed
+③. Add the maximum pitching speed of cricket bowler DevSportInfoBean.reportBowlerSwingMaxSpeed
+④. Add the maximum pitching speed of cricket catcher DevSportInfoBean.reportCricketCatcherSwingMaxSpeed
+========================================================
+ZH_SDK_20250327_V2.0.8 Update content
+1.Fixed the abnormal crash when parsing ring sport data
+========================================================
+ZH_SDK_20250328_V2.0.9 Update content
+1.Fix the blockage of ring Sport
+2.Update Berry protocol binding result callback status code:
+BerryBindCallBack.onBindStatu(bindStatus)
+For bindStatus, refer to BerryBindCallBack.BindStatus(0: User clicks to agree 1: Not the same user ID 2: User clicks to reject 3: Device is bound4: App initiates binding, device is restored to factory settings 5: User does not click the binding button, timeout 6: Data parsing fails)
+3.Update child-related interfaces
+Reference DEMO-ChildrenActivity.kt implementation
+========================================================
+ZH_SDK_20250421_V2.1.0 Updated content
+1. Added flash card progress callback for children's project
+ChildrenCallBack.onFlashCardProgress(FlashCardProgressBean)
+2. Added challenge result callback for children's project
+ChildrenCallBack.onChallengeResult(ChallengeResultBean)
+3. Added scheduler result callback for children's project
+ChildrenCallBack.onSchedulerResult(MutableList<SchedulerResultBean>)
+4. Added callback for sending parent information and receiving result of flash card device for children's project
+CallBackUtils.berryBigFileResultCallBack = object : BerryBigFileResultCallBack {
+    onBigFileResult(BerryBigFileResultBean)
+}
+========================================================
+ZH_SDK_20250430_V2.1.1 Update content
+1. Added the dial status query interface for automatic deletion of the dial
+ControlBleTools.getInstance().getWatchFaceStatusByBerryAutomaticDeletion(watchFaceId,fileSize,albumBitmap,listener)
+========================================================
+ZH_SDK_20250604_V2.1.2 Updated content
+1. Modify the earnings information object
+EarningsInfoBean adds fields: steps, sleep, calories, distance
+2. Add the interface for setting earnings
+ControlBleTools.getInstance().setEarningsPriceByBerry(EarningsInfoBean,listener)
+3. Add the interface for setting medal progress
+ControlBleTools.getInstance().setMedalInfoByBerry(List<MedalInfoBean>,listener)
+//MedalInfoBean.medalId reference ChildrenCallBack.MedalId
+4. Added the interface for obtaining medal progress
+ControlBleTools.getInstance().getMedalInfoByBerry(listener)
+========================================================
+ZH_SDK_20250604_V2.1.3 Updated content
+1. Heart rate monitoring object adds low heart rate warning setting
+HeartRateMonitorBean.lowWarningValue
+2. Daily data adds drinking water data callback
+FitnessDataCallBack.onDrinkWaterData(DrinkWaterBean)
+3. Information recording transcription
+(1). Send recording command
+ControlBleTools.getInstance().sendRecordingCmd(cmd,listener) //cmd reference com.zhapp.ble.callback.RecordingCallBack.RecordCmd
+(2). Recording callback
+Device recording status callback
+RecordingCallBack.onRecordingCmd(RecordingCmdBean)
+Device recording data callback
+RecordingCallBack.onRecordingData(byte[] data)
+4. Add QR code vault related interface callback
+(1). Set single vault information
+ControlBleTools.getInstance().setVaultInfo(VaultInfoBean,listener)
+(2). Get simple vault information collection
+ControlBleTools.getInstance().getSimpleVaultInfoList(listener)
+(3). Get vault information based on card ID
+ControlBleTools.getInstance().getVaultInfo(cardId,listener)
+(4). Delete vault information
+ControlBleTools.getInstance().delVaultInfoList(List<String> cardIdList,listener)
+(5). Vault callback
+VaultCallBack
+Simple vault list
+VaultCallBack.onSimpleVaultInfoList(List<VaultSimpleBean> list)
+Vault details
+VaultCallBack. onVaultInfo(VaultInfoBean bean);
+Device requests to update vault details
+VaultCallBack. onDevRequestVaultInfo(List<String> cardIds)
+========================================================
+ZH_SDK_20250630_V2.1.4 Update content
+1. Added 26 ring sub-screen sports 218-243
+========================================================
+ZH_SDK_20250715_V2.1.5 Updated content
+1. Added ring charging case information to real-time data
+RealTimeBean.RingChargingCaseInfoBean
+2. Added query of ring charging case information
+ControlBleTools.getInstance().getRingChargingCaseInfo(listener)
+CallBackUtils.ringChargingCaseInfoCallBack = object : RingChargingCaseInfoCallBack {
+override fun onRingChargingCaseInfo(ringChargingCaseInfoBean: RingChargingCaseInfoBean){}
+}
+========================================================
+ZH_SDK_20250725_V2.1.6 Updated content
+1. Get WhatsApp quick reply content
+①. Get WhatsApp quick reply content
+ControlBleTools.getInstance().getDevWhatsAppShortReplyData(listener)
+②. Listening callback
+CallBackUtils.setWhatsAppQuickReplyCallBack(WhatsAppQuickReplyCallBack)
+③. Processing data
+WhatsAppQuickReplyCallBack.onQuickReplyResult(ArrayList<String>)
+
+2. Set WhatsApp quick reply content
+ControlBleTools.getInstance().setDevWhatsAppShortReplyData(List<String>,listener)
+
+3. Listening device triggers WhatsApp quick reply
+① Listening callback
+CallBackUtils.setWhatsAppQuickReplyCallBack(WhatsAppQuickReplyCallBack)
+②. Processing data
+WhatsAppQuickReplyCallBack.onMessage(String phone_number, String text)
+
+4. Send super notification
+ControlBleTools.getInstance().sendSuperNotification(SuperNotificationBean,listener)
+
+5. Set morning report content
+①. Set morning report content
+ControlBleTools.getInstance().setMorningPost(MorningPostBean,listener)
+②. Listen for device request APP to update morning report
+CallBackUtils.setMorningPostCallBack(MorningPostCallBack)
+③. Process data
+MorningPostCallBack.onRequestMorningPost()
+
+6. Send AI voice command
+①. Send AI voice command
+ControlBleTools.getInstance().sendAiVoiceCmd(cmd,listener) //cmd reference AiFunctionCallBack.AiVoiceCmd
+②. Listening callback
+CallBackUtils.setAiFunctionCallBack(AiFunctionCallBack)
+③. Processing callback data
+Device voice command callback
+AiFunctionCallBack.onDevAiVoiceCmd(AiVoiceCmdBean
+Device AI voice error code: (0: normal, 1: network abnormality, 2: no voice timeout, 3: ASR/understanding failure, 4: server no response , 5: Exceeding the rate limit)
+AiFunctionCallBack.onAiErrorCode(errorCode)
+
+7. Send the text converted from AI voice to the device
+ControlBleTools.getInstance().sendAiTranslatedText(text,listener)
+
+8. Send the AI answer text to the device
+ControlBleTools.getInstance().sendAiAnswerText(text,listener)
+
+9. Send AI to display heart rate, blood oxygen, activity and other data template template UI
+ControlBleTools.getInstance().sendAiViewUi(AiViewUiBean,listener)
+
+10. Send AI history drawing chart
+ControlBleTools.getInstance().sendAiHisto ryUi(AiHistoryUiBean,listener)
+
+11. Send Ai action behavior
+ControlBleTools.getInstance().sendAiAction(AiActionBean,listener)
+
+12. Send AI switch related
+ControlBleTools.getInstance().sendAiToggle(AiToggleBean,listener)
+
+13. Send Ai to open device related settings
+ControlBleTools.getInstance().sendAiOpenFunction(AiOpenFunctionBean,listener)
+
+14. Set Berry protocol with avatar favorite contacts
+ControlBleTools.getInstance().setFavoriteContacts(supportMax, List<AddFavoriteContactBean>,deviceType, UploadBigDataListener)
+
+15. Get Berry protocol favorite contacts with avatars
+①. Get Berry protocol favorite contacts with avatars
+ControlBleTools.getInstance().getFavoriteContacts(listener)
+②. Listen for callbacks
+CallBackUtils.setFavoriteContactsCallBack(FavoriteContactsCallBack)
+③. Process callback data
+FavoriteContactsCallBack.onFavoriteContacts(FavoriteContactsBean)
+
+16. Delete Berry protocol favorite contacts with avatars
+ControlBleTools.getInstance().deleteFavoriteContacts(List<FavoriteContactsBean.FavoriteContactBean>,listener)
+
+17. Compatible with API 35
+========================================================
+ZH_SDK_20250801_V2.1.7 Updates
+1. Removed AiFunctionCallBack.onAiErrorCode(errorCode)
+2. Added support for app-sent AI voice error codes: (0: Normal, 1: Network error, 2: No voice timeout, 3: ASR/comprehension failure, 4: Server unresponsive, 5: Rate limit exceeded)
+ControlBleTools.getInstance().sendAiErrorCode(errorCode,listener)
+========================================================
+ZH_SDK_20250804_V2.1.8 Updates
+1. Removed the third-party tool utilcodex
+========================================================
+ZH_SDK_20250807_V2.1.9 Updates
+1. RealTimeBean adds ring project NFC sleep error reporting.
+RealTimeBean.nfcSleepErr //0: Normal, 1: Exception
+2. RealTimeBean adds ring sar.
+RealTimeBean.ringSar
+3. Added a method for getting ring NFC sleep error information.
+ControlBleTools.getInstance().getRingNFCSleepErr(listener)
+4. Added a callback for ring NFC sleep error information.
+MicroCallBack.onNfcSleepErr(int error) //0: Normal, 1: Exception
+========================================================
+ZH_SDK_20250808_V2.2.0 Updates
+1. Added AI voice data callback
+AiFunctionCallBack.onDevAiVoiceData(byte[] data)
+========================================================

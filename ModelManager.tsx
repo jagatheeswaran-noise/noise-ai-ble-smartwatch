@@ -10,12 +10,14 @@ import {
   Platform,
   Switch,
 } from 'react-native';
+import Sound from 'react-native-sound'
 import RNFS from 'react-native-fs';
 import { llamaService } from './LlamaService';
 import type { ModelInfo, ModelDownloadProgress } from './LlamaService';
 import LlamaService from './LlamaService';
 import { StorageManager, type StorageInfo } from './StorageManager';
 import { HealthDataGeneratorSection } from './HealthDataGeneratorSection';
+import { whisperModelService, type WhisperModelInfo, type WhisperDownloadProgress } from './src/services/whisper/WhisperModelService';
 
 type Props = {
   visible: boolean;
@@ -323,6 +325,78 @@ class ModelManager extends Component<Props, State> {
     );
   };
 
+  state_recordings: { files: string[]; playing: string | null } = { files: [], playing: null } as any
+
+  loadRecordings = async () => {
+    try {
+      let allFiles: string[] = []
+      
+      // First try Downloads directory
+      const downloadsDir = `${RNFS.DownloadDirectoryPath}/NoiseAI_WatchRecordings`
+      const downloadsExists = await RNFS.exists(downloadsDir)
+      if (downloadsExists) {
+        const downloadsEntries = await RNFS.readDir(downloadsDir)
+        const downloadsFiles = downloadsEntries.filter(e => e.isFile() && (e.name.endsWith('.wav') || e.name.endsWith('.opus'))).map(e => e.path)
+        allFiles = allFiles.concat(downloadsFiles)
+      }
+      
+      // Also check Documents directory (fallback)
+      const documentsDir = `${RNFS.DocumentDirectoryPath}/watch_recordings`
+      const documentsExists = await RNFS.exists(documentsDir)
+      if (documentsExists) {
+        const documentsEntries = await RNFS.readDir(documentsDir)
+        const documentsFiles = documentsEntries.filter(e => e.isFile() && (e.name.endsWith('.wav') || e.name.endsWith('.opus'))).map(e => e.path)
+        allFiles = allFiles.concat(documentsFiles)
+      }
+      
+      const files = allFiles.sort().reverse()
+      this.state_recordings = { files, playing: this.state_recordings.playing } as any
+      this.forceUpdate()
+      console.log(`🎤⌚ Loaded ${files.length} recordings from Downloads and Documents`)
+    } catch (e) {
+      console.warn('Failed to load recordings', e)
+      this.state_recordings = { files: [], playing: null } as any
+      this.forceUpdate()
+    }
+  }
+
+  playRecording = (path: string) => {
+    try {
+      Sound.setCategory('Playback')
+      const sound = new Sound(path, '', (err) => {
+        if (err) {
+          Alert.alert('Playback Error', 'Unable to play recording')
+          return
+        }
+        this.state_recordings.playing = path as any
+        this.forceUpdate()
+        sound.play((success) => {
+          this.state_recordings.playing = null as any
+          this.forceUpdate()
+          sound.release()
+          if (!success) Alert.alert('Playback Error', 'Playback failed')
+        })
+      })
+    } catch (e) {
+      Alert.alert('Playback Error', 'Unable to start playback')
+    }
+  }
+
+  deleteRecording = async (path: string) => {
+    try {
+      await RNFS.unlink(path)
+      await this.loadRecordings()
+    } catch (e) {
+      Alert.alert('Delete Error', 'Failed to delete recording')
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.visible && !prevProps.visible) {
+      this.loadRecordings()
+    }
+  }
+
   render() {
     return (
       <Modal
@@ -394,8 +468,92 @@ class ModelManager extends Component<Props, State> {
 
             {/* Models list */}
             <View style={styles.modelsSection}>
-              <Text style={styles.sectionTitle}>Available Models</Text>
+              <Text style={styles.sectionTitle}>Available Llama Models</Text>
               {this.state.models.map(this.renderModelItem)}
+            </View>
+
+            {/* Whisper Models */}
+            <View style={styles.modelsSection}>
+              <Text style={styles.sectionTitle}>Available Whisper Models</Text>
+              {whisperModelService.getAvailableModels().map((model) => (
+                <View key={`whisper_${model.filename}`} style={styles.modelItem}>
+                  <View style={styles.modelInfo}>
+                    <Text style={styles.modelName}>{model.name}</Text>
+                    <Text style={styles.modelDescription}>{model.description}</Text>
+                    <Text style={styles.modelSize}>Size: {this.formatBytes(model.size)}</Text>
+                  </View>
+                  <View style={styles.modelActions}>
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.downloadButton]}
+                      onPress={async () => {
+                        let progress = 0
+                        Alert.alert('Download Whisper Model', `Download ${model.name}?`, [
+                          { text: 'Cancel', style: 'cancel' },
+                          { text: 'Download', onPress: async () => {
+                            const ok = await whisperModelService.downloadModel(
+                              model,
+                              (p: WhisperDownloadProgress) => {
+                                progress = p.progress
+                              }
+                            )
+                            Alert.alert(ok ? 'Success' : 'Failed', ok ? 'Whisper model downloaded.' : 'Download failed')
+                          }}
+                        ])
+                      }}
+                    >
+                      <Text style={styles.actionButtonText}>Download</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.loadButton]}
+                      onPress={async () => {
+                        await whisperModelService.setActiveModel(model)
+                        Alert.alert('Active', `${model.name} set as active Whisper model`)
+                      }}
+                    >
+                      <Text style={styles.actionButtonText}>Set Active</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.actionButton, styles.deleteButton]}
+                      onPress={async () => {
+                        const ok = await whisperModelService.deleteModel(model)
+                        Alert.alert(ok ? 'Deleted' : 'Error', ok ? 'Whisper model deleted.' : 'Failed to delete model')
+                      }}
+                    >
+                      <Text style={styles.actionButtonText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </View>
+
+            {/* Watch Recordings */}
+            <View style={styles.modelsSection}>
+              <Text style={styles.sectionTitle}>Watch Recordings</Text>
+              <View style={{gap: 8}}>
+                <TouchableOpacity style={[styles.actionButton, styles.loadButton]} onPress={this.loadRecordings}>
+                  <Text style={styles.actionButtonText}>Refresh</Text>
+                </TouchableOpacity>
+                {this.state_recordings.files.length === 0 ? (
+                  <Text style={{color:'#999'}}>No recordings yet</Text>
+                ) : (
+                  this.state_recordings.files.map((p) => (
+                    <View key={p} style={styles.modelItem}>
+                      <View style={styles.modelInfo}>
+                        <Text style={styles.modelName} numberOfLines={1}>{p.split('/').pop()}</Text>
+                        <Text style={styles.modelSize} numberOfLines={1}>{p}</Text>
+                      </View>
+                      <View style={styles.modelActions}>
+                        <TouchableOpacity style={[styles.actionButton, styles.loadButton]} onPress={() => this.playRecording(p)}>
+                          <Text style={styles.actionButtonText}>{this.state_recordings.playing === p ? 'Playing...' : 'Play'}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.actionButton, styles.deleteButton]} onPress={() => this.deleteRecording(p)}>
+                          <Text style={styles.actionButtonText}>Delete</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  ))
+                )}
+              </View>
             </View>
 
             {/* Help text */}

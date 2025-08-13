@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="50dp"
+        android:orientation="vertical">
+
+
+
+        <Button
+            android:id="@+id/btnSetTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s117" />
+
+        <CheckBox
+            android:id="@+id/chbTimeFormat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/s118" />
+
+        <Button
+            android:id="@+id/btnSetTime2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s118" />
+
+        <include layout="@layout/line" />
+
+        <Button
+            android:id="@+id/btnGetWorldClock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s304"
+            android:textAllCaps="false" />
+
+        <Button
+            android:id="@+id/btnSetWorldClock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/s305"
+            android:textAllCaps="false" />
+
+        <include layout="@layout/line" />
+
+
+
+    </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

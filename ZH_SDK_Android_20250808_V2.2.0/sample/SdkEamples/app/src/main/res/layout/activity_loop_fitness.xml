@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".function.ring_loop.LoopBindActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical">
+
+        <!--region 长链接测试 -->
+        <TextView
+            style="@style/MyTextView"
+            android:text="循环次数" />
+
+        <EditText
+            android:id="@+id/etCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入大于等于1的正整数"
+            android:inputType="phone"
+            android:text="1" />
+
+        <TextView
+            style="@style/MyTextView"
+            android:layout_marginTop="8dp"
+            android:text="循环间隔 - 毫秒(将以输入值的1-10倍数随机)" />
+
+        <EditText
+            android:id="@+id/etInterval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入大于等于1000毫秒的正整数"
+            android:inputType="phone"
+            android:text="1000" />
+
+
+        <Button
+            android:id="@+id/btnStart"
+            style="@style/MyButton"
+            android:layout_width="match_parent"
+            android:background="@color/purple_700"
+            android:onClick="onClick"
+            android:text="开始循环" />
+
+        <!--        <Button-->
+        <!--            android:id="@+id/btnClean"-->
+        <!--            style="@style/MyButton"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:onClick="onClick"-->
+        <!--            android:text="清除日志 " />-->
+
+
+        <TextView
+            android:id="@+id/tvStatus"
+            style="@style/MyTextView"
+            android:gravity="start"
+            android:text="连接状态：" />
+
+        <TextView
+            android:id="@+id/tvCount"
+            style="@style/MyTextView"
+            android:text="@string/tv_count" />
+
+        <TextView
+            android:id="@+id/tvSucNum"
+            style="@style/MyTextView"
+            android:text="@string/tv_suc_times" />
+
+        <TextView
+            android:id="@+id/tvFailNum"
+            style="@style/MyTextView"
+            android:text="@string/tv_fail_times" />
+
+        <TextView
+            android:id="@+id/tvDailyProgress"
+            style="@style/MyTextView"
+            android:text="同步进度 :" />
+
+
+        <TextView
+            android:id="@+id/tvLog"
+            style="@style/MyTextView"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:text="@string/tv_log" />
+
+
+        <!--endregion-->
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

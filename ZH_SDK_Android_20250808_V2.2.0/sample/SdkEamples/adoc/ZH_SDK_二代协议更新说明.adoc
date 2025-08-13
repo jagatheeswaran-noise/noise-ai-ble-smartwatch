@@ -1,0 +1,1784 @@
+= ZH SDK 二代协议更新变更说明
+邓东奇 <dengdongqi@zhouhaismart.com>
+v1.0, 2024-11-08
+:font-family: SimSun
+:toc:
+:sectnums:
+
+== 区分设备协议版本
+
+=== 蓝牙扫描
+
+* 调用开启扫描设备并设置回调
+
+[source,kotlin]
+----
+/**
+ * 开始扫描设备
+ */
+ControlBleTools.getInstance().startScanDevice(ScanDeviceCallBack)
+----
+
+* 处理回调函数
+
+[source,kotlin]
+----
+ScanDeviceCallBack.onBleScan(ScanDeviceBean)
+----
+
+* 通过 **ScanDeviceBean.protocolName** 判断协议版本
+
+[source,kotlin]
+----
+BleCommonAttributes.DEVICE_PROTOCOL_APRICOT //一代旧协议 以下简称 APRICOT
+BleCommonAttributes.DEVICE_PROTOCOL_BERRY   //二代新协议 以下简称 BERRY
+----
+
+=== 使用系统LE蓝牙扫描
+
+* 调用开启系统LE扫描设备并设置回调
+
+[source,kotlin]
+----
+var mLeScanCallback: LeScanCallback = LeScanCallback { device:BluetoothDevice, rssi:Int, scanRecord:ByteArray ->
+      val scanResult = ScanResult(device, ScanRecord.parseFromBytes(scanRecord), rssi, SystemClock.elapsedRealtimeNanos())
+      val scanDeviceBean = ScanDeviceBean(scanResult)
+}
+----
+
+* 通过 **ScanDeviceBean.protocolName** 判断协议版本
+
+=== 二维码扫码
+
+* APP扫码设备上的绑定二维码，获取二维码内容字符串**qrCode**
+* 通过**qrCode**构造**ScanQrDeviceBean**对象
+
+[source,kotlin]
+----
+val scanQrDeviceBean:ScanQrDeviceBean = ScanQrDeviceBean(qrCode)
+----
+
+* 通过**ScanQrDeviceBean.scanDeviceBean.protocolName**判断协议版本
+
+[source,kotlin]
+----
+BleCommonAttributes.DEVICE_PROTOCOL_APRICOT //一代旧协议 以下简称 APRICOT
+BleCommonAttributes.DEVICE_PROTOCOL_BERRY   //二代新协议 以下简称 BERRY
+----
+
+TIP: *BERRY扫描扫码增加##protocolName##以区分协议版本，对于以前未有此字段的设备皆为APRICOT*
+
+== 连接
+
+=== APRICOT 连接流程
+
+* APP完成初始化SDK、获取完相关权限、系统蓝牙正常开启
+* 调用连接方法
+
+[source,kotlin]
+----
+/**
+ * 连接设备
+ *
+ * @param name 蓝牙名称
+ * @param address 蓝牙地址
+ * @deprecated use {@link #connect(String, String, String)} name ,
+ *      mac , protocol(ScanDeviceBean.protocolName)
+ */
+ControlBleTools.getInstance().connect(name,address)
+----
+
+* 设置连接状态回调
+
+[source,kotlin]
+----
+/**
+ * 设置连接状态回调
+ */
+ControlBleTools.getInstance().setBleStateCallBack(BleStateCallBack)
+----
+
+* 处理回调结果，通过**state**判断连接状态
+
+[source,kotlin]
+----
+BleStateCallBack.onConnectState(state)
+// 已断连
+BleCommonAttributes.STATE_DISCONNECTED
+// 连接中
+BleCommonAttributes.STATE_CONNECTING
+// 已连接
+BleCommonAttributes.STATE_CONNECTED
+// 断连中
+BleCommonAttributes.STATE_DISCONNECTING
+// 连接超时
+BleCommonAttributes.STATE_TIME_OUT
+----
+
+=== BERRY 连接流程
+
+* APP完成初始化SDK、获取完相关权限、系统蓝牙正常开启
+* 调用连接方法
+
+[source,kotlin]
+----
+/**
+ * 连接设备
+ *
+ * @param name 蓝牙名称
+ * @param address 蓝牙地址
+ * @param deviceProtocol 设备协议版本
+ *      BleCommonAttributes.DEVICE_PROTOCOL_APRICOT、
+ *      BleCommonAttributes.DEVICE_PROTOCOL_BERRY,
+ *      对于老设备无此字段值的可传入空字符串“”或null，默认执行APRICOT连接
+ *
+ */
+ControlBleTools.getInstance().connect(deviceName, deviceAddress, deviceProtocol)
+----
+
+* 设置连接状态回调
+
+[source,kotlin]
+----
+/**
+ * 设置连接状态回调
+ */
+ControlBleTools.getInstance().setBleStateCallBack(BleStateCallBack)
+----
+
+* 处理回调结果，通过**state**判断连接状态
+
+[source,kotlin]
+----
+BleStateCallBack.onConnectState(state)
+// 已断连
+BleCommonAttributes.STATE_DISCONNECTED
+// 连接中
+BleCommonAttributes.STATE_CONNECTING
+// 已连接
+BleCommonAttributes.STATE_CONNECTED
+// 断连中
+BleCommonAttributes.STATE_DISCONNECTING
+// 连接超时
+BleCommonAttributes.STATE_TIME_OUT
+----
+
+TIP: *BERRY连接方法增加##deviceProtocol##设备协议参数，传入由区分设备协议版本步骤得到##ScanDeviceBean.protocolName##设备协议版本（该方法兼容APRICOT连接）*
+
+== 绑定
+
+=== APRICOT 绑定流程
+
+* 完成连接设备，调用查询设备绑定状态接口
+
+[source,kotlin]
+----
+/**
+ * 请求当前连接设备的绑定状态
+ */
+ControlBleTools.getInstance().requestDeviceBindState(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置查询绑定状态回调
+
+[source,kotlin]
+----
+CallBackUtils.setRequestDeviceBindStateCallBack(RequestDeviceBindStateCallBack)
+----
+
+* 处理查询绑定状态回调结果
+
+[source,kotlin]
+----
+RequestDeviceBindStateCallBack.onBindState(state)
+//通过state判断，false为未绑定，可以发起绑定
+----
+
+* 调用绑定接口
+
+[source,kotlin]
+----
+/**
+ * 扫描绑定设备 （需设备端确认绑定）
+ */
+ControlBleTools.getInstance().bindDevice(ParsingStateManager.SendCmdStateListener)
+
+/**
+ * 扫码绑定设备 （扫描设备二维码附带验证码，无需设备确认）
+ *
+ * @param verificationCode 由二维码信息中获取
+ */
+ControlBleTools.getInstance().bindDevice(verificationCode,ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置绑定回调
+
+[source,kotlin]
+----
+CallBackUtils.setBindDeviceStateCallBack(BindDeviceStateCallBack)
+----
+
+* 处理绑定回调结果
+
+[source,kotlin]
+----
+BindDeviceStateCallBack.onDeviceInfo(BindDeviceBean)
+//通过判断BindDeviceBean.deviceVerify 是否为true则绑定成功，或判断deviceVerifyCode是否为VerifyCode.SUCCESS则绑定成功
+----
+
+* App将设备与服务器账户进行绑定，成功则将用户ID下发至设备，调用设置用户ID接口
+
+[source,kotlin]
+----
+/**
+ * 设置绑定成功用户id
+ *
+ * @param userId 服务端用户id
+ */
+ControlBleTools.getInstance().sendAppBindResult(userId, ParsingStateManager.SendCmdStateListener)
+----
+
+=== BERRY 绑定流程
+
+* 完成连接设备，设置绑定相关回调
+
+[source,kotlin]
+----
+CallBackUtils.setBerryBindCallBack(BerryBindCallBack)
+----
+
+* 调用设置用户id接口
+
+[source,kotlin]
+----
+/**
+ * 设置用户ID
+ *
+ * @param userid 用户id
+ * @param phoneName 手机型号 不可为空
+ * @param systemVersion 手机系统版本 不可为空
+ */
+ControlBleTools.getInstance().setUserIdByBerryProtocol(userid, phoneName, systemVersion,ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理设置用户id回调
+
+[source,kotlin]
+----
+BerryBindCallBack.onUserIdResult(BerryDeviceInfoBean)
+//通过判断BerryDeviceInfoBean.isBind == false为未绑定，可以发起绑定
+----
+
+* 调用绑定方法
+
+[source,kotlin]
+----
+/**
+ * 扫描绑定设备 （需设备端确认绑定）
+ */
+ControlBleTools.getInstance().bindDevice(ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理绑定回调结果
+
+[source,kotlin]
+----
+BerryBindCallBack.onBindStatu(bindStatus)
+//bindStatus --> 0：用户点击同意  1:非同一用户ID  2:用户点击拒绝   3:设备已绑定
+// 4：App发起绑定，设备已恢复出厂设置 5：用户不点击绑定按钮，超时 6：数据解析失败
+//通过判断 bindStatus == 0 则为绑定成功
+----
+
+* App将设备与服务器账户进行绑定，成功则通知设备绑定成功，调用回复绑定成功接口
+
+[source,kotlin]
+----
+/**
+ * 通知设备是否绑定成功
+ *
+ * @param isSuc 是否绑定成功
+ * @param listener
+ */
+public void bindDeviceSucByBerryProtocol(isSuc,ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理绑定成功回调结果
+
+[source,kotlin]
+----
+BerryBindCallBack.onBindSuccess(status)
+//status --> 0: 成功；1：超时失败
+//通过status == 0 判断为最终绑定成功
+----
+
+TIP: *BERRY绑定##流程以及相关接口修改##，#设置用户id的步骤提前#，#发起绑定接口不再区分扫描或扫码#*
+
+== 回连
+
+=== APRICOT 回连流程
+
+* 完成连接设备，调用查询设备绑定状态接口
+
+[source,kotlin]
+----
+/**
+ * 请求当前连接设备的绑定状态
+ */
+ControlBleTools.getInstance().requestDeviceBindState(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置查询绑定状态回调
+
+[source,kotlin]
+----
+CallBackUtils.setRequestDeviceBindStateCallBack(RequestDeviceBindStateCallBack)
+----
+
+* 处理查询绑定状态回调结果
+
+[source,kotlin]
+----
+RequestDeviceBindStateCallBack.onBindState(state)
+//通过state判断，true为已绑定，可以执行下一步；false为设备已解绑，提示已解绑
+----
+
+* 已绑定状态下，继续调用校验是否为同一用户接口
+
+[source,kotlin]
+----
+/**
+ * 验证设备的绑定用户id
+ *
+ * @param userid 用户id
+ */
+ControlBleTools.getInstance().verifyUserId(userId, ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置校验用户ID回调
+
+[source,kotlin]
+----
+CallBackUtils.setVerifyUserIdCallBack(VerifyUserIdCallBack)
+----
+
+* 处理校验用户ID回调结果
+
+[source,kotlin]
+----
+VerifyUserIdCallBack.onVerifyState(state)
+//通过判断state == 0 为同一用户，提示回连成功；state == 1为不同用户，提示被其它账户绑定
+----
+
+=== BERRY 回连流程
+
+* 完成连接设备，设置绑定相关回调
+
+[source,kotlin]
+----
+CallBackUtils.setBerryBindCallBack(BerryBindCallBack)
+----
+
+* 调用设置用户id接口
+
+[source,kotlin]
+----
+/**
+ * 设置用户ID
+ *
+ * @param userid 用户ID
+ * @param phoneName 手机型号 不可为空
+ * @param systemVersion 手机系统版本 不可为空
+ */
+ControlBleTools.getInstance().setUserIdByBerryProtocol(userid, phoneName, systemVersion,ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理设置用户id回调
+
+[source,kotlin]
+----
+BerryBindCallBack.onUserIdResult(BerryDeviceInfoBean)
+//通过判断BerryDeviceInfoBean.isBind == true为已绑定；false为设备已解绑，已解绑进行提示
+//通过判断BerryDeviceInfoBean.isSameUser == true 为同一用户，提示回连成功；否则提示被其它账户绑定
+----
+
+TIP: *BERRY回连##流程以及相关接口修改##，对比APRICOT##简化了回连步骤##*
+
+== 同步数据
+
+=== APRICOT 同步数据流程
+
+* 成功回连设备，调用获取日常数据接口
+
+[source,kotlin]
+----
+/**
+ * 获取日常数据
+ */
+ControlBleTools.getInstance().getDailyHistoryData(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置日常数据回调
+
+[source,kotlin]
+----
+CallBackUtils.setFitnessDataCallBack(FitnessDataCallBack)
+----
+
+* 处理日常数据同步进度
+
+[source,kotlin]
+----
+FitnessDataCallBack.onProgress(progress, total)
+//其中 progress 代表当前同步的日常数据条数，total代表总共有多少条日常数据需要同步
+----
+
+* 处理日常数据回调结果
+
+[source,kotlin]
+----
+FitnessDataCallBack.onXXXData(XXXBean)
+//App将XXXBean日常数据储存或上传至服务器
+----
+
+* 调用获取运动数据接口
+
+[source,kotlin]
+----
+/**
+ * 获取设备运动数据
+ */
+ControlBleTools.getInstance().getFitnessSportIdsData(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置运动数据进度回调
+
+[source,kotlin]
+----
+CallBackUtils.setSportParsingProgressCallBack(SportParsingProgressCallBack)
+----
+
+* 处理运动数据进度
+
+[source,kotlin]
+----
+SportParsingProgressCallBack.onProgress(progress, total)
+//其中 progress 代表当前同步的运动数据条数，total代表总共有多少条运动数据需要同步
+----
+
+* 设置运动数据回调
+
+[source,kotlin]
+----
+CallBackUtils.setSportCallBack(SportCallBack)
+----
+
+* 处理运动数据回调结果
+
+[source,kotlin]
+----
+SportCallBack.onDevSportInfo(DevSportInfoBean)
+//App将DevSportInfoBean运动数据存储或上传至服务器
+----
+
+=== BERRY 同步数据流程
+
+* 成功回连设备，调用获取日常数据接口
+
+[source,kotlin]
+----
+/**
+ * 获取日常数据
+ */
+ControlBleTools.getInstance().getDailyHistoryData(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置日常数据回调
+
+[source,kotlin]
+----
+CallBackUtils.setFitnessDataCallBack(FitnessDataCallBack)
+----
+
+* 处理日常数据同步进度
+
+[source,kotlin]
+----
+FitnessDataCallBack.onProgress(progress, total)
+//其中 progress 日常数据接收的字节，total代表总共有多少字节日常数据需要同步
+----
+
+* 处理日常数据回调结果
+
+[source,kotlin]
+----
+FitnessDataCallBack.onXXXData(XXXBean)
+//App将XXXBean日常数据储存或上传至服务器
+----
+
+* 调用获取运动数据接口
+
+[source,kotlin]
+----
+/**
+ * 获取设备运动数据
+ */
+ControlBleTools.getInstance().getFitnessSportIdsData(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置运动数据进度回调
+
+[source,kotlin]
+----
+CallBackUtils.setSportParsingProgressCallBack(SportParsingProgressCallBack)
+----
+
+* 处理运动数据进度
+
+[source,kotlin]
+----
+SportParsingProgressCallBack.onProgress(progress, total)
+//其中 progress 代表运动数据接收的字节，total代表总共有多少字节运动数据需要同步
+----
+
+* 设置运动数据回调
+
+[source,kotlin]
+----
+CallBackUtils.setSportCallBack(SportCallBack)
+----
+
+* 处理运动数据回调结果
+
+[source,kotlin]
+----
+SportCallBack.onDevSportInfo(DevSportInfoBean)
+//App将DevSportInfoBean运动数据存储或上传至服务器
+----
+
+TIP: *BERRY同步数据的流程与接口回调与APRICOT一致，BERRY的##同步速度提升，进度回调的意义不同##*
+
+== 天气
+
+=== APRICOT 天气流程
+
+* 成功回连设备，App获取天气源数据，根据App定义更新手表天气显示
+
+* 发送当天 + 未来N天天气，N一般等于3具体看项目需求
+
+[source,kotlin]
+----
+/**
+ * 发送按天天气信息
+ * @param WeatherDayBean 按天天气信息
+ */
+ControlBleTools.getInstance().sendWeatherDailyForecast(WeatherDayBean,ParsingStateManager.SendCmdStateListener)
+----
+
+* 发送未来N小时天气，N一般等于96具体看项目需求
+
+[source,kotlin]
+----
+/**
+ * 发送未来小时天气信息
+ * @param WeatherPerHourBean 小时天气信息
+ */
+ControlBleTools.getInstance().sendWeatherPreHour(WeatherPerHourBean,ParsingStateManager.SendCmdStateListener)
+----
+
+* 发送气压数据
+
+[source,kotlin]
+----
+/**
+ * 发送气压
+ * @param pressure 气压数据
+ */
+ControlBleTools.getInstance().sendPressureByWeather(pressure,ParsingStateManager.SendCmdStateListener)
+----
+
+* 监听设备请求更新天气回调
+
+[source,kotlin]
+----
+CallBackUtils.setWeatherCallBack(WeatherCallBack)
+----
+
+* 处理设备请求更新天气回调
+
+[source,kotlin]
+----
+WeatherCallBack.onRequestWeather()
+//再次更新未来天气+小时天气+气压
+----
+
+=== BERRY 天气流程
+
+* 成功回连设备，App获取天气源数据，根据App定义更新手表天气显示
+
+* 发送最新天气
+
+[source,kotlin]
+----
+/**
+ * 发送最新天气
+ *
+ * @param LatestWeatherBean 最新天气
+ */
+ControlBleTools.getInstance().sendBerryLatestWeather(BerryLatestWeatherBean,ParsingStateManager.SendCmdStateListener)
+----
+
+[source,java]
+----
+public class BerryLatestWeatherBean implements Serializable {
+
+    private BerryWeatherIdBean id;
+    private int weather;
+    /**
+     * 气温 25
+     */
+    private BerryWeatherKeyValueBean temperature;
+    /**
+     * 湿度 %
+     */
+    private BerryWeatherKeyValueBean humidity;
+    /**
+     * 风力等级 0-12
+     */
+    private BerryWeatherKeyValueBean windSpeed;
+    /**
+     * 风向 0-360
+     */
+    private BerryWeatherKeyValueBean windDeg;
+    /**
+     * 防晒指数 紫外线强度
+     */
+    private BerryWeatherKeyValueBean uvindex;
+    /**
+     * 空气质量 优 aqi >=0 && aqi<= 50 良 aqi >50 && aqi<= 100 轻度污染 aqi >100
+     */
+    private BerryWeatherKeyValueBean aqi;
+    /**
+     * 预警信息
+     */
+    private List<WeatherAlertsListBean> alertsList;
+    /**
+     *  大气压强
+     */
+    private float pressure;
+}
+
+public static class WeatherAlertsListBean {
+    /**
+     * 预警id
+     */
+    private String id;
+    /**
+     * 预警类型 String 例："大风"
+     */
+    private String type;
+    /**
+     * 预警级别 String 例："蓝色"
+     */
+    private String level;
+    /**
+     * 预警标题 String 例："本溪市大风蓝色预警"
+     */
+    private String title;
+    /**
+     * 预警详情 String 例："本溪市大风蓝色预警本溪市大风蓝色预警本溪市大风蓝色预警本溪市大风蓝色预警"
+     */
+    private String detail;
+}
+----
+
+* 发送当天 + 未来N天天气，N一般等于3具体看项目需求
+
+[source,kotlin]
+----
+/**
+ * 发送未来天气 - 日
+ *
+ * @param BerryForecastWeatherBean 未来天气 - 日
+ */
+ControlBleTools.getInstance().sendBerryDailyForecastWeather(BerryForecastWeatherBean,ParsingStateManager.SendCmdStateListener)
+----
+
+[source,java]
+----
+public class BerryForecastWeatherBean implements Serializable {
+    private BerryWeatherIdBean id;
+    public List<WeatherData> data;
+}
+
+public class BerryWeatherIdBean implements Serializable {
+    /**
+     * 毫秒级时间戳
+     */
+    private long pubTime;
+    /**
+     * 城市名
+     */
+    private String cityName;
+    /**
+     * 定位名称
+     */
+    private String locationName;
+    /**
+     * 支持多城市天气时location_key字段是必需的
+     * */
+    private String locationKey;
+    /**
+     * 是否当前定位的城市，支持多城市天气时，设备用于判断是否当前定位城市的天气
+     * */
+    private boolean isCurrentLocation;
+}
+
+public static class WeatherData implements Serializable{
+        /**
+         * 空气质量 优 aqi >=0 && aqi<= 50 良 aqi >50 && aqi<= 100 轻度污染 aqi >100
+         */
+        private BerryWeatherKeyValueBean api;
+        /**
+         * 开始天气id - 结束天气id
+         */
+        private BerryWeatherRangeValueBean weather;
+        /**
+         * 最低气温 - 最高气温
+         */
+        private BerryWeatherRangeValueBean temperature;
+        /**
+         * 温度单位
+         */
+        private String temperatureUnit;
+        /**
+         * 日出日落 秒级时间戳
+         */
+        private BerryWeatherSunRiseSetBean sunRiseSet;
+        /**
+         * 风力等级 0-12
+         */
+        private BerryWeatherKeyValueBean windSpeed;
+        /**
+         * 风向 0-360
+         */
+        private BerryWeatherKeyValueBean windDeg;
+}
+
+----
+
+* 发送未来N小时天气，N最大等于24
+
+[source,kotlin]
+----
+/**
+ * 发送未来天气 - 小时
+ *
+ * @param BerryForecastWeatherBean 未来天气 - 小时
+ */
+ControlBleTools.getInstance().sendBerryHourlyForecastWeather(BerryForecastWeatherBean,ParsingStateManager.SendCmdStateListener)
+----
+
+* 发送气压数据
+
+[source,kotlin]
+----
+/**
+ * 发送气压
+ * @param pressure 气压数据
+ */
+ControlBleTools.getInstance().sendBerryPressureByWeather(pressure,ParsingStateManager.SendCmdStateListener)
+----
+
+* 监听设备请求更新天气回调
+
+[source,kotlin]
+----
+8.CallBackUtils.setWeatherCallBack(WeatherCallBack)
+----
+
+* 处理设备请求更新天气回调
+
+[source,kotlin]
+----
+WeatherCallBack.onRequestWeather()
+//再次更新最新天气+未来天气+小时天气+气压
+----
+
+TIP: *BERRY天气##增加最新天气接口##，可以理解为当前时刻最新的天气数据， +
+未来N天是某天的整体天气情况。BERRY##天气数据结构改变##，具体可参考DEMO赋值*
+
+== 通知
+
+=== APRICOT 通知流程
+
+* 成功回连设备，App监听系统通知与第三方应用通知
+
+* 接收到第三方通知，根据App开关控制决定是否发送，发送调用App通知接口
+
+[source,kotlin]
+----
+/**
+ * 发送app 通知
+ *
+ * @param appName    应用名
+ * @param pageName   应用包名
+ * @param title      通知标题
+ * @param text       通知内容
+ * @param tickerText 提示文案
+ *                   APP通知：通知标题   50个中文字符串长度，最大150个字节；通知内容正文200个中文字符串长度，最大600个字节
+ */
+ControlBleTools.getInstance().sendAppNotification(appName, pageName, title, text, tickerText,ParsingStateManager.SendCmdStateListener)
+----
+
+* 接收到系统来电，未接来电或短信，根据App开关控制决定是否发送，发送调用系统通知接口
+
+[source,kotlin]
+----
+/**
+ * 发送系统通知
+ *
+ * @param type          0来电  1未接来电 2短信
+ * @param phoneNumber   手机号码
+ * @param contactsInfo  联系人昵称
+ * @param messageText  （短信提醒）：内容 正文200个中文字符串长度，最大600个字节
+ */
+ControlBleTools.getInstance().sendSystemNotification(type, phoneNumber, contactsInfo, messageText,ParsingStateManager.SendCmdStateListener)
+----
+
+=== BERRY 通知流程
+
+* 成功回连设备，App监听系统通知与第三方应用通知
+
+* 接收到第三方通知，根据App开关控制决定是否发送，发送调用App通知接口
+
+[source,kotlin]
+----
+/**
+ * 发送app 通知
+ *
+ * @param key        聚合通知消息唯一值
+ * @param appName    App名
+ * @param pageName   App包名
+ * @param title      通知标题
+ * @param text       通知内容
+ * @param tickerText 提示文案
+ *                   APP通知：通知标题   50个字符串长度，最大150个字节；通知内容正文200个字符串长度，最大600个字节
+ */
+ControlBleTools.getInstance().sendAppNotification(key, appName, pageName, title, text, tickerText,ParsingStateManager.SendCmdStateListener)
+----
+
+* 接收到系统未接来电或短信，根据App开关控制决定是否发送，发送调用系统通知接口
+
+[source,kotlin]
+----
+/**
+ * 发送系统通知
+ *
+ * @param type         2短信  !!!移除0来电1未接来电!!!
+ * @param key          聚合通知消息唯一值
+ * @param sysName      系统应用名
+ * @param sysPageName  系统应用包名
+ * @param phoneNumber  手机号
+ * @param contactsInfo 联系人昵称
+ * @param messageText  （短信提醒）：内容 正文200个字符串长度，最大600个字节
+ */
+ControlBleTools.getInstance().sendSystemNotification(type, key, sysName, sysPageName, phoneNumber, contactsInfo, messageText,ParsingStateManager.SendCmdStateListener)
+----
+
+* App未接来电提醒开关控制，需要同步更新至设备
+
+[source,kotlin]
+----
+/**
+ * 设置来电相关通知提醒开关
+ *
+ * @param isCallOpen     是否开启来电通知提醒
+ * @param isMissCallOpen 是否开启未接来电通知提醒
+ * @param listener
+ */
+public void setBerryCallNotificationSwitch(isCallOpen, isMissCallOpen, ParsingStateManager.SendCmdStateListener)
+----
+
+* App来电提醒开关控制，需要同步更新至设备
+
+[source,kotlin]
+----
+ /**
+ * 单独设置来电通知提醒开关
+ *
+ * @param isOpen 是否来电通知提醒
+ * @param listener
+ */
+ControlBleTools.getInstance().setBerryIncomingCallNotificationSwitch(isOpen, SendCmdStateListener)
+----
+
+* App未接来电提醒开关控制，需要同步更新至设备
+
+[source,kotlin]
+----
+ /**
+ * 单独设置未接来电通知提醒开关
+ *
+ * @param isOpen 是否开启未接来电通知提醒
+ * @param listener
+ */
+ControlBleTools.getInstance().setBerryMissCallNotificationSwitch(isOpen, SendCmdStateListener)
+----
+
+* 监听设备请求打开应用回调
+
+[source,kotlin]
+----
+CallBackUtils.setDeviceOpenNotifyAppCallBack(DeviceOpenNotifyAppCallBack)
+----
+
+* 处理设备请求打开应用
+
+[source,kotlin]
+----
+DeviceOpenNotifyAppCallBack.onRequestOpen(pageName)
+//App根据包名pageName打开对应App
+----
+
+* App控制移除设备上的通知
+
+[source,kotlin]
+----
+/**
+ * 移除设备通知
+ * @param packageNames List<String> 应用包名集合
+ */
+ControlBleTools.getInstance().removeNotification(packageNames,ParsingStateManager.SendCmdStateListener)
+----
+
+* App设置通知相关设置
+
+[source,kotlin]
+----
+/**
+ * App设置通知相关设置
+ * @param NotificationSettingsBean 通知设置
+ */
+ControlBleTools.getInstance().setNotificationSettings(NotificationSettingsBean,ParsingStateManager.SendCmdStateListener)
+// NotificationSettingsBean新增以下参数
+///**
+// * 仅手机锁屏时通知
+// */
+//var isOnlyLockedNotify: Boolean = false
+///**
+// * 仅佩戴通知
+// */
+//var isOnlyWornNotify: Boolean = false
+----
+
+* 设置通知亮屏设置
+
+[source,kotlin]
+----
+/**
+ * 设置通知设置的设置参数
+ *
+ * @param bean
+ * @param listener
+ */
+ControlBleTools.getInstance().setNotificationSettings(NotificationSettingsBean, SendCmdStateListener)
+/**
+ * 通知不亮屏
+ */
+NotificationSettingsBean.noticeNotLightUp
+/**
+ * 仅手机锁屏时通知
+ */
+NotificationSettingsBean.isOnlyLockedNotify
+/**
+ * 仅佩戴通知
+ */
+NotificationSettingsBean.isOnlyWornNotify
+----
+
+[source,kotlin]
+----
+ /**
+ * 获取通知设置的设置参数
+ *
+ * @param listener
+ */
+ControlBleTools.getInstance().getNotificationSettings(SendCmdStateListener)
+
+/**
+* 设置监听
+*/
+CallBackUtils.settingMenuCallBack.onNotificationSetting(NotificationSettingsBean)
+----
+
+TIP: *BERRY##系统通知移除来电提醒type 0, 增加sysName,sysPageName参数##，##增加设备请求打开应用回调##， +
+#增加App主动移除通知功能接口#，APRICOT不支持新增接口*
+
+== 同步联系人
+
+=== APRICOT 同步联系人流程
+
+* 成功回连设备，进入App联系人功能
+
+* 调用获取联系人接口
+
+[source,kotlin]
+----
+/**
+ * 获取联系人列表
+ */
+ControlBleTools.getInstance().getContactList(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置监听获取联系人回调
+
+[source,kotlin]
+----
+CallBackUtils.setContactCallBack(contactCallBack)
+----
+
+* 处理获取联系人回调
+
+[source,kotlin]
+----
+ContactCallBack.onContactResult(ContactBean)
+----
+
+* 调用设置联系人接口
+
+[source,kotlin]
+----
+/**
+ * 设置联系人列表
+ *
+ * @param list List<ContactBean> 最大10条数据
+ */
+ControlBleTools.getInstance().setContactList(lsit,ParsingStateManager.SendCmdStateListener)
+----
+
+=== BERRY 同步联系人流程
+
+* 成功回连设备，进入App联系人功能
+
+* 调用获取联系人接口
+
+[source,kotlin]
+----
+/**
+ * 获取联系人列表
+ */
+ControlBleTools.getInstance().getContactList(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置监听获取联系人回调
+
+[source,kotlin]
+----
+CallBackUtils.setContactCallBack(contactCallBack)
+----
+
+* 处理获取联系人回调
+
+[source,kotlin]
+----
+ContactCallBack.onContactResult(ContactBean)
+----
+
+* 调用设置联系人接口
+
+[source,kotlin]
+----
+/**
+ * 设置联系人列表
+ *
+ * @param list List<ContactBean> 最大10条数据
+ */
+ControlBleTools.getInstance().setContactList(lsit,ParsingStateManager.SendCmdStateListener)
+----
+
+* App设置监听设备请求获取联系人昵称回调
+
+[source,kotlin]
+----
+CallBackUtils.setBerryDevReqContactCallBack(BerryDevReqContactCallBack)
+----
+
+* 处理设备请求获取联系人昵称回调
+
+[source,kotlin]
+----
+BerryDevReqContactCallBack.onDeviceRequestContact(phoneNumber)
+//App通过phoneNumber获取系统本地联系人昵称，调用发送联系人昵称接口
+
+/**
+ * 更新设备请求的联系人信息
+ *
+ * @param name          联系人昵称
+ * @param phoneNumber   联系人号码
+ */
+ControlBleTools.getInstance().updateBerryContactInfo(name, phoneNumber, ParsingStateManager.SendCmdStateListener)
+----
+
+TIP: *BERRY同步联系人##增加设备主动请求获取联系人昵称回调##，App接收到回调后需获取本地联系人昵称信息，#如成功需要发送至设备#*
+
+== 获取设备固件日志
+
+=== APRICOT 获取设备固件日志流程
+
+* 调用获取固件日志接口
+
+[source,kotlin]
+----
+/**
+ * 申请设备固件log数据上传
+ */
+ControlBleTools.getInstance().getFirmwareLog(ParsingStateManager.SendCmdStateListener)
+----
+
+* 设置固件日志回调
+
+[source,kotlin]
+----
+CallBackUtils.setFirmwareLogStateCallBack(FirmwareLogStateCallBack)
+----
+
+* 处理固件日志回调
+
+[source,kotlin]
+----
+FirmwareLogStateCallBack.onFirmwareLogState(state)
+//处理状态 FirmwareLogState 0:开始上传(第一包) 1:正在上传 2:结束数据上传(最后一包)
+
+FirmwareLogStateCallBack.onFirmwareLogFilePath(filePath)
+//处理文件路径  filePath
+----
+
+=== BERRY 获取设备固件日志流程
+
+* 设置日志相关回调
+
+[source,kotlin]
+----
+CallBackUtils.setBerryFirmwareLogCallBack(BerryFirmwareLogCallBack)
+----
+
+* 获取类型日志文件状态
+
+[source,kotlin]
+----
+/**
+ * 请求获取日志文件状态
+ *
+ * @param type @see BerryFirmwareLogCallBack.LogFileType
+ * @param optionalUserId
+ * @param optionalDeviceType
+ * @param optionalPhoneType
+ *
+ * @see BerryFirmwareLogCallBack#onLogFileStatus(LogFileStatusBean)
+ */
+ControlBleTools.getInstance().requestLogFileStatusByBerry(type, optionalUserId, optionalPhoneType, optionalAppVer, optionalDeviceType, ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理回调
+
+[source,kotlin]
+----
+BerryFirmwareLogCallBack.onLogFileStatus(LogFileStatusBean)
+//判断LogFileStatusBean.fileSize != 0，则继续下一步
+----
+
+* 申请固件开始上传日志
+
+[source,kotlin]
+----
+/**
+ * 请求日志文件上传或停止上传
+ *
+ * @param isStart isStart 传true开始，传false为结束
+ * @param type @see BerryFirmwareLogCallBack.LogFileType
+ * @param size 由BerryFirmwareLogCallBack.onLogFileStatus(LogFileStatusBean)得到
+ */
+ControlBleTools.getInstance().requestUploadLogFileByBerry(isStart, type, size, ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理上传结果回调
+
+[source,kotlin]
+----
+BerryFirmwareLogCallBack.onLogFileUploadStatus(DeviceFileUploadStatusBean)
+//判断DeviceFileUploadStatusBean.isSuccessful 是否上传成功
+----
+
+* 设备返回发送文件结束后，App需发送申请固件日志结束(目的使设备删除掉本地日志文件记录，下次将不再发送)
+
+[source,kotlin]
+----
+/**
+ * 请求日志文件上传或停止上传
+ *
+ * @param isStart isStart 传true开始，传false为结束
+ * @param type @see BerryFirmwareLogCallBack.LogFileType
+ * @param size 由BerryFirmwareLogCallBack.onLogFileStatus(LogFileStatusBean)得到
+ */
+ControlBleTools.getInstance().requestUploadLogFileByBerry(isStart, type, size, ParsingStateManager.SendCmdStateListener)
+----
+
+* 处理文件日志路径回调
+
+[source,kotlin]
+----
+BerryFirmwareLogCallBack.onLogFilePath(path)
+----
+
+* 处理设备请求App获取固件日志
+
+[source,kotlin]
+----
+BerryFirmwareLogCallBack.onDeviceRequestAppGetLog()
+// 接收到回调， 依次调用 DIMENSION_LOG 开启、结束传输日志，DUMP_LOG 两个日志 开启、结束传输日志
+----
+
+
+TIP: *BERRY获取固件日志##更换接口名、参数、流程##*
+
+== 大文件传输
+
+=== APRICOT 大文件传输流程
+
+* 查询大文件传输状态
+
+[source,kotlin]
+----
+/**
+ * 获取设备发送大文件状态
+ *
+ * @param isForce   是否强制更新
+ * @param version   版本号
+ * @param md5       md5
+ * @param ParsingStateManager.SendCmdStateListener  回调
+ */
+ControlBleTools.getInstance().getDeviceLargeFileState(isForce, version, md5, DeviceLargeFileStatusListener)
+----
+
+* 处理传输状态回调
+
+[source,kotlin]
+----
+DeviceLargeFileStatusListener.onSuccess(statusValue, statusName)
+//判断 statusValue == DeviceLargeFileStatusListener.PrepareStatus.READY.state 则允许发送大文件，否则不允许
+----
+
+* 发送大文件
+
+[source,kotlin]
+----
+/**
+ * 开始上传大文件数据
+ *
+ * @param type      类型 BleCommonAttributes.UPLOAD_BIG_DATA_*
+ * @param fileByte  文件
+ * @param resumable 是否支持断点续传
+ * @param ParsingStateManager.SendCmdStateListener  回调监听
+ */
+ControlBleTools.getInstance().startUploadBigData(type,fileByte, resumable,UploadBigDataListener)
+----
+
+* 处理发送文件回调
+
+[source,kotlin]
+----
+UploadBigDataListener.onProgress(curPiece, dataPackTotalPieceLength)
+//处理传输进度
+
+UploadBigDataListener.onTimeout(msg)
+//处理传输超时或失败
+
+UploadBigDataListener.onSuccess()
+//处理传输成功
+----
+
+=== BERRY 大文件传输流程
+
+* 查询大文件传输状态
+
+[source,kotlin]
+----
+/**
+ * 获取设备发送大文件状态
+ *
+ * @param fileBytes       文件          必
+ * @param fileType        文件类型       必 BleCommonAttributes.UPLOAD_BIG_DATA_*
+ * @param deviceType      设备类型       必
+ * @param firmwareVersion 固件版本       （类型为ota时必传）
+ * @param ParsingStateManager.SendCmdStateListener
+ */
+ControlBleTools.getInstance().getDeviceLargeFileStateByBerry(fileBytes, fileType, deviceType, firmwareVersion, DeviceLargeFileStatusListener)
+----
+
+* 处理传输状态回调
+
+[source,kotlin]
+----
+DeviceLargeFileStatusListener.onSuccess(statusValue, statusName)
+//判断 statusValue == DeviceLargeFileStatusListener.PrepareStatus.READY.state 则允许发送大文件，否则不允许
+----
+
+* 发送大文件
+
+[source,kotlin]
+----
+/**
+ * 开始上传大文件数据
+ *
+ * @param type     类型 BleCommonAttributes.UPLOAD_BIG_DATA_*
+ * @param fileByte 文件
+ * @param ParsingStateManager.SendCmdStateListener 回调监听
+ */
+ControlBleTools.getInstance().startUploadBigDataByBerry(type,fileByte, UploadBigDataListener)
+----
+
+* 处理发送文件回调
+
+[source,kotlin]
+----
+UploadBigDataListener.onProgress(curPiece, dataPackTotalPieceLength)
+//处理传输进度
+
+UploadBigDataListener.onTimeout(msg)
+//处理传输超时或失败
+
+UploadBigDataListener.onSuccess()
+//处理传输成功
+----
+
+TIP: *BERRY大文件传输##更换接口名与参数##，其它与APRICOT一致*
+
+== 表盘
+
+=== APRICOT 表盘流程
+
+* 在线云表盘
+
+** 查询表盘文件发送状态
+
+[source,kotlin]
+----
+/**
+ * 获取发送表盘文件状态
+ *
+ * @param watch_face_id 表盘ID
+ * @param fileSize      文件大小
+ * @param isReplace     是否替换
+ * @param ParsingStateManager.SendCmdStateListener      回调监听
+ */
+ControlBleTools.getInstance().getDeviceWatchFace(watch_face_id, fileSize, isReplace, DeviceWatchFaceFileStatusListener)
+----
+
+** 处理表盘文件发送状态回调
+
+[source,kotlin]
+----
+DeviceWatchFaceFileStatusListener.onSuccess(statusValue, statusName)
+//判断statusValue == DeviceWatchFaceFileStatusListener.PrepareStatus.READY.getState() 则允许发送表盘文件，否则不允许
+----
+
+** 调用发送大文件接口
+
+[source,kotlin]
+----
+/**
+ * 开始上传大文件数据
+ *
+ * @param type      类型 BleCommonAttributes.UPLOAD_BIG_DATA_*
+ * @param fileByte  文件
+ * @param resumable 是否支持断点续传
+ * @param ParsingStateManager.SendCmdStateListener  回调监听
+ */
+ControlBleTools.getInstance().startUploadBigData(type,fileByte, resumable,UploadBigDataListener)
+----
+
+* 处理发送文件回调
+
+[source,kotlin]
+----
+UploadBigDataListener.onProgress(curPiece, dataPackTotalPieceLength)
+//处理传输进度
+
+UploadBigDataListener.onTimeout(msg)
+//处理传输超时或失败
+
+UploadBigDataListener.onSuccess()
+//处理传输成功
+----
+
+* 相册表盘
+
+** 获取效果图
+
+[source,kotlin]
+----
+/**
+* 获取效果图
+*
+* @param src       表盘bin byte[] 资源
+* @param r         颜色R值
+* @param g         颜色G值
+* @param b         颜色B值
+* @param bgBmp     背景Bitmap
+* @param textBmp   文字Bitmap
+* @param callBack  回调
+*/
+ControlBleTools.getInstance().myCustomClockUtils(src, r, g, b, bgBmp, textBmp, EffectCallBack)
+----
+
+** 获取文字覆盖图效果
+
+[source,kotlin]
+----
+/**
+ * 获取文字图
+ *
+ * @param text_bitmp    文字Bitmap
+ * @param color_R       颜色R值
+ * @param color_G       颜色G值
+ * @param color_B       颜色B值
+ */
+ControlBleTools.getInstance().newTextBitmap(text_bitmp, color_R, color_G, color_B)
+----
+
+** 获取相册表盘传输文件
+
+[source,kotlin]
+----
+/**
+ * 获取表盘文件
+ *
+ * @param src           表盘bin byte[] 资源
+ * @param r             颜色R值
+ * @param g             颜色G值
+ * @param b             颜色B值
+ * @param bgBmp         背景Bitmap
+ * @param textBmp       文字Bitmap
+ * @param callBack      回调
+ * @param isPositive    表盘方向正向
+ */
+ControlBleTools.getInstance().newCustomClockDialData(src, r, g, b, bgBmp, textBmp, DialDataCallBack, isPositive)
+----
+
+** 询表盘文件发送状态
+
+[source,kotlin]
+----
+/**
+ * 获取发送表盘文件状态
+ *
+ * @param watch_face_id 表盘ID
+ * @param fileSize      文件大小
+ * @param isReplace     是否替换
+ * @param ParsingStateManager.SendCmdStateListener      回调监听
+ */
+ControlBleTools.getInstance().getDeviceWatchFace(watch_face_id, fileSize, isReplace, DeviceWatchFaceFileStatusListener)
+----
+
+** 处理表盘文件发送状态回调
+
+[source,kotlin]
+----
+DeviceWatchFaceFileStatusListener.onSuccess(statusValue, statusName)
+//判断statusValue == DeviceWatchFaceFileStatusListener.PrepareStatus.READY.getState() 则允许发送表盘文件，否则不允许
+----
+
+** 调用发送大文件接口
+
+[source,kotlin]
+----
+/**
+ * 开始上传大文件数据
+ *
+ * @param type      类型 BleCommonAttributes.UPLOAD_BIG_DATA_*
+ * @param fileByte  文件
+ * @param resumable 是否支持断点续传
+ * @param ParsingStateManager.SendCmdStateListener  回调监听
+ */
+ControlBleTools.getInstance().startUploadBigData(type,fileByte, resumable,UploadBigDataListener)
+----
+
+* 处理发送文件回调
+
+[source,kotlin]
+----
+UploadBigDataListener.onProgress(curPiece, dataPackTotalPieceLength)
+//处理传输进度
+
+UploadBigDataListener.onTimeout(msg)
+//处理传输超时或失败
+
+UploadBigDataListener.onSuccess()
+//处理传输成功
+----
+
+** 设置安装成功回调
+
+[source,kotlin]
+----
+CallBackUtils.setWatchFaceInstallCallBack(WatchFaceInstallCallBack)
+----
+
+* 表盘管理
+
+** 获取表盘列表接口
+
+[source,kotlin]
+----
+/**
+ * 获取已安装表盘
+ */
+ControlBleTools.getInstance().getWatchFaceList(ParsingStateManager.SendCmdStateListener)
+----
+
+** 设置获取表盘列表回调
+
+[source,kotlin]
+----
+CallBackUtils.setWatchFaceListCallBack(WatchFaceListCallBack)
+----
+
+** 设置表盘为当前使用
+
+[source,kotlin]
+----
+/**
+ * 设置当前表盘
+ *
+ * @param id 表盘id
+ */
+ControlBleTools.getInstance().setDeviceWatchFromId(id,ParsingStateManager.SendCmdStateListener)
+----
+
+** 删除当前表盘
+
+[source,kotlin]
+----
+/**
+ * 删除表盘
+ *
+ * @param id 表盘id
+ */
+ControlBleTools.getInstance().deleteDeviceWatchFromId(id,ParsingStateManager.SendCmdStateListener)
+----
+
+** 设置表盘删除或设置表盘结果回调
+
+[source,kotlin]
+----
+CallBackUtils.setWatchFaceCallBack(WatchFaceCallBack)
+
+WatchFaceCallBack.setWatchFace(isSet)
+//isSet == true, App或手表设置成功
+
+WatchFaceCallBack.removeWatchFace(isRemoce)
+//isRemoce == true,app或手表删除成功
+----
+
+=== BERRY 表盘流程
+
+* 表盘安装，修改样式
+
+** 查询表盘文件发送状态
+
+[source,kotlin]
+----
+/**
+ * 获取发送表盘前状态
+ *
+ * @param watchFaceId   表盘iD
+ * @param fileSize      表盘样式 "1" / "2" ...
+ * @param albumBitmap   相册背景图 云表盘传null
+ */
+ControlBleTools.getInstance().getWatchFaceStatusByBerry(watchFaceId, style, fileSize, albumBitmap,ParsingStateManager.SendCmdStateListener)
+----
+
+** 设置表盘文件状态回调
+
+[source,kotlin]
+----
+CallBackUtils.setBerryWatchFaceStatusCallBack(BerryWatchFaceStatusCallBack)
+----
+
+** 处理文件状态回调结果
+
+[source,kotlin]
+----
+BerryWatchFaceStatusCallBack.onPrepareStatus(BerryWatchFaceStatusReplyBean)
+//判断bean.statusValue==BerryWatchFaceStatusCallBack.PrepareStatus.READY.getState() 则允许进行下一步，否则不允许
+//如果是相册表盘，需处理圆角值 bean.screenRadius ,将背景图裁剪成圆角再下发至设备
+----
+
+
+** 查询大文件传输状态
+
+[source,kotlin]
+----
+/**
+ * 获取设备发送大文件状态
+ *
+ * @param fileBytes       文件          必
+ * @param fileType        文件类型       必 BleCommonAttributes.UPLOAD_BIG_DATA_*
+ * @param deviceType      设备类型       必
+ * @param firmwareVersion 固件版本       （类型为ota时必传）
+ * @param ParsingStateManager.SendCmdStateListener
+ */
+ControlBleTools.getInstance().getDeviceLargeFileStateByBerry(fileBytes, fileType, deviceType, firmwareVersion, DeviceLargeFileStatusListener)
+----
+
+** 处理传输状态回调
+
+[source,kotlin]
+----
+DeviceLargeFileStatusListener.onSuccess(statusValue, statusName)
+//判断 statusValue == DeviceLargeFileStatusListener.PrepareStatus.READY.state 则允许发送大文件，否则不允许
+----
+
+** 发送表盘文件
+
+[source,kotlin]
+----
+/**
+ * 发送表盘文件
+ *
+ * @param isAlbum       云表盘传值 false相册传值true
+ * @param fileByte      传值表盘BIN文件
+ * @param background    背景Bitmao图 云表盘传值null
+ * @param requestBean   requestBean 传值 （id 表盘id,isSetCurrent 是否当前true,style样式值后台约定 1，2，3 ...）
+ * @param listener
+ */
+ControlBleTools.getInstance().startUploadDialBigDataByBerry(isAlbum, fileByte, background, BerryAlbumWatchFaceEditRequestBean, BerryDialUploadListener)
+----
+
+** 处理发送文件回调
+
+[source,kotlin]
+----
+//处理传输进度
+BerryDialUploadListener.onProgress(curPiece, dataPackTotalPieceLength)
+
+
+//处理传输超时或失败
+BerryDialUploadListener.onTimeout(msg)
+
+//处理传输成功,参考 BerryAlbumDialUploadListener.SucCode
+BerryDialUploadListener.onSuccess(Code)
+----
+
+** 设置安装成功回调
+
+[source,kotlin]
+----
+CallBackUtils.setWatchFaceInstallCallBack(WatchFaceInstallCallBack)
+----
+
+** 如需单独修改表盘样式、相册背景，需提前传输完成bin文件之后，不需要查询表盘状态和大文件状态即可直接调用发送表盘接口startUploadDialBigDataByBerry，修改样式将BerryAlbumWatchFaceEditRequestBean赋值、修改相册表盘背景将background赋值
+
+* 表盘管理
+
+** 获取表盘列表接口
+
+[source,kotlin]
+----
+/**
+ * 获取已安装表盘
+ */
+ControlBleTools.getInstance().getWatchFaceList(ParsingStateManager.SendCmdStateListener)
+----
+
+** 设置获取表盘列表回调
+
+[source,kotlin]
+----
+CallBackUtils.setWatchFaceListCallBack(WatchFaceListCallBack)
+
+//处理表盘列表结果 List<WatchFaceListBean>
+WatchFaceListCallBack.onResponse(list)
+
+class WatchFaceListBean implements Serializable {
+/**
+ * 表盘id
+ */
+ val id:String? = null
+/**
+ * 是否当前
+ */
+ val isCurrent = false
+/**
+ * 是否移除
+ */
+ val isRemove = false
+/**
+ * 表盘名称  BERRY新增，APRICOT无此属性
+ */
+ val name:String? = null
+/**
+ * 样式   BERRY新增，APRICOT无此属性
+ */
+ val style:String? = null
+/**
+ * 相册表盘支持的图片格式  BERRY新增，APRICOT无此属性
+ * @see com.zhapp.ble.callback.WatchFaceListCallBack.ImageFormat
+ */
+ val supportImageFormat = 0
+/**
+ * 相册背景表盘id BERRY新增，APRICOT无此属性
+ */
+ val backgroundImage:String? = null
+ /**
+ * 表盘版本 BERRY新增，APRICOT无此属性
+ */
+ val versionCode:Long = 0
+}
+----
+
+** 设置表盘为当前使用
+
+[source,kotlin]
+----
+/**
+ * 设置当前表盘
+ *
+ * @param id 表盘id
+ */
+ControlBleTools.getInstance().setDeviceWatchFromId(id,ParsingStateManager.SendCmdStateListener)
+----
+
+** 删除当前表盘
+
+[source,kotlin]
+----
+/**
+ * 删除表盘
+ *
+ * @param id 表盘id
+ */
+ControlBleTools.getInstance().deleteDeviceWatchFromId(id,ParsingStateManager.SendCmdStateListener)
+----
+
+** 设置表盘删除或设置表盘结果回调
+
+[source,kotlin]
+----
+CallBackUtils.setWatchFaceCallBack(WatchFaceCallBack)
+
+WatchFaceCallBack.setWatchFace(isSet)
+//isSet == true, App或手表设置成功
+
+WatchFaceCallBack.removeWatchFace(isRemove)
+//isRemove == true,app或手表删除成功
+----
+
+TIP: BERRY表盘管理与APRICOT一致，#传输表盘接口回调更新#，#云表盘相册表盘相关接口合并#
+
+// APRICOT BERRY
+//
+// [source,kotlin]
+// ----
+//
+// ----

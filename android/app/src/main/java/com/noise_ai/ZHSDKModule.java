@@ -34,6 +34,12 @@ import com.zhapp.ble.callback.VerifyUserIdCallBack;
 import com.zhapp.ble.callback.RequestDeviceBindStateCallBack;
 import com.zhapp.ble.parsing.ParsingStateManager;
 import com.zhapp.ble.parsing.SendCmdState;
+import com.zhapp.ble.bean.berry.AiVoiceCmdBean;
+import com.zhapp.ble.bean.berry.AiViewUiBean;
+import com.zhapp.ble.bean.TimeBean;
+import com.zhapp.ble.callback.AiFunctionCallBack;
+import com.zhapp.ble.callback.CallBackUtils;
+// Removed VoiceCallBack - focusing only on AI Commands
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +98,46 @@ public class ZHSDKModule extends ReactContextBaseJavaModule {
                 sendConnectionStateEvent(state);
             }
         });
+
+        initializeAICallbacks();
+    }
+    
+    private void initializeAICallbacks() {
+        try {
+            // Setup AI voice callback
+            CallBackUtils.aiFunctionCallBack = new AiFunctionCallBack() {
+                @Override
+                public void onDevAiVoiceCmd(AiVoiceCmdBean bean) {
+                    Log.d(TAG, "🎤⌚ AI Voice command received from device: " + bean);
+                    sendAiVoiceCommandEvent(bean);
+                }
+
+                @Override
+                public void onDevAiVoiceData(byte[] data) {
+                    try {
+                        int len = data != null ? data.length : 0;
+                        Log.d(TAG, "🎤⌚ AI Voice data received: " + len + " bytes");
+                        if (data == null || len == 0) return;
+                        // NOTE: Firmware may prepend NFRAME_HEADER=5 header frames.
+                        // We emit raw frames to JS; JS decoder will skip first 5.
+                        WritableMap result = Arguments.createMap();
+                        // Encode using NO_WRAP; ensure we don't add line breaks
+                        result.putString("base64", android.util.Base64.encodeToString(data, android.util.Base64.NO_WRAP));
+                        result.putInt("length", len);
+                        sendEvent("onWatchAiVoiceData", result);
+                    } catch (Exception e) {
+                        Log.e(TAG, "🎤⌚ Error handling AI voice data", e);
+                    }
+                }
+
+                // Note: onAiErrorCode might not be available in current SDK version
+                // If it exists, uncomment this method
+            };
+            
+            Log.d(TAG, "🎤⌚ AI Function callback registered successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "🎤⌚ Error setting up AI callbacks", e);
+        }
     }
 
     @ReactMethod
@@ -529,6 +575,241 @@ public class ZHSDKModule extends ReactContextBaseJavaModule {
         }
     }
 
+    // AI Voice Integration Methods
+    @ReactMethod
+    public void sendAiVoiceCommand(int command, Promise promise) {
+        try {
+            Log.d(TAG, "Sending AI voice command: " + command);
+            ControlBleTools.getInstance().sendAiVoiceCmd(command, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "AI voice command state: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putInt("command", command);
+                    sendEvent("onAiVoiceCommandSent", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "Error sending AI voice command", e);
+            promise.reject("AI_VOICE_CMD_ERROR", "Failed to send AI voice command: " + e.getMessage());
+        }
+    }
+
+    @ReactMethod 
+    public void initializeWatchAI(Promise promise) {
+        try {
+            Log.d(TAG, "🎤⌚ Initializing AI functionality on watch");
+            
+            // First, ensure callbacks are registered
+            initializeAICallbacks();
+            
+            // Send initial AI command to start AI mode (command 1 = start/enable)
+            ControlBleTools.getInstance().sendAiVoiceCmd(1, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "🎤⌚ Initialize AI command result: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putString("action", "initializeAI");
+                    result.putString("state", state.toString());
+                    sendEvent("onWatchAiInitialized", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "🎤⌚ Error initializing watch AI", e);
+            promise.reject("AI_INIT_FAILED", e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void startWatchAIListening(Promise promise) {
+        try {
+            Log.d(TAG, "🎤⌚ Starting AI listening mode on watch");
+            
+            // Send command 2 to start listening for voice input
+            ControlBleTools.getInstance().sendAiVoiceCmd(2, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "🎤⌚ Start AI listening result: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putString("action", "startListening");
+                    result.putString("state", state.toString());
+                    sendEvent("onWatchAiListeningStarted", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "🎤⌚ Error starting AI listening", e);
+            promise.reject("AI_LISTENING_FAILED", e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void stopWatchAIListening(Promise promise) {
+        try {
+            Log.d(TAG, "🎤⌚ Stopping AI listening mode on watch");
+            
+            // Send command 3 to stop listening
+            ControlBleTools.getInstance().sendAiVoiceCmd(3, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "🎤⌚ Stop AI listening result: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putString("action", "stopListening");
+                    result.putString("state", state.toString());
+                    sendEvent("onWatchAiListeningStopped", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "🎤⌚ Error stopping AI listening", e);
+            promise.reject("AI_STOP_FAILED", e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void sendAiTranslatedText(String text, Promise promise) {
+        try {
+            Log.d(TAG, "Sending AI translated text: " + text);
+            ControlBleTools.getInstance().sendAiTranslatedText(text, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "AI translated text state: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putString("text", text);
+                    sendEvent("onAiTranslatedTextSent", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "Error sending AI translated text", e);
+            promise.reject("AI_TRANSLATED_TEXT_ERROR", "Failed to send AI translated text: " + e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void sendAiAnswerText(String text, Promise promise) {
+        try {
+            Log.d(TAG, "Sending AI answer text: " + text);
+            ControlBleTools.getInstance().sendAiAnswerText(text, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "AI answer text state: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putString("text", text);
+                    sendEvent("onAiAnswerTextSent", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "Error sending AI answer text", e);
+            promise.reject("AI_ANSWER_TEXT_ERROR", "Failed to send AI answer text: " + e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void sendAiViewUi(String title, String content, Promise promise) {
+        try {
+            Log.d(TAG, "🎤⌚ Sending AI view UI - Title: " + title + ", Content: " + content);
+            
+            // Create AiViewUiBean using reflection (fields are private)
+            AiViewUiBean aiViewUiBean = new AiViewUiBean();
+            
+            // Use reflection to set private fields
+            java.lang.reflect.Field titleField = AiViewUiBean.class.getDeclaredField("title");
+            titleField.setAccessible(true);
+            titleField.set(aiViewUiBean, title);
+            
+            java.lang.reflect.Field valueField = AiViewUiBean.class.getDeclaredField("value");
+            valueField.setAccessible(true);
+            valueField.set(aiViewUiBean, content);
+            
+            java.lang.reflect.Field unitField = AiViewUiBean.class.getDeclaredField("unit");
+            unitField.setAccessible(true);
+            unitField.set(aiViewUiBean, "");
+            
+            java.lang.reflect.Field footerField = AiViewUiBean.class.getDeclaredField("footer");
+            footerField.setAccessible(true);
+            footerField.set(aiViewUiBean, "Noise AI");
+            
+            // Set current time
+            TimeBean timeBean = new TimeBean();
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            
+            java.lang.reflect.Field yearField = TimeBean.class.getDeclaredField("year");
+            yearField.setAccessible(true);
+            yearField.set(timeBean, calendar.get(java.util.Calendar.YEAR));
+            
+            java.lang.reflect.Field monthField = TimeBean.class.getDeclaredField("month");
+            monthField.setAccessible(true);
+            monthField.set(timeBean, calendar.get(java.util.Calendar.MONTH) + 1);
+            
+            java.lang.reflect.Field dayField = TimeBean.class.getDeclaredField("day");
+            dayField.setAccessible(true);
+            dayField.set(timeBean, calendar.get(java.util.Calendar.DAY_OF_MONTH));
+            
+            java.lang.reflect.Field hourField = TimeBean.class.getDeclaredField("hour");
+            hourField.setAccessible(true);
+            hourField.set(timeBean, calendar.get(java.util.Calendar.HOUR_OF_DAY));
+            
+            java.lang.reflect.Field minuteField = TimeBean.class.getDeclaredField("minute");
+            minuteField.setAccessible(true);
+            minuteField.set(timeBean, calendar.get(java.util.Calendar.MINUTE));
+            
+            java.lang.reflect.Field secondField = TimeBean.class.getDeclaredField("second");
+            secondField.setAccessible(true);
+            secondField.set(timeBean, calendar.get(java.util.Calendar.SECOND));
+            
+            java.lang.reflect.Field actionTimeField = AiViewUiBean.class.getDeclaredField("actionTime");
+            actionTimeField.setAccessible(true);
+            actionTimeField.set(aiViewUiBean, timeBean);
+            
+            ControlBleTools.getInstance().sendAiViewUi(aiViewUiBean, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "🎤⌚ AI view UI state: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putString("title", title);
+                    result.putString("content", content);
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    sendEvent("onAiViewUiSent", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "🎤⌚ Error sending AI view UI", e);
+            promise.reject("AI_VIEW_UI_ERROR", "Failed to send AI view UI: " + e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void sendAiErrorCode(int errorCode, Promise promise) {
+        try {
+            Log.d(TAG, "Sending AI error code: " + errorCode);
+            ControlBleTools.getInstance().sendAiErrorCode(errorCode, new ParsingStateManager.SendCmdStateListener() {
+                @Override
+                public void onState(SendCmdState state) {
+                    Log.d(TAG, "AI error code state: " + state);
+                    WritableMap result = Arguments.createMap();
+                    result.putBoolean("success", state == SendCmdState.SUCCEED);
+                    result.putInt("errorCode", errorCode);
+                    sendEvent("onAiErrorCodeSent", result);
+                }
+            });
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "Error sending AI error code", e);
+            promise.reject("AI_ERROR_CODE_ERROR", "Failed to send AI error code: " + e.getMessage());
+        }
+    }
+
     private void sendDeviceFoundEvent(ScanDeviceBean device) {
         WritableMap params = Arguments.createMap();
         params.putString("name", device.name);
@@ -565,6 +846,96 @@ public class ZHSDKModule extends ReactContextBaseJavaModule {
         
         params.putString("stateString", stateString);
         sendEvent("onConnectionStateChanged", params);
+    }
+
+    @ReactMethod
+    public void testAiVoiceConnection(Promise promise) {
+        try {
+            // Check if device is connected
+            boolean isConnected = ControlBleTools.getInstance().isConnect();
+            Log.d(TAG, "🎤⌚ Device connection status: " + isConnected);
+            
+            WritableMap result = Arguments.createMap();
+            result.putBoolean("isConnected", isConnected);
+            result.putBoolean("sdkInitialized", ControlBleTools.getInstance() != null);
+            result.putBoolean("callbackRegistered", CallBackUtils.aiFunctionCallBack != null);
+            
+            // Try to send a test AI voice command to see if the connection works
+            if (isConnected) {
+                Log.d(TAG, "🎤⌚ Sending test AI voice command to check connectivity");
+                // Send a test command to see if the device responds
+                ControlBleTools.getInstance().sendAiVoiceCmd(1, new ParsingStateManager.SendCmdStateListener() {
+                    @Override
+                    public void onState(SendCmdState state) {
+                        Log.d(TAG, "🎤⌚ Test AI voice command result: " + state);
+                        WritableMap testResult = Arguments.createMap();
+                        testResult.putBoolean("testCommandSuccess", state == SendCmdState.SUCCEED);
+                        testResult.putString("testCommandState", state.toString());
+                        sendEvent("onAiVoiceConnectionTest", testResult);
+                    }
+                });
+                result.putString("testStatus", "Test command sent");
+            } else {
+                result.putString("testStatus", "Device not connected");
+            }
+            
+            promise.resolve(result);
+        } catch (Exception e) {
+            Log.e(TAG, "Error testing AI voice connection", e);
+            promise.reject("AI_VOICE_TEST_FAILED", e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void simulateWatchVoiceCommand(Promise promise) {
+        try {
+            Log.d(TAG, "🔧 Simulating watch voice command manually");
+            
+            // Create a mock AiVoiceCmdBean for testing
+            // Since we can't instantiate AiVoiceCmdBean directly, we'll simulate the callback manually
+            WritableMap params = Arguments.createMap();
+            params.putString("rawData", "AiVoiceCmdBean{voiceState=2, voiceName='test_simulation_" + System.currentTimeMillis() + "'}");
+            params.putString("timestamp", String.valueOf(System.currentTimeMillis()));
+            
+            Log.d(TAG, "🔧 Sending simulated voice command event");
+            sendEvent("onWatchAiVoiceCommand", params);
+            
+            promise.resolve(true);
+        } catch (Exception e) {
+            Log.e(TAG, "Error simulating watch voice command", e);
+            promise.reject("SIMULATION_FAILED", e.getMessage());
+        }
+    }
+
+    private void sendAiVoiceCommandEvent(AiVoiceCmdBean bean) {
+        if (bean == null) return;
+        
+        WritableMap params = Arguments.createMap();
+        // Add available fields from AiVoiceCmdBean
+        // Note: Actual field names depend on the SDK implementation
+        try {
+            // Safely extract rawData with null checks
+            String rawData = "voice_command_received";
+            String beanString = bean.toString();
+            
+            if (beanString != null && !beanString.isEmpty()) {
+                rawData = beanString;
+                Log.d(TAG, "AI Voice command rawData: " + rawData);
+            } else {
+                Log.w(TAG, "Bean toString() returned null or empty");
+            }
+            
+            params.putString("rawData", rawData);
+            params.putString("timestamp", String.valueOf(System.currentTimeMillis()));
+            
+            sendEvent("onWatchAiVoiceCommand", params);
+        } catch (Exception e) {
+            Log.e(TAG, "Error processing AI voice command bean", e);
+            // Send safe fallback event
+            params.putString("rawData", "voice_command_error");
+            params.putString("timestamp", String.valueOf(System.currentTimeMillis()));
+            sendEvent("onWatchAiVoiceCommand", params);
+        }
     }
 
     private void sendEvent(String eventName, WritableMap params) {

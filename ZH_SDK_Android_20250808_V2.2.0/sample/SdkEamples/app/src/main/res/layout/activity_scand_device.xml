@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/app_name"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:imeOptions="actionDone"
+            />
+
+        <ListView
+            android:id="@+id/lv_device"
+            android:layout_width="match_parent"
+            tools:listitem="@layout/listitem_device"
+            android:layout_height="0px"
+            android:layout_weight="1">
+
+        </ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dip">
+
+            <Button
+                android:id="@+id/scan_start"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="startScanLeDevice"
+                android:text="@string/s103"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                />
+
+            <Button
+                android:id="@+id/scan_stop"
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="stopScanLeDevice"
+                android:text="@string/s104"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>
+

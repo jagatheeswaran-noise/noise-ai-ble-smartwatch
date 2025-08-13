@@ -1,0 +1,903 @@
+========================================================
+zhbracelet-sdk-1.0.4更新内容
+略
+========================================================
+zhbracelet-sdk-1.0.5更新内容
+略
+========================================================
+zhbracelet-sdk-1.0.6更新内容
+新增-单独监听连接状态方法
+ControlBleTools.getInstance().init(this);
+
+ControlBleTools.getInstance().setBleStateCallBack(new BleStateCallBack() {
+            @Override
+            public void onConnectState(int state) {
+                BleConnectState.getInstance().postValue(state);
+            }
+});
+========================================================
+zhbracelet-sdk-1.0.7更新内容
+修复-连接监听方法空指针处理
+========================================================
+zhbracelet-sdk-1.0.8更新内容
+修复-连接监听方法无效问题
+========================================================
+zhbracelet-sdk-1.0.9更新内容
+优化-蓝牙连接相关
+========================================================
+zhbracelet-sdk-1.0.10更新内容
+优化-设备语言相关
+========================================================
+zhbracelet-sdk-1.0.11更新内容
+优化-关闭/打开蓝牙自动重连逻辑
+========================================================
+zhbracelet-sdk-1.0.12更新内容
+新增-洗手提醒功能
+新增-吃饭提醒功能
+新增-压力相关功能
+========================================================
+zhbracelet-sdk-1.0.13更新内容
+新增-SDKlog输出功能
+- ControlBleTools.getInstance().setDeviceLogCallBack(new DeviceLogCallBack()
+========================================================
+zhbracelet-sdk-1.0.14更新内容
+优化-同步日常数据逻辑
+新增-股票相关功能
+新增-联系人相关功能
+========================================================
+zhbracelet-sdk-1.0.15更新内容
+优化-连接相关逻辑
+========================================================
+zhbracelet-sdk-1.0.16更新内容
+优化-连接相关逻辑
+新增-运动列表排序功能
+新增-BT蓝牙相关功能
+新增-世界时钟相关功能
+========================================================
+zhbracelet-sdk-1.0.17更新内容
+新增-BT蓝牙配对操作步骤演示
+优化-部分SDK接口
+========================================================
+zhbracelet-sdk-1.0.18更新内容
+新增-天气开关
+========================================================
+zhbracelet-sdk-1.0.19更新内容
+1.设置天气开关是否打开  Set whether the weather switch is on
+ControlBleTools.getInstance().setAppWeatherSwitch(checked,listener)
+2.优化sdk初始化回调  Optimize sdk initialization callback
+ControlBleTools.getInstance().setInitStatusCallBack(ZHInitStatusCallBack)
+========================================================
+zhbracelet-sdk-1.0.20更新内容
+1.同步音乐信息MusicInfoBean对象增加参数 isNewPermissionType 文案显示逻辑（false 表示老文案，true 表示新文案）
+========================================================
+zhbracelet-sdk-1.0.21更新内容
+1.修复绑定设备回调BindDeviceStateCallBack.BindDeviceBean 缺失设备版本信息
+2.修改连接延时机制从原先6秒改为1秒
+========================================================
+zhbracelet-sdk-1.0.22更新内容
+1.兼容android12
+2.增加搜索服务超时重连
+3.连接延时 1S -> 3S
+========================================================
+zhbracelet-sdk-1.0.23更新内容
+1.添加获取设备断开原因
+
+   public void getDisconnectReason(View view) {
+        CallBackUtils.disconnectReasonCallBack = new DisconnectReasonCallBack() {
+            @Override
+            public void onReason(DeviceInfoBean deviceInfoBean) {
+                Log.i(TAG, "getDisconnectReason = deviceInfoBean = " + deviceInfoBean.toString());
+            }
+        };
+
+        if (ControlBleTools.getInstance().isConnect()) {
+            ControlBleTools.getInstance().getDisconnectReason(null);
+        }
+    }
+
+========================================================
+zhbracelet-sdk-1.0.24更新内容
+1.增加ControlBleTools()构造方法用于初始化sdk
+2.优化连接
+3.demo，针对圆形设备的相册表盘，背景图处理为圆形
+========================================================
+zhbracelet-sdk-1.0.25更新内容
+1.增加直达卡片id（小功能卡片列表）
+2.用户信息设置增加昵称
+3.修改BT配对新方案
+4.优化内部同步日常数据超时
+========================================================
+zhbracelet-sdk-1.0.26更新内容
+1.增加通知设置
+ControlBleTools.getInstance().setNotificationSettings(NotificationSettingsBean)
+2.增加获取通设置
+ControlBleTools.getInstance().getNotificationSettings()
+3.增加通知设置数据回调接口
+SettingMenuCallBack.onNotificationSetting
+4.增加压力模式设置
+ControlBleTools.getInstance().setPressureMode(PressureModeBean)
+5.增加获取压力模式设置
+ControlBleTools.getInstance().getPressureMode()
+========================================================
+zhbracelet-sdk-1.0.27更新内容
+1.通话蓝牙一键双连接解决方案优化
+
+PhysiologicalCycleCallBack removed onResponse(),If you have logic in this method before, please migrate to ControlBleTools.getInstance().getPhysiologicalCycle(object :
+     ParsingStateManager.SendCmdStateListener() {
+         override fun onState(state: SendCmdState) {
+             //TODO..
+         }
+     })
+
+CallBackUtils.settingMenuCallBack Add multiple unimplemented callback methods
+========================================================
+zhbracelet-sdk-1.0.28更新内容
+1.略
+========================================================
+zhbracelet-sdk-1.0.29更新内容
+1.优化一键双连配对时，过滤扫描到的BLE类型的蓝牙设备
+2. 增加app申请设备固件日志上传功能
+//获取
+ControlBleTools.getInstance().getFirmwareLog()
+//监听回调
+CallBackUtils.firmwareLogStateCallBack.onFirmwareLogState(int state)
+state = 0:开始上传 1:正在上传 2:结束数据上传
+========================================================
+zhbracelet-sdk-1.0.30更新内容
+1.修复通话解除配对无效问题
+========================================================
+zhbracelet-sdk-1.0.31更新内容
+一、sdk新增ndk配置：android { defaultConfig {ndk{abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'}}}
+app模块根据自身应用声明需要的ABI
+
+二、修改app申请设备固件日志上传回调
+//获取设备固件日志
+ControlBleTools.getInstance().getFirmwareLog()
+//监听回调
+CallBackUtils.firmwareLogStateCallBack = FirmwareLogStateCallBack{
+	/**
+     * 设备日志文件传输进度状态回调
+     */
+    void onFirmwareLogState(int state);
+    /**
+     * 设备日志传输完成后文件路径
+     */
+    void onFirmwareLogFilePath(String filePath);
+}
+
+三、增加获取电量分析接口
+1.获取耗电数据
+ControlBleTools.getInstance().getMptPowerLog(SendCmdStateListener)
+
+2.监听设备耗电数据返回
+CallBackUtils.deviceMptPowerLogCallBack = DeviceMptPowerLogCallBack {
+	/**
+	* 设备耗电数据
+	*/
+	onMptPowerLog(MptPowerLogBean bean);
+}
+
+
+四、增加app发起主动测量接口
+1.app主动发起测量
+ControlBleTools.getInstance().activeMeasurementStart(ActiveMeasureParamsBean,SendCmdStateListener)
+
+2.app主动结束测量
+ControlBleTools.getInstance().activeMeasurementStop(ActiveMeasureParamsBean,SendCmdStateListener)
+
+3.监听主动测量状态，测量数据，结果等回调
+CallBackUtils.activeMeasureCallBack =  ActiveMeasureCallBack {
+	/**
+     * 设备发送主动测量 成功或失败回调
+     */
+    onMeasureStatus(ActiveMeasureStatusBean statusBean);
+    /**
+     * 设备发送主动测量 测量中的数据回调
+     */
+    onMeasuring(ActiveMeasuringBean measuringBean);
+    /**
+     * 设备发送主动测量 测量结果数据回调
+     */
+    onMeasureResult(ActiveMeasureResultBean resultBean);
+}
+
+
+五、增加DIY表盘相关接口
+1.通过配置文件json获取默认diy表盘配置
+val diyWatchFaceConfig = ControlBleTools.getInstance().getDefDiyWatchFaceConfig(dataJson)
+
+2.获取设备diy表盘配置
+ControlBleTools.getInstance().getDiyWatchFaceConfig(String diyWatchId,SendCmdStateListener)
+
+3.监听设备diy表盘配置回调
+CallBackUtils.diyWatchFaceCallBack = DiyWatchFaceCallBack {
+	/**
+     * diy表盘配置
+     */
+    onDiyWatchFaceStatus(DiyWatchFaceConfigBean config);
+}
+
+4.获取diy表盘设置效果图
+ControlBleTools.getInstance().getPreviewBitmap(DiyParamsBean diyParamsBean, DiyDialPreviewCallBack callBack)
+DiyDialPreviewCallBack{
+    /**
+     * 预览图
+     */
+    void onDialPreview(Bitmap preview);
+    /**
+     * 错误信息
+     */
+    void onError(String errMsg);
+}
+
+5.获取diy表盘设置需要发送给设备的设置
+ControlBleTools.getInstance().getDiyDialData(DiyParamsBean diyParamsBean, DiyDialDataCallBack callBack)
+DiyDialDataCallBack{
+	/**
+     * 回调需要更新文件，和配置类
+     */
+    void onDialData(String diyDialId, byte[] data, DiyWatchFaceConfigBean configBean);
+    /**
+     * 仅需要更新配置类
+     */
+    void onChangeConfig(DiyWatchFaceConfigBean configBean);
+    /**
+     * 错误信息
+     */
+    void onError(String errMsg);
+}
+
+5.根据DiyDialDataCallBack回调onChangeConfig和onDialData分别处理
+(1) onChangeConfig(.)
+仅需要更新配置类，调用更新设备diy表盘配置
+ControlBleTools.getInstance().setDiyWatchFaceConfig(DiyWatchFaceConfigBean,SendCmdStateListener)
+(2) onDialData(...)
+需要更新文件，和配置类
+询问设备待发送diy表盘的状态
+①.ControlBleTools.getInstance().getDeviceDiyWatchFace(String watch_face_id, int fileSize, DiyWatchFaceConfigBean configBean, DeviceWatchFaceFileStatusListener listener);
+②.根据回调DeviceWatchFaceFileStatusListener.onSuccess$statusValue == 0(READY)成功则继续下发文件，否则提示异常
+③.通过ControlBleTools.getInstance().startUploadBigData(BleCommonAttributes.UPLOAD_BIG_DATA_WATCH,data, UploadBigDataListener)下发表盘大文件
+④.传输完成后，监听表盘安装结果回调
+CallBackUtils.watchFaceInstallCallBack = WatchFaceInstallCallBack {
+	/**
+     * 表盘安装结果回调
+     */
+    void onresult(WatchFaceInstallResultBean result);
+}
+========================================================
+zhbracelet-sdk-1.0.32更新内容
+1.新增获取当天活动指标数据接口
+获取：
+ControlBleTools.getInstance().getTodayActivityIndicators（ActivityIndicatorsCallBack.IndicatorType，Listener）
+监听数据回调：
+CallBackUtils.setActivityIndicatorsCallBack(ActivityIndicatorsCallBack)
+2.新增获取自动运动数据列表
+获取：
+ControlBleTools.getInstance().getAutoSportData（Listener）
+监听数据回调：
+CallBackUtils.setAutoSportDataCallBack(AutoSportDataCallBack)
+========================================================
+zhbracelet-sdk-1.0.33更新内容
+1.新增alexa状态与设备同步接口
+ControlBleTools.getInstance().syncAlexaStatusToDevice(AlexaBean.XXX, listener)
+2.新增alexa文本标题同步至设备接口
+ControlBleTools.getInstance().syncAlexaTextToDevice(body, mainTitle, subTitle, listener)
+ 注：mainTitle与subTitle参数暂未用到，需传""空字符串
+3.新增alexa技能同步至设备接口
+ControlBleTools.getInstance().syncAlexaSkillToDevice(AlexaBean.XXX_BOOT, eventBean, listener)
+ 注：当发送技能至设备时不需携带额外数据时eventBean可传null
+4.监听设备回复音频数据的状态与opus原始音频数据流
+CallBackUtils.setVoiceCallBack(object : VoiceCallBack{
+            /**
+		 * 设备回复音频数据的状态
+             * 0：设备准备好了
+             * 1：设备开始发送原始音频数据流
+             * 3：设备结束发送音频数据流
+             * 5：需向设备回复当前alexa认证及手机网络状态是否可继续执行下一步
+             */
+      override fun onStatus(status: Int) {}
+	//设备回复的原始音频数据流
+      override fun onRawBodyResult(data: ByteArray?) {}
+})
+========================================================
+zhbracelet-sdk-1.0.34更新内容
+1.睡眠结果
+监听睡眠结果回调
+RingSleepCallBack.setRingSleepCallBack(RingSleepCallBack)//RingSleepCallBack$onRingSleepResult(RingSleepResultBean)
+获取获取睡眠结果数据
+ControlBleTools.getInstance().getRingSleepResult(SendCmdStateListener)
+2.小睡数据
+监听戒指小睡数据回调
+RingSleepCallBack.setRingSleepCallBack(RingSleepCallBack)//RingSleepCallBack$onRingSleepNAPList(List<RingSleepNapBean>)
+获取小睡数据
+ControlBleTools.getInstance().getRingSleepNAPList(SendCmdStateListener)
+========================================================
+zhbracelet-sdk-1.0.35更新内容
+1.移除获取当天活动指标数据
+移除ControlBleTools.getInstance().getTodayActivityIndicators
+移除ActivityIndicatorsCallBack
+2.移除获取戒指睡眠结果数据、戒指小睡数据
+移除ControlBleTools.getInstance().getRingSleepResult
+移除ControlBleTools.getInstance().getRingSleepNAPList
+移除RingSleepCallBack
+3.移除获取戒指健康分数数据
+移除ControlBleTools.getInstance().getRingHealthyScore
+移除RingHealthyCallBack
+4.日常数据回调增加戒指相关数据回调，通过获取日常数据接口同步数据：ControlBleTools.getInstance().getDailyHistoryData
+增加当天活动指标数据回调
+FitnessDataCallBack.onRingTodayActivityIndicators(TodayActivityIndicatorsBean bean)
+增加戒指睡眠结果数据回调
+FitnessDataCallBack.onRingSleepResult(RingSleepResultBean bean)
+增加戒指小睡数据回调
+FitnessDataCallBack.onRingSleepNAP(List<RingSleepNapBean> list)
+增加戒指健康分数数据回调
+FitnessDataCallBack.onRingHealthScore(RingHealthScoreBean bean
+========================================================
+zhbracelet-sdk-1.0.36更新内容
+1.日常数据回调增加当天当前的走路卡路里（todayWakeCalorieData）、当天当前的运动卡路里（todaySportCalorieData）
+FitnessDataCallBack.onDailyData(DailyBean)
+========================================================
+zhbracelet-sdk-1.0.37更新内容
+戒指协议更新
+1.自动运动数据列表数据AutoSportDataBean更新：
+增加 运动打点心率hrData
+
+2.睡眠结果数据 RingSleepResultBean更新:
+修改 入睡时间 由asleepTime 变为 entryTime，起床时间由wakeupTime变为exitTime；
+增加 总的清醒时长awakeTime，总的浅睡时长lightSleepTime，总的深睡时长deepSleepTime，总的快速眼动时长rapidEyeMovementTime，各个睡眠段落 sleepDistributionData；
+移除 睡眠段sleepStagesData
+
+3.小睡数据RingSleepNapBean更新：
+增加 小睡睡眠指标 sleepNapStatus  （1:长睡 2:短睡）
+
+4.健康分数数据RingHealthScoreBean更新：
+增加 当前的久坐时间 sedentaryDuration，最近一次的运动心率workHr
+========================================================
+zhbracelet-sdk-1.0.38更新内容
+1.“FitnessDataCallBack”日常数据回调修改
+2.移除活动指标数据回调“onRingTodayActivityIndicators”
+3.新增“GoMore”算法活动类型指标数据“onRingTodayActiveTypeData(TodayActiveTypeData）”
+4.新增“GoMore”算法全天活动指标数据“onRingOverallDayMovementData(OverallDayMovementData）”
+5.新增“GoMore”算法呼吸速率数据“onRingTodayRespiratoryRateData(TodayRespiratoryRateData）”
+========================================================
+zhbracelet-sdk-1.0.39更新内容
+1.增加在线、DIY表盘安装结果回调（相册表盘安装无此回调）
+CallBackUtils.watchFaceInstallCallBack = new WatchFaceInstallCallBack() {
+    @Override
+    public void onresult(WatchFaceInstallResultBean result) {
+        //“WatchFaceInstallResultBean.code” 安装结果状态码 // 0:验证失败  1:安装失败 2:安装成功
+    }
+};
+
+2.发起待设备确认的恢复出厂
+ControlBleTools.getInstance().unbindDeviceWaitConfirmation(new ParsingStateManager.SendCmdStateListener() {
+    @Override
+    public void onState(SendCmdState state) {
+        if(state == SendCmdState.SUCCEED) {
+            //指令发送成功，处理app逻辑。。。
+        }else{
+			//指令发送失败
+		}
+    }
+});
+
+3.实时数据回调增加步数、卡路里、距离24小时数据
+CallBackUtils.realTimeDataCallback = new RealTimeDataCallBack() {
+    @Override
+    public void onResult(RealTimeBean bean) {
+        //“RealTimeBean.stepsData” 步数24小时数据
+		//“RealTimeBean.calorieData” 卡路里24小时数据
+		//“RealTimeBean.distanceData” 距离24小时数据
+    }
+};
+
+4.增加设备设置项睡眠提醒回调
+CallBackUtils.settingMenuCallBack = new SettingMenuCallBack() {
+	@Override
+	public void onSleepReminder(SleepReminder reminder){
+		//“reminder” 睡眠提醒数据
+	}
+}
+========================================================
+zhbracelet-sdk-1.0.40更新内容
+1.增加发起副屏运动状态改变
+ControlBleTools.getInstance().secondaryScreenSportRequest(SportRequestBean，Listener）
+2.增加回复设备副屏运动状态改变
+ControlBleTools.getInstance().replyDevSecondaryScreenSportRequest(SportResponseBean，Listener）
+3.增加副屏运动相关回调
+CallBackUtils.secondaryScreenSportCallBack = object : SecondaryScreenSportCallBack {
+    设备回复app副屏运动状态上报
+   （1）onSecondaryScreenSportResponseBean(SportResponseBean)
+    设备上报副屏运动状态
+   （2）onSecondaryScreenSportRequestBean(SportRequestBean)
+    副屏运动过程中数据
+   （3）onSecondaryScreenWearData(SecondaryScreenWearDataBean)
+    查询设备运动状态回复
+   （4）onSportStatus(SportStatusBean)
+}
+========================================================
+zhbracelet-sdk-1.0.41更新内容
+1.增加 戒指睡眠结果回调对象活动睡眠段落
+回调：“FitnessDataCallBack.onRingSleepResult(RingSleepResultBean)”
+睡眠段落：“RingSleepResultBean.sleepMovementsData”
+2.增加 日常数据回调对象24小时走路、运动卡路里数据
+回调：“FitnessDataCallBack.onDailyData(DailyBean)”
+走路卡路里数据 24小时数据：“DailyBean.todayWalkCalorieHourlyData”
+运动卡路里数据 24小时数据：“DailyBean.todaySportCalorieHourlyData”
+3.增加 实时数据回调对象24小时走路、运动卡路里数据
+回调：“RealTimeDataCallBack.onResult(RealTimeBean)”
+走路卡路里数据 24小时数据：“RealTimeBean.todayWalkCalorieHourlyData”
+运动卡路里数据 24小时数据：“RealTimeBean.todaySportCalorieHourlyData”
+4.修改属性名 日常数据回调对象DailyBean当天当前的走路卡路里
+由'todayWakeCalorieData'改为'todayWalkCalorieData'
+5.修改属性名 实时数据回调对象RealTimeBean当天当前的走路卡路里
+由'todayWakeCalorie'改为'todayWalkCalorie'
+========================================================
+zhbracelet-sdk-1.0.42更新内容
+略
+========================================================
+zhbracelet-sdk-1.0.43更新内容
+1.戒指相关数据对象增加日期“Date”字段（OverallDayMovementData、RingHealthScoreBean、RingSleepNapBean、RingSleepResultBean、TodayActiveTypeData、TodayRespiratoryRateData）
+2.移除健康得分“RingHealthScoreBean”对象“workHr”字段
+3.修改“RealTimeBean”当天当前的走路卡路里字段由“todayWaleCalorie” 改为“todayWalkCalorie”
+========================================================
+zhbracelet-sdk-1.0.44更新内容
+1.增加戒指重启方法（产测协议）
+ControlBleTools.getInstance().restartByProduction()
+2.移除枚举类：VerifyUserIdCallBack.VerifyUserIdState
+========================================================
+zhbracelet-sdk-1.0.45更新内容
+1.日志回调DeviceLogCallBack方法增加'mode'参数
+由‘DeviceLogCallBack.Log...(String tag, String msg);’ 修改为‘DeviceLogCallBack.Log...(String mode, String tag, String msg);’
+mode已有类型：BIND、CONNECT、DAILY、SPORT、BASIC、WEATHER、NOTIFICATION、DIAL、OTA、AGPS、SET、AUXILIARY
+2.minsdkVersion 由19修改至21
+（以下v1.0.26 已提供）
+3.增加通知设置方法
+ControlBleTools.getInstance().setNotificationSettings(NotificationSettingsBean)
+4. 增加获取通知设置方法
+ControlBleTools.getInstance().getNotificationSettings()
+5. 增加通知数据回调方法
+SettingMenuCallBack.onNotificationSetting
+========================================================
+zhbracelet-sdk-1.0.46更新内容
+1.新增样式相册表盘
+2.修改新版DIY，集体流程参考DEMO (DiyDialActivity)，相关接口如下
+(1).根据配置json文件获取默认diy表盘配置
+ControlBleTools.getInstance().getDefDiyWatchFaceConfig(String jsonStr）
+(2).获取设备默认diy表盘配置
+ControlBleTools.getInstance().getDiyWatchFaceConfig(diyWatchId,listener）
+(3).设置设备diy表盘配置回调
+CallBackUtils.setDiyWatchFaceCallBack(DiyWatchFaceCallBack)
+(4).根据diy参数对象获取DIY表盘效果图
+ControlBleTools.getInstance().getPreviewBitmap(DiyParamsBean, DiyDialPreviewCallBack）
+(5).根据diy参数对象获取diy表盘数据
+ControlBleTools.getInstance().getPreviewBitmap(DiyParamsBean, DiyDialDataCallBack）
+(6).获取表盘发送状态
+ControlBleTools.getInstance().getDeviceDiyWatchFace(diyWatchId, fileSize, isReplace, DiyWatchFaceConfigBean, DeviceWatchFaceFileStatusListener)
+(7).发送表盘文件
+ControlBleTools.getInstance().startUploadBigData(BleCommonAttributes.UPLOAD_BIG_DATA_WATCH, data, resumable,UploadBigDataListener）
+(8).设置监听表盘安装结果
+CallBackUtils.setWatchFaceInstallCallBack(WatchFaceInstallCallBack)
+========================================================
+zhbracelet-sdk-1.0.47更新内容
+1.更新样式相册表盘
+2.修复日志分类下标越界异常
+3.增加产测服务心率漏光测试
+ControlBleTools.getInstance().heartLightLeakTestByProduction()
+========================================================
+zhbracelet-sdk-1.0.48更新内容
+1.优化运动定位数据解析
+2.运动数据对象DevSportInfoBean新增以下参数
+GPS版本：“recordGpsVersion”，报告版本：“recordReportVersion”，数据有效性5：“reportDataValid5”，平均配速：“reportAvgPace”，平均速度：“reportAvgSpeed”，平均步频：“reportAvgStepSpeed”，最大摄氧量：“reportVO2max”，运动负荷：“reportTrainingLoad”
+3.diy数字表盘字体对象“TextInfo"新增以下参数（App无需处理）
+是否隐藏地址：“isDisableAddr”，是否隐藏数据：“isDisableValue”
+4.增加Spp通道传输方法
+//使用Spp通道传输
+ControlBleTools.getInstance().startUploadBigDataUseSpp(
+	BleCommonAttributes.UPLOAD_BIG_DATA_WATCH,
+	data, true, new UploadBigDataListener() {
+		@Override
+		public void onSuccess() {
+		}
+
+		@Override
+		public void onProgress(int curPiece, int dataPackTotalPieceLength) {
+		}
+
+		@Override
+		public void onTimeout() {
+			//若Spp连接失败可以在此处切换传输方式、
+		}
+	});
+========================================================
+zhbracelet-sdk-1.0.49更新内容
+1.兼容255版本规则相册表盘传输
+========================================================
+zhbracelet-sdk-1.0.50更新内容
+1.增加根据json获取json模型对象接口
+ControlBleTools.getInstance().getZhDiyDialBeanByJson(json)
+2.增加获取指针diy数据
+ControlBleTools.getInstance().getSimplePointerDiyDialData(backgroundBm, thumbnailBm, pointerBin,complexBin, diyWatchFaceConfigBean, json,callBack)
+3.增加获取数字diy数据
+ControlBleTools.getInstance().getSimpleNumberDiyDialData(backgroundBm, thumbnailBm, numberId,numberBin,complexBin,colorRed,colorGreen,colorBlue,diyWatchFaceConfigBean, json, callBack)
+4.设备信息增加是否支持spp
+DeviceInfoBean.sppSupportFlat
+========================================================
+zhbracelet-sdk-1.0.51更新内容
+1.移除CustomClockDialNewUtils.getMyNewCustomClockDialData
+2.兼容V3相册表盘规则
+3. app module build.gradle文件需要增加  implementation 'com.blankj:utilcodex:1.31.1'
+========================================================
+zhbracelet-sdk-1.0.52更新内容
+1. 增加戒指电量主动上报回调
+   设置监听电量主动上报'CallBackUtils.setDeviceBatteryReportingCallBack(DeviceBatteryReportingCallBack)'
+   //onBatteryReporting(DeviceBatteryValueBean)  DeviceBatteryValueBean.deviceBatteryValue设备电量
+2. 日常数据增加戒指多天的自动运动回调
+   'FitnessParsing.onRingAutoActiveSportData(AutoActiveSportBean)'
+3. 增加戒指Gomore全天睡眠开关相关接口
+   获取睡眠开关设置：'ControlBleTools.getInstance().getRingAllDaySleepConfig(listener)'
+   设置睡眠开关设置：'ControlBleTools.getInstance().setRingAllDaySleepConfig(listener)'
+   设置监听：'CallBackUtils.setRingAllDaySleepConfigCallBack(RingAllDaySleepConfigCallBack)'
+4. 增加戒指Gomore自动活动检测开关相关接口
+   获取睡眠开关设置：'ControlBleTools.getInstance().getRingAutoActiveSportConfig(listener)'
+   设置睡眠开关设置：'ControlBleTools.getInstance().setRingAutoActiveSportConfig(listener)'
+   设置监听：'CallBackUtils.setRingAutoActiveSportConfigCallBack(RingAutoActiveSportConfigCallBack)'
+5. 更新v3相册表盘兼容
+========================================================
+zhbracelet-sdk-1.0.53更新内容
+1.更新思澈SIFLI SDK
+（1）更新serialTransport-release.aar
+（2）更新watchfacelibrary-release.aar
+（3）com.sifli.watchfacelibrary导包修改为com.sifli.watchfacelibraryzh
+========================================================
+zhbracelet-sdk-1.0.54更新内容
+1. DIY相关模型和接口修改命名
+   (1).DiyParamsBean 修改为 NewDiyParamsBean
+   (2).ZhDiyDialBean 修改为 NewZhDiyDialBean
+   (3).ControlBleTools.getInstance().getPreviewBitmap(...) 修改为 ControlBleTools.getInstance().getNewPreviewBitmap(...)
+   (4).ControlBleTools.getInstance().getDiyDialData(...) 修改为 ControlBleTools.getInstance().getNewDiyDialData(...)
+2. 睡眠数据增加睡眠准备得分 SleepBean.readinessScore
+3. 运动数据增加健身年龄 DevSportInfoBean.fitnessAge
+4. 新增呼吸灯相关接口
+   (1)获取呼吸灯设置 ControlBleTools.getInstance().getBreathingLightSettings(...)
+   (2)设置呼吸灯设置 ControlBleTools.getInstance().setBreathingLightSettings(BreathingLightSettingsBean,...)
+   (3)监听呼吸灯设置结果回调 CallBackUtils.settingMenuCallBack.onBreathingLightSettings(BreathingLightSettingsBean)
+========================================================
+zhbracelet-sdk-1.0.54更新内容
+1. DIY相关模型和接口修改命名
+   针对旧版（H客户）DIY相关模型和接口修改命名
+   (1).DiyParamsBean 修改为 OldDiyParamsBean
+   (2).ZhDiyDialBean 修改为 OldZhDiyDialBean
+   (3).ControlBleTools.getInstance().getPreviewBitmap(...) 修改为 ControlBleTools.getInstance().getOldPreviewBitmap(...)
+   (4).ControlBleTools.getInstance().getDiyDialData(...) 修改为 ControlBleTools.getInstance().getOldDiyDialData(...)
+========================================================
+zhbracelet-sdk-1.0.55更新内容
+1. 增加戒指副屏运动相关指令
+   (1).设置戒指副屏运动状态
+   ControlBleTools.getInstance().sendRingSportStatus(SendRingSportStatusBean,listener)
+   (2).获取戒指副屏运动状态
+   ControlBleTools.getInstance().sendRingSportStatus(SendRingSportStatusBean,listener)
+   (3).监听戒指音频运动状态回调
+   CallBackUtils.RingSportCallBack.onRingSportStatus(RingSportStatusBean)
+2. 增加设备主动请求更新自动运动数据
+   CallBackUtils.AutoSportDataCallBack.onAutoSportData(AutoSportDataBeans)
+========================================================
+zhbracelet-sdk-1.0.57更新内容
+1. 日常数据"DailyBean.todayWalkCalorieData"修改为"DailyBean.todayOuraCalorieData"（戒指项目对标"Oura"的卡路里）
+2. 日常数据"DailyBean.todayWalkCalorieHourlyData"修改为"DailyBean.todayOuraCalorieHourlyData"（戒指项目对标"Oura"的24小时卡路里）
+3. 日常数据"DailyBean"增加"todayCalorieData"当天当前的卡路里（戒指项目对标"Apple"）
+4. 实时数据"RealTimeBean.todayWalkCalorie"修改为"RealTimeBean.todayOuraCalorie"（总卡路里对标"Oura"的卡路里）
+5. 实时数据" RealTimeBean.todayWalkCalorieHourlyData"修改为" RealTimeBean.todayOuraCalorieHourlyData" (戒指项目对标"Oura"的当天当前运动卡路里)
+6. 自动运动检测参数设置"RingAutoActiveSportConfigBean"增加"autoActiveSportActivetime"（自动运动检测的时间有效性）
+7. 日常数据增加"GoMore"算法身体分数"FitnessDataCallBack.onRingBodyBatteryData"("RingBodyBatteryBean")
+8. 日常数据增加"GoMore"算法身体分数"FitnessDataCallBack.onRingStressDetectionData"("RingStressDetectionBean")
+9. 戒指副屏运动增加类型"211"羽毛球,"212"网球,"213"足球,"214"板球,"215"瑜伽
+10. 修复杰理相册表盘花屏问题
+========================================================
+zhbracelet-sdk-1.0.58更新内容
+1.优化“SPP”传输空指针异常
+========================================================
+zhbracelet-sdk-1.0.59更新内容
+1.增加打点数据对应的时间戳‘DevSportInfoBean.RingPointData.pointTime’
+========================================================
+zhbracelet-sdk-1.0.60更新内容
+1.设置发光联系人
+ControlBleTool.getInstance().setGlodFriendContactsList(List<GlodFriendContactsBean>,listener)
+2.获取发光联系人
+ControlBleTool.getInstance().getGlodFriendContactsList(listener)
+3.发光联系人回调接口
+CallBackUtils.glodFriendContactsCallBack
+4.设置联系人emoji信息
+ControlBleTool.getInstance().setGlodFriendEmoji(GlodFriendEmojiBean,listener)
+5.获取联系人emoji信息
+ControlBleTool.getInstance().getGlodFriendEmoji(listener)
+6.联系人emoji回调接口
+CallBackUtils.glodFriendEmojiCallBack
+7.开启或关闭漏光原始数据上传
+ControlBleTools.getInstance().setHeartRateRawSwitch(true/false,listener)
+8.监听漏光原始数据
+CallBackUtils.heartRateLeakageRawCallBack.onRawData(HeartRateLeakageRawBean)
+9.增加戒指运动中，充电中导致运动结束的原因枚举
+RingSportEndReason.SPORT_END_REASON_CHARGE
+========================================================
+zhbracelet-sdk-1.0.61更新内容
+1.修改 呼吸灯枚举类型(详情见BreathingLightType),设置呼吸灯
+"ControlBleTools.getInstance().setBreathingLightSettings(BreathingLightSettingsBean, listener)"
+2.新增 发送联系人emoji信息状态回复
+"ControlBleTools.getInstance().setGlodFriendEmojiRequest(GlodFriendEmojiBean, listener)"
+3.删除 获取联系人emoji信息
+"ControlBleTool.getInstance().getGlodFriendEmoji(listener)"
+========================================================
+zhbracelet-sdk-1.0.62更新内容
+1.发光好友联系人GlodFriendContactsBean增加callContactsId字段
+2.发光好友emoji信息GlodFriendEmojiBean增加callContactsId字段
+========================================================
+zhbracelet-sdk-1.0.63更新内容
+1.修改BleBCManager类的包名：由"com.zhapp.ble" 修改为 "com.zhapp.ble.manager"
+2.增加功耗行为日志记录回调
+“CallBackUtils.setBehaviorLogCallBack(BehaviorLogCallBack)”
+3.修改DIY兼容多背景，多数字颜色
+(1).“NewDiyParamsBean.backgroundResBean.background” 字段名称由“background”修改为“backgrounds”， 类型由“Bitmap”修改为“List<Bitmap>”
+(2).“NewDiyParamsBean.backgroundResBean” 增加 “List<int[]> backgroundColors;”
+(3).“ControlBleTools.getInstance().getSimpleNumberDiyDialData(Bitmap backgroundBm, ..., int colorRed, int colorGreen, int colorBlue,...)”
+修改为 “ControlBleTools.getInstance().getSimpleNumberDiyDialData(List<Bitmap> backgroundBm, ..., List<int[]> colors, ...)”
+(4)“ControlBleTools.getInstance().getSimplePointerDiyDialData(Bitmap backgroundBm, ...)”
+修改为 “ControlBleTools.getInstance().getSimplePointerDiyDialData(List<Bitmap> backgroundBm, ...)”
+========================================================
+zhbracelet-sdk-1.0.64更新内容
+1.增加设置EV电动车相关数据接口
+"ControlBleTool.getInstance().setEvDataInfo(EvDataInfoBean, listener)"
+"EvDataInfoBean.dataConnectType" 电动车连接状态 参考 "SettingMenuCallBack.EvConnectType"
+"EvDataInfoBean.ApplicationData.carStatus" 电动车状态 参考 "SettingMenuCallBack.EvCarStatus"
+"EvDataInfoBean.ApplicationData.ChargeStatus.status" 车辆充电情况 参考 "SettingMenuCallBack.EvChargeStatus"
+2.增加设置Ev电动车提醒事件
+"ControlBleTool.getInstance().setEvRemindStatus(remindStatus,listener)"
+"remindStatus" 提醒类型 参考 "SettingMenuCallBack.EvRemindType"
+========================================================
+zhbracelet-sdk-1.0.65更新内容
+1.戒指项目 - 日常数据同步增加戒指充电数据回调
+"FitnessDataCallBack.onRingBatteryData(RingBatteryBean)"
+2.戒指项目 - 增加开启飞行模式功能
+"ControlBleTool.getInstance().setRingAirplaneMode(listener)"
+3.戒指项目 - 日常数据增加戒指电量信息
+"FitnessDataCallBack.onRingBatteryData(RingBatteryBean)"
+4.戒指运动开启运动结果枚举"RingSportStartResult"增加"SPORT_START_RESULT_SPORTING"（运动中）.
+========================================================
+ZH_SDK_20241127_Bate_V2.0.0 更新内容
+1.sdk文件命名修改，由ZhAppBle-sdk-n010-XXX.aar 修改至ZH_SDK_yyyyMMdd_Bate_VXXX/ ZH_SDK_yyyyMMdd_VXXX
+2.兼容二代协议，修改参考文档 ZH_SDK_二代协议更新说明.adoc
+========================================================
+ZH_SDK_20241226_V2.0.0 更新内容
+1.增加板球运动（sportType = 217）数据解析
+2.二代协议修改通知接口，增加key参数用于聚合消息通知
+3.优化大文件数据传输
+========================================================
+ZH_SDK_20241231_V2.0.1 更新内容
+1.更新TVS iQube 参数修改
+（1）."EvDataInfoBean" 增加获取失败原因 "dataFailType" （参考SettingMenuCallBack.DataFailType）
+（2）."EvDataInfoBean" 增加刷新频率 "refreshInterval" （目前由设备强制10分钟）
+（3）."EvDataInfoBean.ApplicationData.TireGauge" 中的 frontWheel rearWheel 当无数据时需填入65535
+（4）."EvCarStatus" 电动车状态增加 异常无法获取数据类型 "EV_CAR_ERROR"
+（5）."EvChargeStatus"  车辆充电情况增加 异常无法获取数据类型 "EV_CHARGE_END"
+（6）."EvRemindType" 车辆提醒事件增加 异常无法获取数据类型 "EV_APP_CONNECT_ERROR"
+========================================================
+ZH_SDK_20250102_V2.0.2 更新内容
+1. 增加来电通知提醒开关设置接口
+“ControlBleTools.getInstance().setBerryIncomingCallSwitch(isOpen, SendCmdStateListener)”
+========================================================
+ZH_SDK_20250104_V2.0.3 更新内容
+1. 修改来电通知提醒开关设置接口
+“ControlBleTools.getInstance().setBerryIncomingCallNotificationSwitch(isOpen, SendCmdStateListener)”
+2. 新增未接来电通知提醒开关设置接口
+“ControlBleTools.getInstance().setBerryMissCallNotificationSwitch(isOpen, SendCmdStateListener)”
+3. 新增来电相关通知开关设置接口
+“ControlBleTools.getInstance().setBerryCallNotificationSwitch(isCallOpen, isMissCallOpen, SendCmdStateListener)”
+========================================================
+ZH_SDK_20250122_V2.0.4 更新内容
+1.增加Berry协议取消配对断连事件处理
+========================================================
+ZH_SDK_20250219_V2.0.5 更新内容
+1.APP确认收到戒指同步上来的数据（戒指使用）
+//receptionStatus -> 0：表示未收到,1：表示已收到
+“ControlBleTools.getInstance().ringExecutesDeleteDailyData(receptionStatus,SendCmdStateListener)”
+2.二代协议Berry天气数据修改
+移除旧风力 “BerryLatestWeatherBean.windinfo、BerryForecastWeatherBean.WeatherData.windinfo”
+新增风力等级 “BerryLatestWeatherBean.windSpeed、BerryForecastWeatherBean.WeatherData.windSpeed”
+新增风向 “BerryLatestWeatherBean.windDeg、BerryForecastWeatherBean.WeatherData.windDeg”
+========================================================
+ZH_SDK_20250227_V2.0.6 更新内容
+1.增加获取ESIM通用信息数据接口
+“ControlBleTools.getInstance().getEsimCommonDataSettings(SendCmdStateListener)”
+2.EsimEidSettingsCallBack增加通用数据回调
+EsimEidSettingsCallBack.onEsimCommonDataSetting(EsimCommonDataBean)
+========================================================
+ZH_SDK_20250320_V2.0.7 更新内容
+1.增加戒指运动中手表数据上报
+RingSportCallBack.onRingSportData(RingSportDataBean)
+2.修改DevSportInfoBean数据
+①.修改DevSportInfoBean.RecordPointSportData.baseballRole 为 DevSportInfoBean.RecordPointSportData.cricketRole
+②.增加板球击球手最大挥板速度 DevSportInfoBean.reportBatsmanSwingMaxSpeed
+③.增加板球投球手最大投球速度 DevSportInfoBean.reportBowlerSwingMaxSpeed
+④.增加板球接球手最大投球速度 DevSportInfoBean.reportCricketCatcherSwingMaxSpeed
+========================================================
+ZH_SDK_20250327_V2.0.8 更新内容
+1.修复解析戒指运动数据奔溃异常
+========================================================
+ZH_SDK_20250328_V2.0.9 更新内容
+1.修复获取戒指运动异常阻塞
+2.更新Berry二代协议绑定结果回调状态码：
+BerryBindCallBack.onBindStatu(bindStatus)
+bindStatus参考BerryBindCallBack.BindStatus
+（0：用户点击同意  1:非同一用户ID  2:用户点击拒绝   3:设备已绑定4：App发起绑定，设备已恢复出厂设置 5：用户不点击绑定按钮，超时 6：数据解析失败）
+3.更新儿童相关相关接口
+参考DEMO-ChildrenActivity.kt实现
+========================================================
+ZH_SDK_20250421_V2.1.0 更新内容
+1.增加儿童项目闪存卡进度回调
+ChildrenCallBack.onFlashCardProgress(FlashCardProgressBean)
+2.增加儿童项目挑战结果回调
+ChildrenCallBack.onChallengeResult(ChallengeResultBean)
+3.增加儿童项目调度器结果回调
+ChildrenCallBack.onSchedulerResult(MutableList<SchedulerResultBean>)
+4.增加儿童项目发送家长信息、闪存卡设备接收结果回调
+CallBackUtils.berryBigFileResultCallBack = object : BerryBigFileResultCallBack {
+    onBigFileResult(BerryBigFileResultBean)
+}
+========================================================
+ZH_SDK_20250430_V2.1.1 更新内容
+1.增加自动删除表盘的查询表盘状态接口
+ControlBleTools.getInstance().getWatchFaceStatusByBerryAutomaticDeletion(watchFaceId,fileSize,albumBitmap,listener)
+========================================================
+ZH_SDK_20250604_V2.1.2 更新内容
+1.修改收益信息对象
+EarningsInfoBean 增加属性：steps、sleep、calories、distance
+2.增加设置收益接口
+ControlBleTools.getInstance().setEarningsPriceByBerry(EarningsInfoBean,listener)
+3.增加设置勋章进度接口
+ControlBleTools.getInstance().setMedalInfoByBerry(List<MedalInfoBean>,listener)
+//MedalInfoBean.medalId 参考 ChildrenCallBack.MedalId
+4.增加获取勋章进度接口
+ControlBleTools.getInstance().getMedalInfoByBerry(listener)
+========================================================
+ZH_SDK_20250604_V2.1.3 更新内容
+1.心率检测对象增加低心率预警设置
+HeartRateMonitorBean.lowWarningValue
+2.日常数据增加喝水数据回调
+FitnessDataCallBack.onDrinkWaterData(DrinkWaterBean)
+3.信息录音转录
+(1).发送录音指令
+ControlBleTools.getInstance().sendRecordingCmd(cmd,listener) //cmd 参考 com.zhapp.ble.callback.RecordingCallBack.RecordCmd
+(2).录音回调
+设备录音状态回调
+RecordingCallBack.onRecordingCmd(RecordingCmdBean)
+设备录音数据回调
+RecordingCallBack.onRecordingData(byte[] data)
+4.新增二维码保险库相关接口回调
+(1).设置单个保险库信息
+ControlBleTools.getInstance().setVaultInfo(VaultInfoBean,listener)
+(2).获取简略保险库信息集合
+ControlBleTools.getInstance().getSimpleVaultInfoList(listener)
+(3).根据卡片ID获取保险库信息
+ControlBleTools.getInstance().getVaultInfo(cardId,listener)
+(4).删除保险库信息
+ControlBleTools.getInstance().delVaultInfoList(List<String> cardIdList,listener)
+(5).保险库回调
+VaultCallBack
+简略保险库列表
+VaultCallBack.onSimpleVaultInfoList(List<VaultSimpleBean> list)
+保险库详情
+VaultCallBack. onVaultInfo(VaultInfoBean bean);
+设备请求更新保险库详情
+VaultCallBack. onDevRequestVaultInfo(List<String> cardIds)
+========================================================
+ZH_SDK_20250630_V2.1.4 更新内容
+1.增加26种戒指副屏运动 218-243
+========================================================
+ZH_SDK_20250715_V2.1.5 更新内容
+1.实时数据新增戒指充电仓信息
+RealTimeBean.RingChargingCaseInfoBean
+2.新增查询戒指充电仓信息
+ControlBleTools.getInstance().getRingChargingCaseInfo(listener)
+CallBackUtils.ringChargingCaseInfoCallBack = object : RingChargingCaseInfoCallBack {
+   override fun onRingChargingCaseInfo(ringChargingCaseInfoBean: RingChargingCaseInfoBean){}
+}
+========================================================
+ZH_SDK_20250725_V2.1.6 更新内容
+1.获取whatsApp快速回复内容
+①.获取whatsApp快速回复内容
+ControlBleTools.getInstance().getDevWhatsAppShortReplyData(listener)
+②.监听回调
+CallBackUtils.setWhatsAppQuickReplyCallBack(WhatsAppQuickReplyCallBack)
+③.处理数据
+WhatsAppQuickReplyCallBack.onQuickReplyResult(ArrayList<String>)
+
+2.设置whatsApp快速回复内容
+ControlBleTools.getInstance().setDevWhatsAppShortReplyData(List<String>,listener)
+
+3.监听设备触发whatsApp快速回复
+①监听回调
+CallBackUtils.setWhatsAppQuickReplyCallBack(WhatsAppQuickReplyCallBack)
+②.处理数据
+WhatsAppQuickReplyCallBack.onMessage(String phone_number, String text)
+
+4.发送超级通知
+ControlBleTools.getInstance().sendSuperNotification(SuperNotificationBean,listener)
+
+5.设置早报内容
+①.设置早报内容
+ControlBleTools.getInstance().setMorningPost(MorningPostBean,listener)
+②.监听设备请求APP更新早报
+CallBackUtils.setMorningPostCallBack(MorningPostCallBack)
+③.处理数据
+MorningPostCallBack.onRequestMorningPost()
+
+6.发送AI语音指令
+①.发送AI语音指令
+ControlBleTools.getInstance().sendAiVoiceCmd(cmd,listener) //cmd参考 AiFunctionCallBack.AiVoiceCmd
+②.监听回调
+CallBackUtils.setAiFunctionCallBack(AiFunctionCallBack)
+③.处理回调数据
+设备语音指令回调
+AiFunctionCallBack.onDevAiVoiceCmd(AiVoiceCmdBean
+设备AI语音错误码：（0: 正常， 1：网络异常， 2：无语音超时 ，3：ASR / 理解失败 ， 4：服务器无响应 ，5：超过速率限制)
+AiFunctionCallBack.onAiErrorCode(errorCode)
+
+7.发送AI语音转文字后的文本给设备
+ControlBleTools.getInstance().sendAiTranslatedText(text,listener)
+
+8.发送AI回答文本给设备
+ControlBleTools.getInstance().sendAiAnswerText(text,listener)
+
+9.发送AI显示心率，血氧，活动等数据模版模板UI
+ControlBleTools.getInstance().sendAiViewUi(AiViewUiBean,listener)
+
+10.发送Ai历史绘制图表
+ControlBleTools.getInstance().sendAiHistoryUi(AiHistoryUiBean,listener)
+
+11.发送Ai动作行为
+ControlBleTools.getInstance().sendAiAction(AiActionBean,listener)
+
+12.发送AI开关相关
+ControlBleTools.getInstance().sendAiToggle(AiToggleBean,listener)
+
+13.发送Ai打开设备相关设置
+ControlBleTools.getInstance().sendAiOpenFunction(AiOpenFunctionBean,listener)
+
+14.设置Berry协议带头像收藏联系人
+ControlBleTools.getInstance().setFavoriteContacts(supportMax, List<AddFavoriteContactBean>,deviceType, UploadBigDataListener)
+
+15.获取Berry协议带头像收藏联系人
+①.获取Berry协议带头像收藏联系人
+ControlBleTools.getInstance().getFavoriteContacts(listener)
+②.监听回调
+CallBackUtils.setFavoriteContactsCallBack(FavoriteContactsCallBack)
+③.处理回调数据
+FavoriteContactsCallBack.onFavoriteContacts(FavoriteContactsBean)
+
+16.删除Berry协议带头像收藏联系人
+ControlBleTools.getInstance().deleteFavoriteContacts(List<FavoriteContactsBean.FavoriteContactBean>,listener)
+
+17.适配API 35
+========================================================
+ZH_SDK_20250801_V2.1.7 更新内容
+1.移除AiFunctionCallBack.onAiErrorCode(errorCode)
+2.新增App发送AI语音错误码：（0: 正常， 1：网络异常， 2：无语音超时 ，3：ASR / 理解失败 ， 4：服务器无响应 ，5：超过速率限制)
+ControlBleTools.getInstance().sendAiErrorCode(errorCode,listener)
+========================================================
+ZH_SDK_20250804_V2.1.8 更新内容
+1.移除第三方工具utilcodex
+========================================================
+ZH_SDK_20250807_V2.1.9 更新内容
+1.RealTimeBean新增戒指项目nfc睡眠报错 
+RealTimeBean.nfcSleepErr //0：表示正常   1：表示异常
+2.RealTimeBean新增戒指sar 
+RealTimeBean.ringSar
+3.新增获取戒指NFC睡眠错误信息
+ControlBleTools.getInstance().getRingNFCSleepErr(listener)
+4.新增戒指NFC睡眠错误信息回调
+MicroCallBack.onNfcSleepErr(int error) //0：表示正常   1：表示异常
+========================================================
+ZH_SDK_20250808_V2.2.0 更新内容
+1.新增AI语音数据回调
+AiFunctionCallBack.onDevAiVoiceData(byte[] data)
+========================================================

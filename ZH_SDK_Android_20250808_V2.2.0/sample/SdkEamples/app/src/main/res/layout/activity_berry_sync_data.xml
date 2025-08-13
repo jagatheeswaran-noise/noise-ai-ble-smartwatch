@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="50dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvStatus"
+                style="@style/MyTextView"
+                android:text="@string/s255" />
+
+            <CheckBox
+                android:id="@+id/chbTimeFormat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/s118" />
+
+            <Button
+                android:id="@+id/btnSetTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s117" />
+
+            <Button
+                android:id="@+id/btnGetDeviceInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s8" />
+
+            <Button
+                android:id="@+id/btnGetDeviceBatteryInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s9"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnGetSimpleSet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s581" />
+
+            <Button
+                android:id="@+id/btnRealTimeOpen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s86" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/s10"
+                android:textColor="#ff0000"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvRealTimeData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="50dp"
+                android:textSize="13sp" />
+
+            <include layout="@layout/line"/>
+
+            <Button
+                android:id="@+id/btnGetFitness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s12" />
+
+            <TextView
+                android:id="@+id/tvDailyProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="#ff0000"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvDailyResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="50dp"
+                android:textColor="#ff0000"
+                android:textSize="13sp" />
+
+            <include layout="@layout/line" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:text="@string/s162"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnGetDevSportStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s163"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnDevConnect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s164"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btnBleClose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="click"
+                android:text="@string/s165"
+                android:textAllCaps="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/s168"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnGetSportData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/s169"
+                android:textAllCaps="false" />
+
+
+            <TextView
+                android:id="@+id/tvSportData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

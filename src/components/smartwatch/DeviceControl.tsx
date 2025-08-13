@@ -7,8 +7,10 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
+import RNFS from 'react-native-fs';
 import { zhSDKService } from '../../services/ZHSDKService';
 import { DeviceInfo, ConnectionStatus } from '../../types/smartwatch';
+
 
 interface DeviceControlProps {
   device: DeviceInfo | null;
@@ -19,6 +21,9 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
   const [deviceInfo, setDeviceInfo] = useState<any>(null);
   const [batteryInfo, setBatteryInfo] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [availableBinFiles, setAvailableBinFiles] = useState<string[]>([]);
+  const [selectedBinFile, setSelectedBinFile] = useState<string>('');
+  const [isScanningFiles, setIsScanningFiles] = useState<boolean>(false);
 
   useEffect(() => {
     // Setup event listeners
@@ -95,6 +100,75 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
       unsubscribeBindingSuccess.remove();
     };
   }, []);
+
+  const scanForBinFiles = async () => {
+    try {
+      setIsScanningFiles(true);
+      console.log('🔍 Scanning for BIN files...');
+      
+      // Use the same path as ModelManager for consistency
+      const downloadsDir = `${RNFS.DownloadDirectoryPath}/NoiseAI_WatchRecordings`;
+      const documentsDir = `${RNFS.DocumentDirectoryPath}/watch_recordings`;
+      
+      let binFiles: string[] = [];
+      
+      try {
+        // Check Downloads/NoiseAI_WatchRecordings directory
+        const downloadsExists = await RNFS.exists(downloadsDir);
+        if (downloadsExists) {
+          const files = await RNFS.readDir(downloadsDir);
+          binFiles = files
+            .filter(file => file.isFile() && file.name.endsWith('.bin'))
+            .map(file => file.path);
+          console.log('📁 Found BIN files in Downloads:', binFiles);
+        }
+      } catch (error) {
+        console.log('📁 Downloads/NoiseAI_WatchRecordings directory not accessible:', error);
+      }
+      
+      // Also check Documents/watch_recordings directory
+      try {
+        const documentsExists = await RNFS.exists(documentsDir);
+        if (documentsExists) {
+          const files = await RNFS.readDir(documentsDir);
+          const docBinFiles = files
+            .filter(file => file.isFile() && file.name.endsWith('.bin'))
+            .map(file => file.path);
+          binFiles = [...binFiles, ...docBinFiles];
+          console.log('📁 Found BIN files in Documents:', docBinFiles);
+        }
+      } catch (error) {
+        console.log('📁 Documents/watch_recordings directory not accessible:', error);
+      }
+      
+      // Sort by modification time (newest first)
+      binFiles.sort((a, b) => {
+        try {
+          const statA = RNFS.stat(a);
+          const statB = RNFS.stat(b);
+          return statB.mtime.getTime() - statA.mtime.getTime();
+        } catch (error) {
+          return 0; // If we can't get stats, don't change order
+        }
+      });
+      
+      console.log('📋 Total BIN files found:', binFiles);
+      setAvailableBinFiles(binFiles);
+      
+      if (binFiles.length > 0) {
+        setSelectedBinFile(binFiles[0]); // Select the first (newest) file
+        Alert.alert('Success', `Found ${binFiles.length} BIN file(s)`);
+      } else {
+        Alert.alert('No Files', 'No BIN files found in NoiseAI_WatchRecordings or watch_recordings folders');
+      }
+      
+    } catch (error) {
+      console.error('❌ Error scanning for BIN files:', error);
+      Alert.alert('Error', `Failed to scan for BIN files: ${error.message}`);
+    } finally {
+      setIsScanningFiles(false);
+    }
+  };
 
   const handleCheckConnection = async () => {
     try {
@@ -244,6 +318,99 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
     );
   };
 
+  const handleTestOpusBridge = async () => {
+    try {
+      if (!selectedBinFile) {
+        Alert.alert('No File Selected', 'Please scan for BIN files and select one first');
+        return;
+      }
+      
+      console.log('🎵 Testing OpusBridge module...');
+      
+      // Import NativeModules dynamically to avoid build issues
+      const { NativeModules } = require('react-native');
+      const { OpusBridge } = NativeModules;
+      
+      if (!OpusBridge) {
+        Alert.alert('Error', 'OpusBridge module not found!');
+        return;
+      }
+      
+      console.log('✅ OpusBridge module found');
+      console.log('Available methods:', Object.keys(OpusBridge));
+      
+      // Source file (user selected)
+      const srcBinFile = selectedBinFile;
+      
+      // Destination files in app's sandbox (guaranteed accessible)
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const dstBinFile = `${RNFS.DocumentDirectoryPath}/opus_input_${timestamp}.bin`;
+      const dstWavFile = `${RNFS.DocumentDirectoryPath}/opus_output_${timestamp}.wav`;
+      
+      console.log('📁 Source file:', srcBinFile);
+      console.log('📁 Sandbox BIN:', dstBinFile);
+      console.log('📁 Sandbox WAV:', dstWavFile);
+      
+      // Step 1: Verify source exists and is accessible
+      let sourceStat;
+      try {
+        sourceStat = await RNFS.stat(srcBinFile);
+        if (!sourceStat || !sourceStat.isFile()) {
+          throw new Error('Source BIN not found or not accessible');
+        }
+        console.log('✅ Source file accessible, size:', sourceStat.size, 'bytes');
+      } catch (statError) {
+        console.error('❌ Source file access failed:', statError);
+        Alert.alert('File Access Error', 
+          'Cannot access the selected .bin file.\n\n' +
+          'This is likely due to Android scoped storage restrictions.\n\n' +
+          'Try selecting a different file or copying it to a different location.'
+        );
+        return;
+      }
+      
+      // Step 2: Copy into app's sandbox (guaranteed readable by native fopen)
+      try {
+        console.log('📋 Copying file to sandbox...');
+        await RNFS.copyFile(srcBinFile, dstBinFile);
+        console.log('✅ File copied to sandbox');
+      } catch (copyError) {
+        console.error('❌ File copy failed:', copyError);
+        Alert.alert('Copy Error', `Failed to copy file to sandbox: ${copyError.message}`);
+        return;
+      }
+      
+      // Step 3: Decode using the sandbox file (guaranteed accessible)
+      try {
+        console.log('🎵 Decoding with OpusBridge...');
+        const result = await OpusBridge.decodeBinToWav(dstBinFile, dstWavFile, { bytesPerPacket: 80 });
+        
+        if (result.wavPath) {
+          Alert.alert(
+            'Success! 🎉', 
+            `OpusBridge test completed successfully!\n\n` +
+            `Input: ${srcBinFile}\n` +
+            `Output: ${result.wavPath}\n` +
+            `Input Size: ${sourceStat.size} bytes\n` +
+            `Output Size: ${result.outputSize || 'Unknown'} bytes\n` +
+            `Bytes per packet: ${result.bytesPerPacket || 80}`
+          );
+          console.log('🎵 OpusBridge test result:', result);
+        } else {
+          Alert.alert('Error', `OpusBridge test failed: ${result}`);
+          console.log('❌ OpusBridge test failed:', result);
+        }
+      } catch (decodeError) {
+        console.error('❌ Decode failed:', decodeError);
+        Alert.alert('Decode Error', `OpusBridge decode failed: ${decodeError.message}`);
+      }
+      
+    } catch (error) {
+      console.error('❌ OpusBridge test error:', error);
+      Alert.alert('Error', `OpusBridge test failed: ${error.message}`);
+    }
+  };
+
   const getConnectionStatusColor = () => {
     // Use real-time status from service instead of local state
     const currentStatus = zhSDKService.currentConnectionStatus;
@@ -286,6 +453,55 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
         return 'Full';
       default:
         return 'Unknown';
+    }
+  };
+
+  // Helper function to safely decode Opus files with sandbox copy
+  const decodeOpusFileSafely = async (sourcePath: string, bytesPerPacket: number = 80) => {
+    try {
+      const RNFS = require('react-native-fs');
+      
+      // Generate unique filenames in app's sandbox
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const dstBinFile = `${RNFS.DocumentDirectoryPath}/opus_input_${timestamp}.bin`;
+      const dstWavFile = `${RNFS.DocumentDirectoryPath}/opus_output_${timestamp}.wav`;
+      
+      console.log('📁 Source:', sourcePath);
+      console.log('📁 Sandbox BIN:', dstBinFile);
+      console.log('📁 Sandbox WAV:', dstWavFile);
+      
+      // Step 1: Verify source exists and is accessible
+      const sourceStat = await RNFS.stat(sourcePath);
+      if (!sourceStat || !sourceStat.isFile()) {
+        throw new Error('Source file not found or not accessible');
+      }
+      console.log('✅ Source accessible, size:', sourceStat.size, 'bytes');
+      
+      // Step 2: Copy into app's sandbox
+      await RNFS.copyFile(sourcePath, dstBinFile);
+      console.log('✅ File copied to sandbox');
+      
+      // Step 3: Decode using sandbox file
+      const { NativeModules } = require('react-native');
+      const { OpusBridge } = NativeModules;
+      
+      const result = await OpusBridge.decodeBinToWav(dstBinFile, dstWavFile, { bytesPerPacket });
+      console.log('✅ Decode successful:', result);
+      
+      return {
+        success: true,
+        inputPath: dstBinFile,
+        outputPath: result.wavPath,
+        bytesPerPacket,
+        sourceSize: sourceStat.size
+      };
+      
+    } catch (error) {
+      console.error('❌ Safe decode failed:', error);
+      return {
+        success: false,
+        error: error.message
+      };
     }
   };
 
@@ -405,6 +621,86 @@ const DeviceControl: React.FC<DeviceControlProps> = ({ device }) => {
           >
             <Text style={styles.buttonText}>Forget Device</Text>
           </TouchableOpacity>
+
+          {/* File Picker Section */}
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTitle}>📁 BIN File Picker</Text>
+            <Text style={styles.infoText}>
+              Scan for available .bin files and select one to convert
+            </Text>
+            
+            <TouchableOpacity 
+              style={[styles.primaryButton, { backgroundColor: '#059669' }]} 
+              onPress={scanForBinFiles}
+              disabled={isScanningFiles}
+            >
+              <Text style={styles.buttonText}>
+                {isScanningFiles ? '🔍 Scanning...' : '🔍 Scan for BIN Files'}
+              </Text>
+            </TouchableOpacity>
+            
+            {availableBinFiles.length > 0 && (
+              <View style={styles.fileListContainer}>
+                <Text style={styles.fileListTitle}>Available Files:</Text>
+                {availableBinFiles.map((filePath, index) => {
+                  const fileName = filePath.split('/').pop() || 'Unknown';
+                  const isSelected = filePath === selectedBinFile;
+                  
+                  return (
+                    <TouchableOpacity
+                      key={index}
+                      style={[
+                        styles.fileItem,
+                        isSelected && styles.selectedFileItem
+                      ]}
+                      onPress={() => setSelectedBinFile(filePath)}
+                    >
+                      <Text style={[
+                        styles.fileName,
+                        isSelected && styles.selectedFileName
+                      ]}>
+                        {fileName}
+                      </Text>
+                      <Text style={styles.filePath}>{filePath}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            )}
+          </View>
+
+          {/* OpusBridge Test Section */}
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoTitle}>🎵 OpusBridge Test</Text>
+            <Text style={styles.infoText}>
+              Test the native OpusBridge module with your selected .bin file
+            </Text>
+            
+            {selectedBinFile ? (
+              <View style={styles.selectedFileInfo}>
+                <Text style={styles.selectedFileLabel}>Selected:</Text>
+                <Text style={styles.selectedFilePath}>{selectedBinFile.split('/').pop()}</Text>
+              </View>
+            ) : (
+              <Text style={styles.noFileSelected}>No file selected</Text>
+            )}
+            
+            <TouchableOpacity 
+              style={[
+                styles.primaryButton, 
+                { backgroundColor: '#8b5cf6' },
+                !selectedBinFile && styles.disabledButton
+              ]} 
+              onPress={handleTestOpusBridge}
+              disabled={!selectedBinFile}
+            >
+              <Text style={styles.buttonText}>
+                {selectedBinFile ? 'Test OpusBridge' : 'Select a file first'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+
         </View>
       </View>
     </ScrollView>
@@ -560,6 +856,70 @@ const styles = StyleSheet.create({
     color: '#d1d5db',
     fontSize: 14,
     marginBottom: 8,
+  },
+  fileListContainer: {
+    marginTop: 16,
+    padding: 12,
+    backgroundColor: '#1f2937',
+    borderRadius: 8,
+  },
+  fileListTitle: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  fileItem: {
+    padding: 12,
+    backgroundColor: '#374151',
+    borderRadius: 8,
+    marginBottom: 8,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  selectedFileItem: {
+    borderColor: '#8b5cf6',
+    backgroundColor: '#4c1d95',
+  },
+  fileName: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  selectedFileName: {
+    color: '#e9d5ff',
+  },
+  filePath: {
+    color: '#9ca3af',
+    fontSize: 12,
+    fontFamily: 'monospace',
+  },
+  selectedFileInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    padding: 12,
+    backgroundColor: '#1f2937',
+    borderRadius: 8,
+  },
+  selectedFileLabel: {
+    color: '#9ca3af',
+    fontSize: 14,
+    marginRight: 8,
+  },
+  selectedFilePath: {
+    color: '#10b981',
+    fontSize: 14,
+    fontWeight: '600',
+    fontFamily: 'monospace',
+  },
+  noFileSelected: {
+    color: '#6b7280',
+    fontSize: 14,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginBottom: 12,
   },
 });
 

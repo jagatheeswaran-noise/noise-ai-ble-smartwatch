@@ -8,6 +8,7 @@ import {
   ConnectionStatus
 } from '../types/smartwatch';
 import ConnectionPersistenceService from './ConnectionPersistenceService';
+import { WatchVoiceCommand } from './WatchVoiceService';
 
 const { ZHSDKModule } = NativeModules;
 
@@ -471,6 +472,106 @@ class ZHSDKService {
       return await ZHSDKModule.setTimeFormat(is24HourFormat);
     } catch (error) {
       console.error('Error setting time format:', error);
+      return false;
+    }
+  }
+
+  // AI Voice Integration Methods
+  async sendAiVoiceCommand(command: number): Promise<boolean> {
+    try {
+      return await ZHSDKModule.sendAiVoiceCommand(command);
+    } catch (error) {
+      console.error('Error sending AI voice command:', error);
+      return false;
+    }
+  }
+
+  async sendAiTranslatedText(text: string): Promise<boolean> {
+    try {
+      return await ZHSDKModule.sendAiTranslatedText(text);
+    } catch (error) {
+      console.error('Error sending AI translated text:', error);
+      return false;
+    }
+  }
+
+  async sendAiAnswerText(text: string): Promise<boolean> {
+    try {
+      return await ZHSDKModule.sendAiAnswerText(text);
+    } catch (error) {
+      console.error('Error sending AI answer text:', error);
+      return false;
+    }
+  }
+
+  async sendAiViewUi(title: string, content: string): Promise<boolean> {
+    try {
+      console.log('🎤⌚ Sending AI view UI:', { title, content });
+      return await ZHSDKModule.sendAiViewUi(title, content);
+    } catch (error) {
+      console.error('🎤⌚ Error sending AI view UI:', error);
+      return false;
+    }
+  }
+
+  async sendAiErrorCode(errorCode: number): Promise<boolean> {
+    try {
+      return await ZHSDKModule.sendAiErrorCode(errorCode);
+    } catch (error) {
+      console.error('Error sending AI error code:', error);
+      return false;
+    }
+  }
+
+  async testAiVoiceConnection(): Promise<any> {
+    try {
+      return await ZHSDKModule.testAiVoiceConnection();
+    } catch (error) {
+      console.error('Error testing AI voice connection:', error);
+      return { 
+        isConnected: false, 
+        sdkInitialized: false, 
+        callbackRegistered: false,
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  async simulateWatchVoiceCommand(): Promise<boolean> {
+    try {
+      return await ZHSDKModule.simulateWatchVoiceCommand();
+    } catch (error) {
+      console.error('Error simulating watch voice command:', error);
+      return false;
+    }
+  }
+
+  async initializeWatchAI(): Promise<boolean> {
+    try {
+      console.log('🎤⌚ Initializing AI functionality on watch...');
+      return await ZHSDKModule.initializeWatchAI();
+    } catch (error) {
+      console.error('Error initializing watch AI:', error);
+      return false;
+    }
+  }
+
+  async startWatchAIListening(): Promise<boolean> {
+    try {
+      console.log('🎤⌚ Starting AI listening mode on watch...');
+      return await ZHSDKModule.startWatchAIListening();
+    } catch (error) {
+      console.error('Error starting AI listening:', error);
+      return false;
+    }
+  }
+
+  async stopWatchAIListening(): Promise<boolean> {
+    try {
+      console.log('🎤⌚ Stopping AI listening mode on watch...');
+      return await ZHSDKModule.stopWatchAIListening();
+    } catch (error) {
+      console.error('Error stopping AI listening:', error);
       return false;
     }
   }
