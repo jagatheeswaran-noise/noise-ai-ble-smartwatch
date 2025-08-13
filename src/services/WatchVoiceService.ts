@@ -293,27 +293,50 @@ class WatchVoiceService {
                     const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
                     const sandboxBinPath = `${RNFS.DocumentDirectoryPath}/opus_input_${timestamp}.bin`
                     const sandboxWavPath = `${RNFS.DocumentDirectoryPath}/opus_output_${timestamp}.wav`
-                    
+
                     // Copy BIN to sandbox
+                    const copyStartTime = Date.now();
                     await RNFS.copyFile(latestBinFile.path, sandboxBinPath)
-                    
+                    const copyEndTime = Date.now();
+                    const copyLatency = copyEndTime - copyStartTime;
+                    console.log('🎤⌚ [LATENCY] BIN file copy to sandbox completed in:', copyLatency, 'ms');
+
                     // Convert to WAV using OpusBridge
+                    const opusBridgeStartTime = Date.now();
                     const result = await OpusBridge.decodeBinToWav(sandboxBinPath, sandboxWavPath, { bytesPerPacket: 80 })
-                    
+                    const opusBridgeEndTime = Date.now();
+                    const opusBridgeLatency = opusBridgeEndTime - opusBridgeStartTime;
+                    console.log('🎤⌚ [LATENCY] OpusBridge BIN to WAV conversion completed in:', opusBridgeLatency, 'ms');
+
                     if (result && result.wavPath) {
                       console.log('🎤⌚ OpusBridge conversion successful:', result.wavPath)
                       console.log('🎤⌚ WAV file size:', result.outputSize, 'bytes')
                       console.log('🎤⌚ Input BIN size:', result.inputSize, 'bytes')
-                      
+
                       // NEW: Copy WAV file to Downloads for easy access and debugging
+                      let downloadCopyLatency = 0;
                       try {
                         const downloadsWavPath = `${RNFS.DownloadDirectoryPath}/NoiseAI_WatchRecordings/watch_decoded_${timestamp}.wav`
+                        const downloadCopyStartTime = Date.now();
                         await RNFS.copyFile(result.wavPath, downloadsWavPath)
+                        const downloadCopyEndTime = Date.now();
+                        downloadCopyLatency = downloadCopyEndTime - downloadCopyStartTime;
+                        console.log('🎤⌚ [LATENCY] WAV file copy to Downloads completed in:', downloadCopyLatency, 'ms');
                         console.log('🎤⌚ WAV file copied to Downloads for debugging:', downloadsWavPath)
                       } catch (copyError) {
                         console.warn('🎤⌚ Failed to copy WAV to Downloads:', copyError)
                       }
-                      
+
+                      // Log total OpusBridge pipeline latency
+                      const totalOpusBridgeLatency = Date.now() - opusBridgeStartTime;
+                      console.log('🎤⌚ [LATENCY] ===== OPUSBRIDGE PIPELINE LATENCY BREAKDOWN =====');
+                      console.log('🎤⌚ [LATENCY] Total OpusBridge pipeline:', totalOpusBridgeLatency, 'ms');
+                      console.log('🎤⌚ [LATENCY] Step breakdown:');
+                      console.log(`🎤⌚ [LATENCY]   BIN copy to sandbox: ${copyLatency}ms`);
+                      console.log(`🎤⌚ [LATENCY]   OpusBridge conversion: ${opusBridgeLatency}ms`);
+                      console.log(`🎤⌚ [LATENCY]   WAV copy to Downloads: ${downloadCopyLatency || 0}ms`);
+                      console.log('🎤⌚ [LATENCY] =====================================================');
+
                       // Use the high-quality WAV for transcription
                       await this.processWhisperTranscriptionWithFile(result.wavPath, rawData)
                       return
@@ -669,9 +692,23 @@ class WatchVoiceService {
   }
 
   private async processWhisperTranscription(rawData: string): Promise<void> {
+    const startTime = Date.now();
+    const stepTimings: { [key: string]: number } = {};
+    
     try {
+      console.log('🎤⌚ [LATENCY] Starting buffered audio transcription at:', new Date().toISOString());
+      console.log('🎤⌚ [LATENCY] Using fallback buffered audio method');
+      
+      const whisperStartTime = Date.now();
       console.log('🎤⌚ [DEBUG] Running Whisper transcription for buffered audio');
       const transcript = await whisperASRService.transcribeBufferedAudio('ggml-base.en-q5_1.bin');
+      const whisperEndTime = Date.now();
+      const whisperLatency = whisperEndTime - whisperStartTime;
+      stepTimings['whisper_buffered_transcription'] = whisperLatency;
+      
+      console.log('🎤⌚ [LATENCY] Buffered audio Whisper transcription completed in:', whisperLatency, 'ms');
+      console.log('🎤⌚ [LATENCY] Whisper result length:', transcript?.length || 0, 'characters');
+      
       const sessionId = this.extractSessionId(rawData);
       const text = transcript && transcript.length > 0 ? transcript : '...';
 
@@ -679,27 +716,77 @@ class WatchVoiceService {
       console.log('🎤⌚ [DEBUG] Raw transcript length:', transcript?.length || 0);
 
       // Step 1: send transcribed text to watch
+      const watchSendStartTime = Date.now();
       await this.sendWatchTranslatedText(text);
+      const watchSendEndTime = Date.now();
+      const watchSendLatency = watchSendEndTime - watchSendStartTime;
+      stepTimings['watch_text_send'] = watchSendLatency;
+      
+      console.log('🎤⌚ [LATENCY] Watch text send completed in:', watchSendLatency, 'ms');
 
       // Step 2: generate AI response using existing pipeline (simplified here)
+      const aiResponseStartTime = Date.now();
       const aiResponse = `AI processed: "${text}". Session: ${sessionId.replace('noise_ai_', '')}`;
+      const aiResponseEndTime = Date.now();
+      const aiResponseLatency = aiResponseEndTime - aiResponseStartTime;
+      stepTimings['ai_response_generation'] = aiResponseLatency;
+      
+      console.log('🎤⌚ [LATENCY] AI response generation completed in:', aiResponseLatency, 'ms');
+      
+      const aiSendStartTime = Date.now();
       await this.sendWatchAnswerText(aiResponse);
       await this.sendWatchViewUi('AI Assistant', aiResponse);
+      const aiSendEndTime = Date.now();
+      const aiSendLatency = aiSendEndTime - aiSendStartTime;
+      stepTimings['ai_response_send'] = aiSendLatency;
+      
+      console.log('🎤⌚ [LATENCY] AI response send completed in:', aiSendLatency, 'ms');
 
       if (this.callbacks.onVoiceTranscription) {
         console.log('🎤⌚ [DEBUG] Calling onVoiceTranscription callback with:', text);
         this.callbacks.onVoiceTranscription(text);
       }
+      
+      // Calculate total latency
+      const totalLatency = Date.now() - startTime;
+      stepTimings['total_end_to_end'] = totalLatency;
+      
+      // Log comprehensive latency breakdown
+      console.log('🎤⌚ [LATENCY] ===== END-TO-END BUFFERED AUDIO TRANSCRIPTION LATENCY BREAKDOWN =====');
+      console.log('🎤⌚ [LATENCY] Total end-to-end latency:', totalLatency, 'ms');
+      console.log('🎤⌚ [LATENCY] Step breakdown:');
+      Object.entries(stepTimings).forEach(([step, latency]) => {
+        const percentage = ((latency / totalLatency) * 100).toFixed(1);
+        console.log(`🎤⌚ [LATENCY]   ${step}: ${latency}ms (${percentage}%)`);
+      });
+      console.log('🎤⌚ [LATENCY] =====================================================');
+      
     } catch (error) {
+      const totalLatency = Date.now() - startTime;
+      console.error('🎤⌚ [LATENCY] Buffered audio transcription failed after:', totalLatency, 'ms');
       console.error('🎤⌚ Whisper transcription failed:', error);
       await this.sendErrorCode(AiErrorCode.ASR_UNDERSTANDING_FAILURE);
     }
   }
 
   private async processWhisperTranscriptionWithFile(wavPath: string, rawData: string): Promise<void> {
+    const startTime = Date.now();
+    const stepTimings: { [key: string]: number } = {};
+    
     try {
+      console.log('🎤⌚ [LATENCY] Starting WAV file transcription at:', new Date().toISOString());
+      console.log('🎤⌚ [LATENCY] WAV file path:', wavPath);
+      
+      const whisperStartTime = Date.now();
       console.log('🎤⌚ [DEBUG] Running Whisper transcription for high-quality WAV file:', wavPath);
       const transcript = await whisperASRService.transcribeWavFile(wavPath, 'ggml-base.en-q5_1.bin');
+      const whisperEndTime = Date.now();
+      const whisperLatency = whisperEndTime - whisperStartTime;
+      stepTimings['whisper_transcription'] = whisperLatency;
+      
+      console.log('🎤⌚ [LATENCY] Whisper transcription completed in:', whisperLatency, 'ms');
+      console.log('🎤⌚ [LATENCY] Whisper result length:', transcript?.length || 0, 'characters');
+      
       const sessionId = this.extractSessionId(rawData);
       const text = transcript && transcript.length > 0 ? transcript : '...';
 
@@ -707,18 +794,54 @@ class WatchVoiceService {
       console.log('🎤⌚ [DEBUG] Raw transcript length:', transcript?.length || 0);
 
       // Step 1: send transcribed text to watch
+      const watchSendStartTime = Date.now();
       await this.sendWatchTranslatedText(text);
+      const watchSendEndTime = Date.now();
+      const watchSendLatency = watchSendEndTime - watchSendStartTime;
+      stepTimings['watch_text_send'] = watchSendLatency;
+      
+      console.log('🎤⌚ [LATENCY] Watch text send completed in:', watchSendLatency, 'ms');
 
       // Step 2: generate AI response using existing pipeline (simplified here)
+      const aiResponseStartTime = Date.now();
       const aiResponse = `AI processed: "${text}". Session: ${sessionId.replace('noise_ai_', '')}`;
+      const aiResponseEndTime = Date.now();
+      const aiResponseLatency = aiResponseEndTime - aiResponseStartTime;
+      stepTimings['ai_response_generation'] = aiResponseLatency;
+      
+      console.log('🎤⌚ [LATENCY] AI response generation completed in:', aiResponseLatency, 'ms');
+      
+      const aiSendStartTime = Date.now();
       await this.sendWatchAnswerText(aiResponse);
       await this.sendWatchViewUi('AI Assistant', aiResponse);
+      const aiSendEndTime = Date.now();
+      const aiSendLatency = aiSendEndTime - aiSendStartTime;
+      stepTimings['ai_response_send'] = aiSendLatency;
+      
+      console.log('🎤⌚ [LATENCY] AI response send completed in:', aiSendLatency, 'ms');
 
       if (this.callbacks.onVoiceTranscription) {
         console.log('🎤⌚ [DEBUG] Calling onVoiceTranscription callback with:', text);
         this.callbacks.onVoiceTranscription(text);
       }
+      
+      // Calculate total latency
+      const totalLatency = Date.now() - startTime;
+      stepTimings['total_end_to_end'] = totalLatency;
+      
+      // Log comprehensive latency breakdown
+      console.log('🎤⌚ [LATENCY] ===== END-TO-END TRANSCRIPTION LATENCY BREAKDOWN =====');
+      console.log('🎤⌚ [LATENCY] Total end-to-end latency:', totalLatency, 'ms');
+      console.log('🎤⌚ [LATENCY] Step breakdown:');
+      Object.entries(stepTimings).forEach(([step, latency]) => {
+        const percentage = ((latency / totalLatency) * 100).toFixed(1);
+        console.log(`🎤⌚ [LATENCY]   ${step}: ${latency}ms (${percentage}%)`);
+      });
+      console.log('🎤⌚ [LATENCY] =====================================================');
+      
     } catch (error) {
+      const totalLatency = Date.now() - startTime;
+      console.error('🎤⌚ [LATENCY] Whisper transcription failed after:', totalLatency, 'ms');
       console.error('🎤⌚ Whisper transcription failed for high-quality WAV:', error);
       await this.sendErrorCode(AiErrorCode.ASR_UNDERSTANDING_FAILURE);
     }

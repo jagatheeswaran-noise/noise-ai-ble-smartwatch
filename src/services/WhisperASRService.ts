@@ -209,85 +209,198 @@ export class WhisperASRService {
   }
 
   async transcribeBufferedAudio(modelFilename?: string): Promise<string> {
+    const startTime = Date.now();
+    console.log('🎤⌚ WhisperASR: [LATENCY] Starting buffered audio transcription at:', new Date().toISOString());
+    
     const pcm = this.concatPcm()
     if (pcm.length === 0) return ''
     console.log(`🎤⌚ WhisperASR: total raw bytes=${pcm.length}`)
 
     if (!this.whisperContext) {
+      const modelInitStartTime = Date.now();
       const modelPath = await this.ensureModel(modelFilename)
       this.whisperContext = await initWhisper({ filePath: modelPath })
+      const modelInitEndTime = Date.now();
+      const modelInitLatency = modelInitEndTime - modelInitStartTime;
+      console.log('🎤⌚ WhisperASR: [LATENCY] Whisper context initialization completed in:', modelInitLatency, 'ms');
       console.log('🎤⌚ WhisperASR: whisper context initialized')
     }
 
     // PRIMARY: Use byte-swapped format since watch audio is Big Endian
     console.log('🎤⌚ WhisperASR: Using byte-swapped format (watch is Big Endian)')
+    const byteSwapStartTime = Date.now();
     const swapped = this.swapEndian16(pcm)
+    const byteSwapEndTime = Date.now();
+    const byteSwapLatency = byteSwapEndTime - byteSwapStartTime;
+    console.log('🎤⌚ WhisperASR: [LATENCY] Byte swapping completed in:', byteSwapLatency, 'ms');
+    
+    const wavWriteStartTime = Date.now();
     let wavPath = await this.writeWavFile(swapped, 16000, 1, 16)
+    const wavWriteEndTime = Date.now();
+    const wavWriteLatency = wavWriteEndTime - wavWriteStartTime;
+    console.log(`🎤⌚ WhisperASR: [LATENCY] WAV file writing completed in: ${wavWriteLatency}ms`);
     console.log(`🎤⌚ WhisperASR: wrote WAV (16k BE->LE corrected) ${wavPath}`)
     
     // Check WAV file size
+    let wavStats;
     try {
-      const wavStats = await RNFS.stat(wavPath.replace('file://', ''))
+      const statsStartTime = Date.now();
+      wavStats = await RNFS.stat(wavPath.replace('file://', ''))
+      const statsEndTime = Date.now();
+      const statsLatency = statsEndTime - statsStartTime;
+      console.log(`🎤⌚ WhisperASR: [LATENCY] WAV file stats retrieval completed in: ${statsLatency}ms`);
       console.log(`🎤⌚ WhisperASR: WAV file size: ${wavStats.size} bytes`)
     } catch (e) {
       console.warn('🎤⌚ WhisperASR: Could not get WAV file stats:', e)
     }
     
+    const transcriptionStartTime = Date.now();
     let { promise } = this.whisperContext.transcribe(wavPath, { language: 'en' })
     let { result } = await promise
     let text = (result || '').trim()
+    const transcriptionEndTime = Date.now();
+    const transcriptionLatency = transcriptionEndTime - transcriptionStartTime;
+    
+    // Calculate audio metrics
+    const audioLengthSeconds = wavStats.size / (16000 * 2 * 1); // 16kHz, 16-bit, mono
+    const realTimeFactor = transcriptionLatency / (audioLengthSeconds * 1000); // RTF = processing_time / audio_duration
+    const processingSpeed = (audioLengthSeconds * 1000) / transcriptionLatency; // x times real-time
+    
+    console.log('🎤⌚ WhisperASR: [LATENCY] Whisper transcription completed in:', transcriptionLatency, 'ms');
+    console.log('🎤⌚ WhisperASR: [METRICS] Audio length:', audioLengthSeconds.toFixed(2), 'seconds');
+    console.log('🎤⌚ WhisperASR: [METRICS] Real-time factor (RTF):', realTimeFactor.toFixed(2), 'x');
+    console.log('🎤⌚ WhisperASR: [METRICS] Processing speed:', processingSpeed.toFixed(2), 'x real-time');
     console.log('🎤⌚ WhisperASR: result (16k corrected):', text)
-    if (text && text !== '[BLANK_AUDIO]') return text
+    if (text && text !== '[BLANK_AUDIO]') {
+      // Calculate total latency
+      const totalLatency = Date.now() - startTime;
+      console.log('🎤⌚ WhisperASR: [LATENCY] ===== BUFFERED AUDIO TRANSCRIPTION LATENCY BREAKDOWN =====');
+      console.log('🎤⌚ WhisperASR: [LATENCY] Total transcription latency:', totalLatency, 'ms');
+      console.log('🎤⌚ WhisperASR: [LATENCY] Step breakdown:');
+      console.log(`🎤⌚ WhisperASR: [LATENCY]   Byte swapping: ${byteSwapLatency}ms`);
+      console.log(`🎤⌚ WhisperASR: [LATENCY]   WAV file writing: ${wavWriteLatency}ms`);
+      console.log(`🎤⌚ WhisperASR: [LATENCY]   Whisper transcription: ${transcriptionLatency}ms`);
+      console.log('🎤⌚ WhisperASR: [METRICS] Performance metrics:');
+      console.log(`🎤⌚ WhisperASR: [METRICS]   Audio duration: ${audioLengthSeconds.toFixed(2)}s`);
+      console.log(`🎤⌚ WhisperASR: [METRICS]   RTF: ${realTimeFactor.toFixed(2)}x`);
+      console.log(`🎤⌚ WhisperASR: [METRICS]   Speed: ${processingSpeed.toFixed(2)}x real-time`);
+      console.log('🎤⌚ WhisperASR: [LATENCY] =====================================================');
+      return text;
+    }
 
     // Fallback 1: Original format (Little Endian) 
+    console.log('🎤⌚ WhisperASR: [LATENCY] Trying fallback 1: Original format (Little Endian)');
+    const fallback1StartTime = Date.now();
     wavPath = await this.writeWavFile(pcm, 16000, 1, 16)
     console.log(`🎤⌚ WhisperASR: wrote WAV (16k original) ${wavPath}`)
     ;({ promise } = this.whisperContext.transcribe(wavPath, { language: 'en' }))
     ;({ result } = await promise)
     text = (result || '').trim()
+    const fallback1EndTime = Date.now();
+    const fallback1Latency = fallback1EndTime - fallback1StartTime;
+    console.log('🎤⌚ WhisperASR: [LATENCY] Fallback 1 (original format) completed in:', fallback1Latency, 'ms');
     console.log('🎤⌚ WhisperASR: result (16k original):', text)
     if (text && text !== '[BLANK_AUDIO]') return text
 
     // Fallback 2: 8 kHz with corrected endianness
+    console.log('🎤⌚ WhisperASR: [LATENCY] Trying fallback 2: 8 kHz with corrected endianness');
+    const fallback2StartTime = Date.now();
     wavPath = await this.writeWavFile(swapped, 8000, 1, 16)
     console.log(`🎤⌚ WhisperASR: wrote WAV (8k corrected) ${wavPath}`)
     ;({ promise } = this.whisperContext.transcribe(wavPath, { language: 'en' }))
     ;({ result } = await promise)
     text = (result || '').trim()
+    const fallback2EndTime = Date.now();
+    const fallback2Latency = fallback2EndTime - fallback2StartTime;
+    console.log('🎤⌚ WhisperASR: [LATENCY] Fallback 2 (8kHz corrected) completed in:', fallback2Latency, 'ms');
     console.log('🎤⌚ WhisperASR: result (8k corrected):', text)
+    
+    // Calculate total latency including all fallbacks
+    const totalLatency = Date.now() - startTime;
+    console.log('🎤⌚ WhisperASR: [LATENCY] ===== BUFFERED AUDIO TRANSCRIPTION WITH FALLBACKS LATENCY BREAKDOWN =====');
+    console.log('🎤⌚ WhisperASR: [LATENCY] Total transcription latency (with fallbacks):', totalLatency, 'ms');
+    console.log('🎤⌚ WhisperASR: [LATENCY] Step breakdown:');
+    console.log(`🎤⌚ WhisperASR: [LATENCY]   Primary (16k corrected): ${byteSwapLatency + wavWriteLatency + transcriptionLatency}ms`);
+    console.log(`🎤⌚ WhisperASR: [LATENCY]   Fallback 1 (16k original): ${fallback1Latency}ms`);
+    console.log(`🎤⌚ WhisperASR: [LATENCY]   Fallback 2 (8kHz corrected): ${fallback2Latency}ms`);
+    console.log('🎤⌚ WhisperASR: [LATENCY] =====================================================');
+    
     return text
   }
 
   // NEW: Transcribe a specific WAV file (for OpusBridge output)
   async transcribeWavFile(wavPath: string, modelFilename?: string): Promise<string> {
-    console.log(`🎤⌚ WhisperASR: transcribing WAV file: ${wavPath}`)
+    const startTime = Date.now();
+    console.log(`🎤⌚ WhisperASR: [LATENCY] Starting WAV file transcription at:`, new Date().toISOString());
+    console.log(`🎤⌚ WhisperASR: [LATENCY] WAV file path: ${wavPath}`);
 
     if (!this.whisperContext) {
+      const modelInitStartTime = Date.now();
       const modelPath = await this.ensureModel(modelFilename)
       this.whisperContext = await initWhisper({ filePath: modelPath })
+      const modelInitEndTime = Date.now();
+      const modelInitLatency = modelInitEndTime - modelInitStartTime;
+      console.log('🎤⌚ WhisperASR: [LATENCY] Whisper context initialization completed in:', modelInitLatency, 'ms');
       console.log('🎤⌚ WhisperASR: whisper context initialized')
     }
 
     try {
       // Check if file exists
+      const fileCheckStartTime = Date.now();
       const fileExists = await RNFS.exists(wavPath.replace('file://', ''))
       if (!fileExists) {
         throw new Error(`WAV file not found: ${wavPath}`)
       }
+      const fileCheckEndTime = Date.now();
+      const fileCheckLatency = fileCheckEndTime - fileCheckStartTime;
+      console.log('🎤⌚ WhisperASR: [LATENCY] File existence check completed in:', fileCheckLatency, 'ms');
 
       // Get file stats
+      const statsStartTime = Date.now();
       const wavStats = await RNFS.stat(wavPath.replace('file://', ''))
+      const statsEndTime = Date.now();
+      const statsLatency = statsEndTime - statsStartTime;
+      console.log(`🎤⌚ WhisperASR: [LATENCY] File stats retrieval completed in: ${statsLatency}ms`);
       console.log(`🎤⌚ WhisperASR: WAV file size: ${wavStats.size} bytes`)
 
       // Transcribe the WAV file directly
+      const transcriptionStartTime = Date.now();
       let { promise } = this.whisperContext.transcribe(wavPath, { language: 'en' })
       let { result } = await promise
       let text = (result || '').trim()
+      const transcriptionEndTime = Date.now();
+      const transcriptionLatency = transcriptionEndTime - transcriptionStartTime;
       
+      // Calculate audio metrics
+      const audioLengthSeconds = wavStats.size / (16000 * 2 * 1); // 16kHz, 16-bit, mono
+      const realTimeFactor = transcriptionLatency / (audioLengthSeconds * 1000); // RTF = processing_time / audio_duration
+      const processingSpeed = (audioLengthSeconds * 1000) / transcriptionLatency; // x times real-time
+      
+      console.log('🎤⌚ WhisperASR: [LATENCY] Whisper transcription completed in:', transcriptionLatency, 'ms');
+      console.log('🎤⌚ WhisperASR: [METRICS] Audio length:', audioLengthSeconds.toFixed(2), 'seconds');
+      console.log('🎤⌚ WhisperASR: [METRICS] Real-time factor (RTF):', realTimeFactor.toFixed(2), 'x');
+      console.log('🎤⌚ WhisperASR: [METRICS] Processing speed:', processingSpeed.toFixed(2), 'x real-time');
       console.log('🎤⌚ WhisperASR: transcription result:', text)
+      
+      // Calculate total latency
+      const totalLatency = Date.now() - startTime;
+      console.log('🎤⌚ WhisperASR: [LATENCY] ===== WAV FILE TRANSCRIPTION LATENCY BREAKDOWN =====');
+      console.log('🎤⌚ WhisperASR: [LATENCY] Total transcription latency:', totalLatency, 'ms');
+      console.log('🎤⌚ WhisperASR: [LATENCY] Step breakdown:');
+      console.log(`🎤⌚ WhisperASR: [LATENCY]   File check: ${fileCheckLatency}ms`);
+      console.log(`🎤⌚ WhisperASR: [LATENCY]   File stats: ${statsLatency}ms`);
+      console.log(`🎤⌚ WhisperASR: [LATENCY]   Whisper transcription: ${transcriptionLatency}ms`);
+      console.log('🎤⌚ WhisperASR: [METRICS] Performance metrics:');
+      console.log(`🎤⌚ WhisperASR: [METRICS]   Audio duration: ${audioLengthSeconds.toFixed(2)}s`);
+      console.log(`🎤⌚ WhisperASR: [METRICS]   RTF: ${realTimeFactor.toFixed(2)}x`);
+      console.log(`🎤⌚ WhisperASR: [METRICS]   Speed: ${processingSpeed.toFixed(2)}x real-time`);
+      console.log('🎤⌚ WhisperASR: [LATENCY] =====================================================');
+      
       return text
 
     } catch (error) {
+      const totalLatency = Date.now() - startTime;
+      console.error('🎤⌚ WhisperASR: [LATENCY] WAV file transcription failed after:', totalLatency, 'ms');
       console.error('🎤⌚ WhisperASR: WAV file transcription failed:', error)
       throw error
     }
